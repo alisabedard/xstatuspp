@@ -43,6 +43,7 @@ case $ARCH in
 	LINUX) 
 		cat >> $CFG <<- EOF
 		CFLAGS+=-D_GNU_SOURCE
+		CXXFLAGS=${CFLAGS}
 		EOF
 		;;
 	NETBSD)

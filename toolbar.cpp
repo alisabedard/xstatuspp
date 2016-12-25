@@ -1,10 +1,10 @@
 // Copyright 2016, Jeffrey E. Bedard
 extern "C" {
 #include "toolbar.h"
-#include "button.h"
 }
 #include <cstdlib>
 #include <string>
+#include "button.h"
 #include "config.h"
 #include "libjb/log.h"
 using namespace std;
@@ -28,7 +28,7 @@ static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 	char *  label, char *  cmd)
 {
 	XSButton * i = get_last_button();
-	XSButton * b = xstatus_create_button(xc, offset, label);
+	XSButton * b = new XSButton(xc, offset, label);
 	b->cb = system_cb;
 	b->cb_data = cmd;
 	*(i ? &i->next : &xstatus_head_button) = b;

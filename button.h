@@ -4,18 +4,22 @@
 #include <xcb/xcb.h>
 class XSButton {
 	public:
+		XSButton(xcb_connection_t * xc, const int16_t x, char * label);
+		~XSButton(void);
+		xcb_window_t get_window(void){return window;}
+		const char * get_label(void){return label;}
 		XSButton * next;
 		void (*cb)(XSButton *);
 		void (*draw) (XSButton *);
 		void (*enter) (XSButton *);
 		void (*leave) (XSButton *);
 		char * cb_data;
-		char * label;
-		xcb_connection_t * xc;
-		xcb_window_t window;
 		int16_t x;
+		xcb_connection_t * xc;
+		char * label;
+		xcb_window_t window;
 		uint16_t width;
 };
-XSButton * xstatus_create_button(xcb_connection_t *  xc,
+XSButton * xstatus_create_button(xcb_connection_t * xc,
 	const int16_t x, char * label);
 #endif//XSTATUS_BUTTON_H

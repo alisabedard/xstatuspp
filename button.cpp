@@ -1,14 +1,15 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "button.h"
+extern "C" {
 #include "config.h"
 #include "font.h"
 #include "libjb/xcb.h"
 #include "xdata.h"
 #include "window.h"
-#include <stdlib.h>
-#include <string.h>
 }
+#include <cstdlib>
+#include <cstring>
+using namespace std;
 static void draw(XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
@@ -43,15 +44,13 @@ static inline uint8_t get_height(uint8_t fh)
 static xcb_rectangle_t get_geometry(XSButton * b)
 {
 	const struct JBDim f = xstatus::get_font_size();
-	xcb_rectangle_t r = {b->x, 0, get_width(f.w, b->label),
+	xcb_rectangle_t r = {b->x, 0, get_width(f.w, b->get_label()),
 		get_height(f.h)};
 	b->width = r.width;
 	return r;
 }
 static void create_window(XSButton * b)
 {
-	const xcb_window_t w = b->window;
-	xcb_connection_t *  xc = b->xc;
 	{ // g scope, vm scope, em scope
 		enum {
 			VM = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK,
@@ -63,25 +62,26 @@ static void create_window(XSButton * b)
 			BORDER = 0
 		};
 		const xcb_rectangle_t g = get_geometry(b);
-		uint32_t v[] = {get_bg(xc), EM};
-		xcb_create_window(xc, CFP, w, xstatus::get_window(xc),
+		uint32_t v[] = {get_bg(b->xc), EM};
+		xcb_create_window(b->xc, CFP, b->window,
+			xstatus::get_window(b->xc),
 			g.x, g.y, g.width, g.height, BORDER,
 			CFP, CFP, VM, v);
 	}
-	xcb_map_window(xc, w);
+	xcb_map_window(b->xc, b->window);
 }
-XSButton * xstatus_create_button(xcb_connection_t *  xc,
+XSButton::XSButton(xcb_connection_t *  xc,
 	const int16_t x, char * label)
+	: next(NULL), x(x), xc(xc), label(strdup(label))
 {
-	XSButton * b = new XSButton;
-	b->window = xcb_generate_id(b->xc = xc);
-	b->label = label;
-	b->draw = draw;
-	b->enter = invert;
-	b->leave = invert;
-	b->x = x;
-	b->next = NULL;
-	create_window(b);
-	draw(b);
-	return b;
+	window = xcb_generate_id(xc);
+	create_window(this);
+	this->draw = ::draw;
+	this->enter = this->leave = invert;
+	draw(this);
+}
+XSButton::~XSButton(void)
+{
+	xcb_destroy_window(xc, window);
+	free(label);
 }
