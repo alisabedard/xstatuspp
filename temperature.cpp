@@ -4,6 +4,7 @@ extern "C" {
 #include "config.h"
 #include "font.h"
 #include "util.h"
+#include "xdata.h"
 #include <stdio.h>
 }
 static int32_t get_temp_raw(void)
