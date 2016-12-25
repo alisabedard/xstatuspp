@@ -15,6 +15,7 @@ extern "C" {
 #include "window.h"
 #include "util.h"
 }
+using namespace xstatus;
 static uint16_t poll_status(xcb_connection_t *  xc,
 	const char * filename, const uint16_t widget_start)
 {
@@ -41,23 +42,23 @@ static void handle_events(xcb_connection_t *  xc,
 #if LOG_LEVEL > 8
 		LOG("enter");
 #endif//LOG_LEVEL
-		xstatus_toolbar_handle_button_enter(
+		toolbar::handle_button_enter(
 			((xcb_enter_notify_event_t*)e)->event);
 		break;
 	case XCB_LEAVE_NOTIFY:
 #if LOG_LEVEL > 8
 		LOG("leave");
 #endif//LOG_LEVEL
-		xstatus_toolbar_handle_button_leave(
+		toolbar::handle_button_leave(
 			((xcb_leave_notify_event_t*)e)->event);
 		break;
 	case XCB_EXPOSE:
-		if (!xstatus_toolbar_handle_expose(((xcb_expose_event_t*)e)
+		if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
 			->window))
 			update(xc, filename, widget_start);
 		break;
 	case XCB_BUTTON_PRESS:
-		xstatus_toolbar_handle_button_press(
+		toolbar::handle_button_press(
 			((xcb_button_press_event_t *)e)->event);
 		break;
 	default:
@@ -80,23 +81,23 @@ event_loop:
 }
 static void initialize_font(xcb_connection_t *  xc)
 {
-	if (!xstatus::open_font(xc, XSTATUS_FONT)) // default
-		if (!xstatus::open_font(xc, "fixed")) // fallback
+	if (!open_font(xc, XSTATUS_FONT)) // default
+		if (!open_font(xc, "fixed")) // fallback
 			LIBJB_ERROR("Could not load any font");
 }
 static void setup_invert_gc(xcb_connection_t *  xc,
 	const xcb_window_t w)
 {
-	xcb_gcontext_t gc = xstatus::get_invert_gc(xc);
+	xcb_gcontext_t gc = get_invert_gc(xc);
 	uint32_t v = XCB_GX_INVERT;
 	xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 }
 static void initialize_gcs(xcb_connection_t *  xc)
 {
-	const xcb_window_t w = xstatus::get_window(xc);
-	xstatus_create_gc(xc, xstatus::get_gc(xc), w,
+	const xcb_window_t w = get_window(xc);
+	xstatus_create_gc(xc, get_gc(xc), w,
 		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
-	xstatus_create_gc(xc, xstatus::get_button_gc(xc), w,
+	xstatus_create_gc(xc, get_button_gc(xc), w,
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
 	setup_invert_gc(xc, w);
 }
@@ -105,7 +106,7 @@ static uint16_t initialize(xcb_connection_t *  xc)
 	xstatus_create_window(xc);
 	initialize_font(xc); // font needed for gc
 	initialize_gcs(xc);
-	return xstatus_initialize_toolbar(xc);
+	return toolbar::initialize(xc);
 }
 namespace xstatus {
 	void start(struct XStatusOptions *  opt)
