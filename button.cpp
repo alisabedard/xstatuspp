@@ -9,14 +9,14 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 }
-static void draw(struct XSButton *  b)
+static void draw(XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
 	xcb_image_text_8(xc, strlen(b->label), b->window,
 		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
 		xstatus::get_font_size().height, b->label);
 }
-static void invert(struct XSButton *  b)
+static void invert(XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
 	const xcb_window_t w = b->window;
@@ -40,7 +40,7 @@ static inline uint8_t get_height(uint8_t fh)
 {
 	return fh + (XSTATUS_CONST_PAD >> 1);
 }
-static xcb_rectangle_t get_geometry(struct XSButton * b)
+static xcb_rectangle_t get_geometry(XSButton * b)
 {
 	const struct JBDim f = xstatus::get_font_size();
 	xcb_rectangle_t r = {b->x, 0, get_width(f.w, b->label),
@@ -48,7 +48,7 @@ static xcb_rectangle_t get_geometry(struct XSButton * b)
 	b->width = r.width;
 	return r;
 }
-static void create_window(struct XSButton * b)
+static void create_window(XSButton * b)
 {
 	const xcb_window_t w = b->window;
 	xcb_connection_t *  xc = b->xc;
@@ -70,16 +70,17 @@ static void create_window(struct XSButton * b)
 	}
 	xcb_map_window(xc, w);
 }
-struct XSButton * xstatus_create_button(xcb_connection_t *  xc,
+XSButton * xstatus_create_button(xcb_connection_t *  xc,
 	const int16_t x, char * label)
 {
-	struct XSButton * b = new XSButton;
+	XSButton * b = new XSButton;
 	b->window = xcb_generate_id(b->xc = xc);
 	b->label = label;
 	b->draw = draw;
 	b->enter = invert;
 	b->leave = invert;
 	b->x = x;
+	b->next = NULL;
 	create_window(b);
 	draw(b);
 	return b;

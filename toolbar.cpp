@@ -2,21 +2,23 @@
 extern "C" {
 #include "toolbar.h"
 #include "button.h"
+}
+#include <cstdlib>
+#include <string>
 #include "config.h"
 #include "libjb/log.h"
-#include <stdlib.h>
-}
-static struct XSButton * xstatus_head_button;
-static struct XSButton * get_last_button_r(struct XSButton * i)
+using namespace std;
+static XSButton * xstatus_head_button;
+static XSButton * get_last_button_r(XSButton * i)
 {
 	return i->next ? get_last_button_r(i->next) : i;
 }
-static struct XSButton * get_last_button(void)
+static XSButton * get_last_button(void)
 {
 	return xstatus_head_button ? get_last_button_r(xstatus_head_button)
 		: NULL;
 }
-static void system_cb(struct XSButton * b)
+static void system_cb(XSButton * b)
 {
 	const char *cmd = b->cb_data;
 	if (system(cmd))
@@ -25,8 +27,8 @@ static void system_cb(struct XSButton * b)
 static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 	char *  label, char *  cmd)
 {
-	struct XSButton * i = get_last_button();
-	struct XSButton * b = xstatus_create_button(xc, offset, label);
+	XSButton * i = get_last_button();
+	XSButton * b = xstatus_create_button(xc, offset, label);
 	b->cb = system_cb;
 	b->cb_data = cmd;
 	*(i ? &i->next : &xstatus_head_button) = b;
@@ -36,31 +38,36 @@ static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 uint16_t xstatus_initialize_toolbar(xcb_connection_t * xc)
 {
 	uint16_t off = 0;
-	static char menu[] = "Menu";
-	static char menu_cmd[] = XSTATUS_MENU_COMMAND;
+	static char menu[] = "Menu", menu_cmd[] = XSTATUS_MENU_COMMAND;
 	off = btn(xc, off, menu, menu_cmd);
-#if 0
-	off = btn(xc, off, "Terminal", XSTATUS_TERMINAL);
-	off = btn(xc, off, "Editor", XSTATUS_EDITOR_COMMAND);
+	static char term[] = "Terminal", term_cmd[] = XSTATUS_TERMINAL;
+	off = btn(xc, off, term, term_cmd);
+	static char edit[] = "Editor", edit_cmd[] = XSTATUS_EDITOR_COMMAND;
+	off = btn(xc, off, edit, edit_cmd);
 	{ // * browser scope
-		char * browser=getenv("XSTATUS_BROWSER_COMMAND");
-		off = btn(xc, off, "Browser", browser ? browser
-			: XSTATUS_BROWSER_COMMAND);
+		static char www_env[] = "XSTATUS_BROWSER_COMMAND",
+			    www[] = "Browser",
+			    default_www_cmd[] = XSTATUS_BROWSER_COMMAND;
+		char * browser=getenv(www_env);
+		if (!browser)
+			browser = default_www_cmd;
+		off = btn(xc, off, www, browser);
 	}
-	off = btn(xc, off, "Mixer", XSTATUS_MIXER_COMMAND);
-	off = btn(xc, off, "Lock", XSTATUS_LOCK_COMMAND);
-#endif
+	static char mix[] = "Mixer", mix_cmd[] = XSTATUS_MIXER_COMMAND;
+	off = btn(xc, off, mix, mix_cmd);
+	static char lock[] = "Lock", lock_cmd[] = XSTATUS_LOCK_COMMAND;
+	off = btn(xc, off, lock, lock_cmd);
 	return off;
 }
-static struct XSButton * find_button_r(const xcb_window_t w,
-	struct XSButton * i)
+static XSButton * find_button_r(const xcb_window_t w,
+	XSButton * i)
 {
 	return i ? i->window == w ? i : find_button_r(w, i->next) : NULL;
 }
 static bool iterate_buttons(const xcb_window_t ewin,
-	void (*func)(struct XSButton * ))
+	void (*func)(XSButton * ))
 {
-	struct XSButton * b = find_button_r(ewin, xstatus_head_button);
+	XSButton * b = find_button_r(ewin, xstatus_head_button);
 	if (b) {
 		func(b);
 		return true;
