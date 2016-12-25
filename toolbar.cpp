@@ -3,7 +3,6 @@ extern "C" {
 #include "toolbar.h"
 }
 #include <cstdlib>
-#include <string>
 #include "button.h"
 #include "config.h"
 #include "libjb/log.h"

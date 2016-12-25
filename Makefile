@@ -30,7 +30,7 @@ install:
 depend:
 	${CC} -E -MM *.cpp > depend.mk
 cppcheck:
-	cppcheck --enable=all --inconclusive --std=c11 \
+	cppcheck --enable=all --inconclusive --std=c++11 \
                 . 2> cppcheck.log
 	echo 'Results written to cppcheck.log'
 #EOF

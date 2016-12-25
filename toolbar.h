@@ -1,8 +1,9 @@
 // Copyright 2016, Jeffrey E. Bedard
 #ifndef XSTATUS_TOOLBAR_H
 #define XSTATUS_TOOLBAR_H
-#include <stdbool.h>
+#include <stdint.h>
 #include <xcb/xcb.h>
+#include <xcb/xproto.h>
 namespace xstatus {
 	namespace toolbar {
 		/* Returns x offset after all buttons added.  */
