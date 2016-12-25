@@ -14,11 +14,14 @@ class XSButton {
 		void (*enter) (XSButton *);
 		void (*leave) (XSButton *);
 		char * cb_data;
-		int16_t x;
 		xcb_connection_t * xc;
 		char * label;
 		xcb_window_t window;
 		uint16_t width;
+	private:
+		int16_t x;
+		xcb_rectangle_t get_geometry(void);
+		void create_window(void);
 };
 XSButton * xstatus_create_button(xcb_connection_t * xc,
 	const int16_t x, char * label);

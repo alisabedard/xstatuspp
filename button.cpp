@@ -41,15 +41,15 @@ static inline uint8_t get_height(uint8_t fh)
 {
 	return fh + (XSTATUS_CONST_PAD >> 1);
 }
-static xcb_rectangle_t get_geometry(XSButton * b)
+xcb_rectangle_t XSButton::get_geometry(void)
 {
 	const struct JBDim f = xstatus::get_font_size();
-	xcb_rectangle_t r = {b->x, 0, get_width(f.w, b->get_label()),
+	xcb_rectangle_t r = {this->x, 0, get_width(f.w, this->get_label()),
 		get_height(f.h)};
-	b->width = r.width;
+	this->width = r.width;
 	return r;
 }
-static void create_window(XSButton * b)
+void XSButton::create_window(void)
 {
 	{ // g scope, vm scope, em scope
 		enum {
@@ -61,21 +61,20 @@ static void create_window(XSButton * b)
 			CFP = XCB_COPY_FROM_PARENT,
 			BORDER = 0
 		};
-		const xcb_rectangle_t g = get_geometry(b);
-		uint32_t v[] = {get_bg(b->xc), EM};
-		xcb_create_window(b->xc, CFP, b->window,
-			xstatus::get_window(b->xc),
+		const xcb_rectangle_t g = get_geometry();
+		uint32_t v[] = {get_bg(this->xc), EM};
+		xcb_create_window(this->xc, CFP, this->window,
+			xstatus::get_window(this->xc),
 			g.x, g.y, g.width, g.height, BORDER,
 			CFP, CFP, VM, v);
 	}
-	xcb_map_window(b->xc, b->window);
+	xcb_map_window(this->xc, this->window);
 }
-XSButton::XSButton(xcb_connection_t *  xc,
-	const int16_t x, char * label)
-	: next(NULL), x(x), xc(xc), label(strdup(label))
+XSButton::XSButton(xcb_connection_t *  xc, const int16_t x, char * label)
+	: next(NULL), xc(xc), label(strdup(label)), x(x)
 {
 	window = xcb_generate_id(xc);
-	create_window(this);
+	create_window();
 	this->draw = ::draw;
 	this->enter = this->leave = invert;
 	draw(this);
