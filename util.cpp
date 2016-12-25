@@ -12,7 +12,7 @@ void xstatus_create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 	const char *  bg)
 {
 	jb_create_gc(xc, gc, win, fg, bg);
-	uint32_t v = xstatus_get_font(xc);
+	uint32_t v = xstatus::get_font(xc);
 	xcb_change_gc(xc, gc, XCB_GC_FONT, &v);
 }
 // returns -1 on error

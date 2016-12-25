@@ -26,7 +26,7 @@ static inline xcb_rectangle_t get_geometry(xcb_screen_t *  s)
 __attribute__((nonnull))
 void xstatus_create_window(xcb_connection_t *  xc)
 {
-	const xcb_window_t w = xstatus_get_window(xc);
+	const xcb_window_t w = xstatus::get_window(xc);
 	{ // * s, em, vm, and g scope
 		enum {
 			VM = XCB_CW_BACK_PIXEL | XCB_CW_OVERRIDE_REDIRECT
@@ -34,7 +34,7 @@ void xstatus_create_window(xcb_connection_t *  xc)
 			EM = XCB_EVENT_MASK_EXPOSURE,
 			CFP = XCB_COPY_FROM_PARENT
 		};
-		xcb_screen_t * s = xstatus_get_screen(xc);
+		xcb_screen_t * s = xstatus::get_screen(xc);
 		const xcb_rectangle_t g = get_geometry(s);
 		uint32_t v[] = {get_bg(xc, s), true, EM};
 		xcb_create_window(xc, CFP, w, s->root, g.x, g.y, g.width,

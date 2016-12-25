@@ -80,23 +80,23 @@ event_loop:
 }
 static void initialize_font(xcb_connection_t *  xc)
 {
-	if (!xstatus_open_font(xc, XSTATUS_FONT)) // default
-		if (!xstatus_open_font(xc, "fixed")) // fallback
+	if (!xstatus::open_font(xc, XSTATUS_FONT)) // default
+		if (!xstatus::open_font(xc, "fixed")) // fallback
 			LIBJB_ERROR("Could not load any font");
 }
 static void setup_invert_gc(xcb_connection_t *  xc,
 	const xcb_window_t w)
 {
-	xcb_gcontext_t gc = xstatus_get_invert_gc(xc);
+	xcb_gcontext_t gc = xstatus::get_invert_gc(xc);
 	uint32_t v = XCB_GX_INVERT;
 	xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 }
 static void initialize_gcs(xcb_connection_t *  xc)
 {
-	const xcb_window_t w = xstatus_get_window(xc);
-	xstatus_create_gc(xc, xstatus_get_gc(xc), w,
+	const xcb_window_t w = xstatus::get_window(xc);
+	xstatus_create_gc(xc, xstatus::get_gc(xc), w,
 		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
-	xstatus_create_gc(xc, xstatus_get_button_gc(xc), w,
+	xstatus_create_gc(xc, xstatus::get_button_gc(xc), w,
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
 	setup_invert_gc(xc, w);
 }

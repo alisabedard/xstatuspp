@@ -40,8 +40,8 @@ static void draw_percent(xcb_connection_t *  xc, const xcb_gcontext_t gc,
 {
 	enum {BUF_SZ = 7};
 	char buf[BUF_SZ];
-	xcb_image_text_8(xc, format(buf, BUF_SZ, pct), xstatus_get_window(xc),
-		gc, x, xstatus_get_font_size().h, buf);
+	xcb_image_text_8(xc, format(buf, BUF_SZ, pct), xstatus::get_window(xc),
+		gc, x, xstatus::get_font_size().h, buf);
 }
 static void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
 	xcb_gcontext_t *  gc, const char *  fg)
@@ -75,7 +75,7 @@ static void draw_rectangles(xcb_connection_t *  xc,
 	const uint8_t pct)
 {
 	xcb_rectangle_t rect = get_rectangle(range);
-	const xcb_window_t w = xstatus_get_window(xc);
+	const xcb_window_t w = xstatus::get_window(xc);
 	// clear:
 	xcb_poly_fill_rectangle(xc, w, bg_gc, 1, &rect);
 	rect.width = get_width_for_percent(rect.width, pct);
@@ -97,7 +97,7 @@ static xcb_gcontext_t * get_gcs(xcb_connection_t *  xc)
 {
 	static xcb_gcontext_t gc[BATTERY_GC_SIZE];
 	if (!*gc)
-		initialize_gcs(xc, xstatus_get_window(xc), gc);
+		initialize_gcs(xc, xstatus::get_window(xc), gc);
 	return gc;
 }
 static void draw_for_percent(xcb_connection_t *  xc,
