@@ -13,7 +13,7 @@ PREFIX=/usr
 exe=xstatuspp
 installdir=${DESTDIR}${PREFIX}
 ${exe}: libjb/libjb.a ${objs}
-	${CC} ${cflags} ${ldflags} ${objs} ${static} -o $@
+	${CXX} ${cflags} ${ldflags} ${objs} ${static} -o $@
 	strip -s -o xstatus_stripped ${exe}
 	ls -l xstatus_stripped >> sz.log
 	rm -f xstatus_stripped
@@ -28,7 +28,7 @@ install:
 	install -d ${installdir}/bin
 	install -s ${exe} ${installdir}/bin
 depend:
-	${CC} -E -MM *.c > depend.mk
+	${CC} -E -MM *.cpp > depend.mk
 cppcheck:
 	cppcheck --enable=all --inconclusive --std=c11 \
                 . 2> cppcheck.log

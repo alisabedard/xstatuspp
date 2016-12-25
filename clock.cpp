@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "clock.h"
 #include "config.h"
 #include "font.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
+}
 //#define XSTATUS_DEBUG_CLOCK
 #ifndef XSTATUS_DEBUG_CLOCK
 #undef LOG
@@ -17,8 +19,8 @@ static uint16_t get_offset(xcb_connection_t *  xc,
 }
 static uint8_t format(char * buf, uint8_t sz)
 {
-	 return strftime(buf, sz, XSTATUS_TIME_FORMAT,
-		 localtime(&(time_t){time(NULL)}));
+	time_t t = time(NULL);
+	 return strftime(buf, sz, XSTATUS_TIME_FORMAT, localtime(&t));
 }
 static uint16_t draw_for_font_size(xcb_connection_t *  xc,
 	const struct JBDim font_size, char * buf, const uint8_t sz)

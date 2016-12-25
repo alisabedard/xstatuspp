@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "font.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 #include <stdlib.h>
 #include <string.h>
+}
 static struct JBDim font_size;
 xcb_window_t xstatus_get_window(xcb_connection_t *  xc)
 {

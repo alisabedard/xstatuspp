@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "xstatus.h"
+extern "C" {
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "xstatus.h"
+}
 #define XSTATUS_HELPTEXT \
 	"DESCRIPTION:  Simple X toolbar for minimalistic"\
 	" window managers.\n" \
@@ -41,8 +43,9 @@ static void parse_command_line(int argc, char ** argv,
 }
 int main(int argc, char ** argv)
 {
-	struct XStatusOptions o = {.filename = XSTATUS_STATUS_FILE,
+	char default_filename[] = XSTATUS_STATUS_FILE;
+	struct XStatusOptions o = {.filename = default_filename,
 		.delay = 1};
 	parse_command_line(argc, argv, &o);
-	xstatus_start(&o);
+	xstatus::start(&o);
 }

@@ -30,10 +30,8 @@ fi
 echo CFLAGS+="-D${ARCH}" >> $CFG
 case $ARCH in
 	OPENBSD)
-		CC=clang
 		echo NOTE:  OpenBSD requires llvm
 		cat >> $CFG <<- EOF
-		CC=clang
 		PREFIX=/usr/local
 		LDFLAGS+=-L/usr/X11R6/lib
 		LDFLAGS+=-L/usr/local/lib
@@ -85,20 +83,16 @@ search() # 1: cmd 2: var
 cc_err()
 {
 	echo 'Error: Cannot find a suitable compiler.'
-	echo 'Please set CC to a valid C compiler command'
+	echo "Please set ${1} to a valid C compiler command"
 	exit 1
 }
 if [ ! "$CC" ]; then
-	if [ "$ARCH" = "LINUX" ]; then
-		search cc CC && search gcc CC && search clang CC\
-			&& cc_err
-	else
-		# Many BSD systems come with an old version of
-		# gcc without support of required language features.
-		# Search for clang first.
-		search search clang CC && search cc CC && search gcc CC\
-			&& cc_err
-	fi
+	search search clang CC && search cc CC && search gcc CC\
+		&& cc_err CC
+fi
+if [ ! "$CXX" ]; then
+	search search clang CXX && search cc CXX && search gcc CXX\
+		&& cc_err CXX
 fi
 if $OPT_DEBUG; then
 	echo -n 'Enabling debug options... '

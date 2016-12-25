@@ -1,8 +1,10 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "window.h"
 #include "config.h"
 #include "libjb/xcb.h"
 #include "xdata.h"
+}
 __attribute__((const))
 static inline int16_t get_y(const uint16_t screen_height)
 {
@@ -34,9 +36,9 @@ void xstatus_create_window(xcb_connection_t *  xc)
 		};
 		xcb_screen_t * s = xstatus_get_screen(xc);
 		const xcb_rectangle_t g = get_geometry(s);
+		uint32_t v[] = {get_bg(xc, s), true, EM};
 		xcb_create_window(xc, CFP, w, s->root, g.x, g.y, g.width,
-			g.height, XSTATUS_CONST_BORDER, CFP, CFP,
-			VM, (uint32_t[]){get_bg(xc, s), true, EM});
+			g.height, XSTATUS_CONST_BORDER, CFP, CFP, VM, v);
 	}
 	xcb_map_window(xc, w);
 }

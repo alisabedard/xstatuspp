@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "load.h"
 #include "config.h"
 #include "font.h"
 #include <stdio.h>
 #include <stdlib.h>
+}
 __attribute__((nonnull))
 static uint8_t format(char *  buf, const uint8_t sz)
 {

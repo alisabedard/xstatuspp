@@ -1,4 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "status_file.h"
 #include "config.h"
 #include "font.h"
@@ -8,6 +9,7 @@
 #include <stdio.h>
 #include <sys/stat.h> // include per man page of fchmod()
 #include <unistd.h> // include per man page of read()
+}
 static ssize_t poll_status_file(const char *  filename,
 	char *  buf)
 {

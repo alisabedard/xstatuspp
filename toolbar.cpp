@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "toolbar.h"
 #include "button.h"
 #include "config.h"
 #include "libjb/log.h"
 #include <stdlib.h>
+}
 static struct XSButton * xstatus_head_button;
 static struct XSButton * get_last_button_r(struct XSButton * i)
 {
@@ -34,7 +36,10 @@ static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 uint16_t xstatus_initialize_toolbar(xcb_connection_t * xc)
 {
 	uint16_t off = 0;
-	off = btn(xc, off, "Menu", XSTATUS_MENU_COMMAND);
+	static char menu[] = "Menu";
+	static char menu_cmd[] = XSTATUS_MENU_COMMAND;
+	off = btn(xc, off, menu, menu_cmd);
+#if 0
 	off = btn(xc, off, "Terminal", XSTATUS_TERMINAL);
 	off = btn(xc, off, "Editor", XSTATUS_EDITOR_COMMAND);
 	{ // * browser scope
@@ -44,6 +49,7 @@ uint16_t xstatus_initialize_toolbar(xcb_connection_t * xc)
 	}
 	off = btn(xc, off, "Mixer", XSTATUS_MIXER_COMMAND);
 	off = btn(xc, off, "Lock", XSTATUS_LOCK_COMMAND);
+#endif
 	return off;
 }
 static struct XSButton * find_button_r(const xcb_window_t w,

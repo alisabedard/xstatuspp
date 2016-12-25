@@ -1,18 +1,20 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
+#include "libjb/log.h"
+#include "libjb/xcb.h"
 #include "xstatus.h"
 #include "battery.h"
 #include "clock.h"
 #include "config.h"
-#include "font.h"
-#include "libjb/log.h"
-#include "libjb/xcb.h"
 #include "load.h"
 #include "status_file.h"
 #include "temperature.h"
 #include "toolbar.h"
-#include "util.h"
-#include "window.h"
 #include "xdata.h"
+#include "font.h"
+#include "window.h"
+#include "util.h"
+}
 static uint16_t poll_status(xcb_connection_t *  xc,
 	const char * filename, const uint16_t widget_start)
 {
@@ -86,8 +88,8 @@ static void setup_invert_gc(xcb_connection_t *  xc,
 	const xcb_window_t w)
 {
 	xcb_gcontext_t gc = xstatus_get_invert_gc(xc);
-	xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION,
-		(uint32_t[]){XCB_GX_INVERT});
+	uint32_t v = XCB_GX_INVERT;
+	xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 }
 static void initialize_gcs(xcb_connection_t *  xc)
 {
@@ -105,8 +107,10 @@ static uint16_t initialize(xcb_connection_t *  xc)
 	initialize_gcs(xc);
 	return xstatus_initialize_toolbar(xc);
 }
-void xstatus_start(struct XStatusOptions *  opt)
-{
-	xcb_connection_t * xc = jb_get_xcb_connection(NULL, NULL);
-	event_loop(xc, opt->delay, opt->filename, initialize(xc));
+namespace xstatus {
+	void start(struct XStatusOptions *  opt)
+	{
+		xcb_connection_t * xc = jb_get_xcb_connection(NULL, NULL);
+		event_loop(xc, opt->delay, opt->filename, initialize(xc));
+	}
 }

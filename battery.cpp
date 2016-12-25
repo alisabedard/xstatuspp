@@ -1,12 +1,15 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "battery.h"
 #include "config.h"
-#include "font.h"
 #include "libjb/log.h"
 #include "libjb/macros.h"
 #include "libjb/util.h"
 #include "util.h"
 #include "xstatus.h"
+#include "font.h"
+#include "xdata.h"
+}
 //#define XSTATUS_DEBUG_BATTERY
 #ifndef XSTATUS_DEBUG_BATTERY
 #undef LOG
@@ -56,10 +59,11 @@ static void initialize_gcs(xcb_connection_t *  xc,
 }
 static xcb_rectangle_t get_rectangle(const struct JBDim range)
 {
-	return (xcb_rectangle_t){.x=range.start,
-		.y = (XSTATUS_CONST_HEIGHT >> 2) + 1,
-		.height = XSTATUS_CONST_HEIGHT >> 1,
-		.width = range.end - range.start - XSTATUS_CONST_PAD};
+	const int16_t x = range.start, y = (XSTATUS_CONST_HEIGHT >> 2) + 1;
+	const uint16_t height = XSTATUS_CONST_HEIGHT >> 1;
+	const uint16_t width = range.end - range.start - XSTATUS_CONST_PAD;
+	const xcb_rectangle_t r = {x, y, width, height};
+	return r;
 }
 __attribute__((const))
 static uint16_t get_width_for_percent(const uint16_t width, const uint8_t pct)
@@ -112,6 +116,7 @@ void xstatus_draw_battery(xcb_connection_t * xc, const uint16_t start,
 		LOG("Could not get percent, returning");
 		return;
 	}
-	draw_for_percent(xc, (struct JBDim){.start = start, .end = end}, pct);
+	struct JBDim range = {start, end};
+	draw_for_percent(xc, range, pct);
 	xcb_flush(xc);
 }

@@ -1,9 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "temperature.h"
 #include "config.h"
 #include "font.h"
 #include "util.h"
 #include <stdio.h>
+}
 static int32_t get_temp_raw(void)
 {
 	return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);

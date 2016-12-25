@@ -1,11 +1,14 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "button.h"
 #include "config.h"
 #include "font.h"
 #include "libjb/xcb.h"
 #include "xdata.h"
+#include "window.h"
 #include <stdlib.h>
 #include <string.h>
+}
 static void draw(struct XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
@@ -19,8 +22,8 @@ static void invert(struct XSButton *  b)
 	const xcb_window_t w = b->window;
 	const xcb_gcontext_t gc = xstatus_get_invert_gc(xc);
 	const struct JBDim f = xstatus_get_font_size();
-	xcb_poly_fill_rectangle(xc, w, gc, 1, &(xcb_rectangle_t){0, 0,
-		b->width, f.h});
+	xcb_rectangle_t r = {0, 0, b->width, f.h};
+	xcb_poly_fill_rectangle(xc, w, gc, 1, &r);
 	xcb_flush(xc);
 }
 static pixel_t get_bg(xcb_connection_t *  xc)
@@ -40,9 +43,10 @@ static inline uint8_t get_height(uint8_t fh)
 static xcb_rectangle_t get_geometry(struct XSButton * b)
 {
 	const struct JBDim f = xstatus_get_font_size();
-	return (xcb_rectangle_t){.x = b->x,
-		.width = b->width = get_width(f.w, b->label),
-		.height = get_height(f.h)};
+	xcb_rectangle_t r = {b->x, 0, get_width(f.w, b->label),
+		get_height(f.h)};
+	b->width = r.width;
+	return r;
 }
 static void create_window(struct XSButton * b)
 {
@@ -59,16 +63,17 @@ static void create_window(struct XSButton * b)
 			BORDER = 0
 		};
 		const xcb_rectangle_t g = get_geometry(b);
+		uint32_t v[] = {get_bg(xc), EM};
 		xcb_create_window(xc, CFP, w, xstatus_get_window(xc),
 			g.x, g.y, g.width, g.height, BORDER,
-			CFP, CFP, VM, (uint32_t[]){get_bg(xc), EM});
+			CFP, CFP, VM, v);
 	}
 	xcb_map_window(xc, w);
 }
 struct XSButton * xstatus_create_button(xcb_connection_t *  xc,
 	const int16_t x, char * label)
 {
-	struct XSButton * b = calloc(1, sizeof(struct XSButton));
+	struct XSButton * b = new XSButton;
 	b->window = xcb_generate_id(b->xc = xc);
 	b->label = label;
 	b->draw = draw;

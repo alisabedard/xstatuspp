@@ -1,6 +1,8 @@
 // Copyright 2016, Jeffrey E. Bedard
+extern "C" {
 #include "xdata.h"
 #include "libjb/xcb.h"
+}
 xcb_screen_t * xstatus_get_screen(xcb_connection_t * xc)
 {
 	static xcb_screen_t * s;
@@ -26,3 +28,9 @@ xcb_gcontext_t xstatus_get_invert_gc(xcb_connection_t * xc)
 	static xcb_gcontext_t g;
 	return g ? g : (g = xcb_generate_id(xc));
 }
+xcb_window_t xstatus_get_window(xcb_connection_t *  xc)
+{
+	static xcb_window_t w;
+	return w ? w : (w = xcb_generate_id(xc));
+}
+
