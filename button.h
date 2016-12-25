@@ -7,6 +7,7 @@ class XSButton {
 		XSButton(xcb_connection_t * xc, const int16_t x, char * label);
 		~XSButton(void);
 		xcb_window_t get_window(void){return window;}
+		xcb_rectangle_t get_geometry(void){return geometry;}
 		XSButton * next;
 		void (*cb)(XSButton *);
 		void (*draw) (XSButton *);
@@ -15,11 +16,11 @@ class XSButton {
 		char * cb_data;
 		xcb_connection_t * xc;
 		char * label;
-		uint16_t width;
 	private:
 		xcb_window_t window;
+		xcb_rectangle_t geometry;
 		int16_t x;
-		xcb_rectangle_t get_geometry(void);
+		void set_geometry(void);
 		void create_window(void);
 };
 XSButton * xstatus_create_button(xcb_connection_t * xc,

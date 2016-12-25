@@ -32,7 +32,7 @@ static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 	b->cb = system_cb;
 	b->cb_data = cmd;
 	*(i ? &i->next : &xstatus_head_button) = b;
-	return offset + b->width + XSTATUS_CONST_PAD;
+	return offset + b->get_geometry().width + XSTATUS_CONST_PAD;
 }
 /* Returns x offset after all buttons added.  */
 uint16_t xstatus_initialize_toolbar(xcb_connection_t * xc)
