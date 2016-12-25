@@ -10,17 +10,17 @@ extern "C" {
 #include <cstdlib>
 #include <cstring>
 using namespace std;
-static void draw(XSButton *  b)
+static void draw(XSButton * b)
 {
 	xcb_connection_t * xc = b->xc;
-	xcb_image_text_8(xc, strlen(b->label), b->window,
+	xcb_image_text_8(xc, strlen(b->label), b->get_window(),
 		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
 		xstatus::get_font_size().height, b->label);
 }
-static void invert(XSButton *  b)
+static void invert(XSButton * b)
 {
 	xcb_connection_t * xc = b->xc;
-	const xcb_window_t w = b->window;
+	const xcb_window_t w = b->get_window();
 	const xcb_gcontext_t gc = xstatus::get_invert_gc(xc);
 	const struct JBDim f = xstatus::get_font_size();
 	xcb_rectangle_t r = {0, 0, b->width, f.h};
@@ -44,7 +44,7 @@ static inline uint8_t get_height(uint8_t fh)
 xcb_rectangle_t XSButton::get_geometry(void)
 {
 	const struct JBDim f = xstatus::get_font_size();
-	xcb_rectangle_t r = {this->x, 0, get_width(f.w, this->get_label()),
+	xcb_rectangle_t r = {this->x, 0, get_width(f.w, this->label),
 		get_height(f.h)};
 	this->width = r.width;
 	return r;

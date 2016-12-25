@@ -62,7 +62,7 @@ uint16_t xstatus_initialize_toolbar(xcb_connection_t * xc)
 static XSButton * find_button_r(const xcb_window_t w,
 	XSButton * i)
 {
-	return i ? i->window == w ? i : find_button_r(w, i->next) : NULL;
+	return i ? i->get_window() == w ? i : find_button_r(w, i->next) : NULL;
 }
 static bool iterate_buttons(const xcb_window_t ewin,
 	void (*func)(XSButton * ))
