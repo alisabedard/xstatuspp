@@ -21,7 +21,7 @@ static void system_cb(struct XSButton * b)
 		LIBJB_WARN("Cannot execute %s", cmd);
 }
 static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
-	char * restrict label, char * restrict cmd)
+	char *  label, char *  cmd)
 {
 	struct XSButton * i = get_last_button();
 	struct XSButton * b = xstatus_create_button(xc, offset, label);
@@ -52,7 +52,7 @@ static struct XSButton * find_button_r(const xcb_window_t w,
 	return i ? i->window == w ? i : find_button_r(w, i->next) : NULL;
 }
 static bool iterate_buttons(const xcb_window_t ewin,
-	void (*func)(struct XSButton * restrict))
+	void (*func)(struct XSButton * ))
 {
 	struct XSButton * b = find_button_r(ewin, xstatus_head_button);
 	if (b) {

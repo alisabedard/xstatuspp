@@ -1,6 +1,6 @@
-objs=${exe}.o util.o main.o font.o xdata.o button.o
+objs=util.o main.o font.o xdata.o button.o
 objs+=clock.o load.o status_file.o window.o toolbar.o
-objs+=battery.o temperature.o
+objs+=battery.o temperature.o xstatus.o
 include config.mk
 cflags+=-std=c11
 cflags+=-D_XOPEN_SOURCE=700
@@ -10,11 +10,11 @@ ldflags+=-lxcb -lxcb-cursor
 ldlags+=${LDFLAGS}
 cflags+=${CFLAGS}
 PREFIX=/usr
-exe=xstatus
+exe=xstatuspp
 installdir=${DESTDIR}${PREFIX}
 ${exe}: libjb/libjb.a ${objs}
 	${CC} ${cflags} ${ldflags} ${objs} ${static} -o $@
-	strip -s -o xstatus_stripped xstatus
+	strip -s -o xstatus_stripped ${exe}
 	ls -l xstatus_stripped >> sz.log
 	rm -f xstatus_stripped
 	tail sz.log
@@ -25,9 +25,8 @@ clean:
 	cd libjb && ${MAKE} clean
 	rm -f ${exe} *.o
 install:
-#	cd libjb && ${MAKE} install
 	install -d ${installdir}/bin
-	install -s xstatus ${installdir}/bin
+	install -s ${exe} ${installdir}/bin
 depend:
 	${CC} -E -MM *.c > depend.mk
 cppcheck:

@@ -32,7 +32,7 @@ static uint8_t format(char * buf, const uint8_t sz, const uint8_t pct)
 {
 	return snprintf(buf, sz, " %d%% ", pct);
 }
-static void draw_percent(xcb_connection_t * restrict xc, const xcb_gcontext_t gc,
+static void draw_percent(xcb_connection_t *  xc, const xcb_gcontext_t gc,
 	const uint8_t pct, const int16_t x)
 {
 	enum {BUF_SZ = 7};
@@ -40,14 +40,14 @@ static void draw_percent(xcb_connection_t * restrict xc, const xcb_gcontext_t gc
 	xcb_image_text_8(xc, format(buf, BUF_SZ, pct), xstatus_get_window(xc),
 		gc, x, xstatus_get_font_size().h, buf);
 }
-static void set_gc(xcb_connection_t * restrict xc, const xcb_window_t w,
-	xcb_gcontext_t * restrict gc, const char * restrict fg)
+static void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
+	xcb_gcontext_t *  gc, const char *  fg)
 {
 	xstatus_create_gc(xc, *gc = xcb_generate_id(xc), w, fg,
 		XSTATUS_BATTERY_BACKGROUND_COLOR);
 }
-static void initialize_gcs(xcb_connection_t * restrict xc,
-	const xcb_window_t w, xcb_gcontext_t * restrict gc)
+static void initialize_gcs(xcb_connection_t *  xc,
+	const xcb_window_t w, xcb_gcontext_t *  gc)
 {
 #define SETGC(color) set_gc(xc, w, gc + BATTERY_GC_##color, \
 	XSTATUS_BATTERY_##color##_COLOR);
@@ -66,7 +66,7 @@ static uint16_t get_width_for_percent(const uint16_t width, const uint8_t pct)
 {
 	return width * pct / 100;
 }
-static void draw_rectangles(xcb_connection_t * restrict xc,
+static void draw_rectangles(xcb_connection_t *  xc,
 	const xcb_gcontext_t gc, const xcb_gcontext_t bg_gc, const struct JBDim range,
 	const uint8_t pct)
 {
@@ -89,14 +89,14 @@ static void draw_for_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 	draw_rectangles(xc, gc, bg_gc, range, pct);
 	draw_percent(xc, gc, pct, get_x(range));
 }
-static xcb_gcontext_t * get_gcs(xcb_connection_t * restrict xc)
+static xcb_gcontext_t * get_gcs(xcb_connection_t *  xc)
 {
 	static xcb_gcontext_t gc[BATTERY_GC_SIZE];
 	if (!*gc)
 		initialize_gcs(xc, xstatus_get_window(xc), gc);
 	return gc;
 }
-static void draw_for_percent(xcb_connection_t * restrict xc,
+static void draw_for_percent(xcb_connection_t *  xc,
 	const struct JBDim range, const uint8_t pct)
 {
 	xcb_gcontext_t * gc = get_gcs(xc);

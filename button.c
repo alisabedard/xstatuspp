@@ -6,14 +6,14 @@
 #include "xdata.h"
 #include <stdlib.h>
 #include <string.h>
-static void draw(struct XSButton * restrict b)
+static void draw(struct XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
 	xcb_image_text_8(xc, strlen(b->label), b->window,
 		xstatus_get_button_gc(xc), XSTATUS_CONST_PAD,
 		xstatus_get_font_size().height, b->label);
 }
-static void invert(struct XSButton * restrict b)
+static void invert(struct XSButton *  b)
 {
 	xcb_connection_t * xc = b->xc;
 	const xcb_window_t w = b->window;
@@ -23,7 +23,7 @@ static void invert(struct XSButton * restrict b)
 		b->width, f.h});
 	xcb_flush(xc);
 }
-static pixel_t get_bg(xcb_connection_t * restrict xc)
+static pixel_t get_bg(xcb_connection_t *  xc)
 {
 	static pixel_t p; // cache the result
 	return p ? p : (p = jb_get_pixel(xc, xstatus_get_colormap(xc),
@@ -47,7 +47,7 @@ static xcb_rectangle_t get_geometry(struct XSButton * b)
 static void create_window(struct XSButton * b)
 {
 	const xcb_window_t w = b->window;
-	xcb_connection_t * restrict xc = b->xc;
+	xcb_connection_t *  xc = b->xc;
 	{ // g scope, vm scope, em scope
 		enum {
 			VM = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK,
@@ -65,7 +65,7 @@ static void create_window(struct XSButton * b)
 	}
 	xcb_map_window(xc, w);
 }
-struct XSButton * xstatus_create_button(xcb_connection_t * restrict xc,
+struct XSButton * xstatus_create_button(xcb_connection_t *  xc,
 	const int16_t x, char * label)
 {
 	struct XSButton * b = calloc(1, sizeof(struct XSButton));

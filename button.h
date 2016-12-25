@@ -15,6 +15,6 @@ struct XSButton {
 	int16_t x;
 	uint16_t width;
 };
-struct XSButton * xstatus_create_button(xcb_connection_t * restrict xc,
+struct XSButton * xstatus_create_button(xcb_connection_t *  xc,
 	const int16_t x, char * label);
 #endif//XSTATUS_BUTTON_H

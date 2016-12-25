@@ -9,7 +9,7 @@
 #undef LOG
 #define LOG(...)
 #endif//!XSTATUS_DEBUG_CLOCK
-static uint16_t get_offset(xcb_connection_t * restrict xc,
+static uint16_t get_offset(xcb_connection_t *  xc,
 	const uint16_t font_width, const size_t sz)
 {
 	return xstatus_get_screen(xc)->width_in_pixels
@@ -20,7 +20,7 @@ static uint8_t format(char * buf, uint8_t sz)
 	 return strftime(buf, sz, XSTATUS_TIME_FORMAT,
 		 localtime(&(time_t){time(NULL)}));
 }
-static uint16_t draw_for_font_size(xcb_connection_t * restrict xc,
+static uint16_t draw_for_font_size(xcb_connection_t *  xc,
 	const struct JBDim font_size, char * buf, const uint8_t sz)
 {
 	uint16_t offset = get_offset(xc, font_size.w, sz);

@@ -7,5 +7,5 @@ xcb_gcontext_t xstatus_get_button_gc(xcb_connection_t * xc);
 xcb_gcontext_t xstatus_get_gc(xcb_connection_t * xc);
 xcb_gcontext_t xstatus_get_invert_gc(xcb_connection_t * xc);
 xcb_screen_t * xstatus_get_screen(xcb_connection_t * xc);
-xcb_window_t xstatus_get_window(xcb_connection_t * restrict xc);
+xcb_window_t xstatus_get_window(xcb_connection_t *  xc);
 #endif//!XS_XDATA_H

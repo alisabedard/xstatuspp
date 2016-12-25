@@ -22,7 +22,7 @@ static void usage(void)
 	exit(1);
 }
 static void parse_command_line(int argc, char ** argv,
-	struct XStatusOptions * restrict o)
+	struct XStatusOptions *  o)
 {
 	int8_t opt;
 	while((opt = getopt(argc, argv, "d:f:h")) != -1) {

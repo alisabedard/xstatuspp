@@ -22,7 +22,7 @@ static uint8_t get_temp(void)
 	}
 	return temp / 1000;
 }
-static uint8_t format(char * restrict buf, const uint8_t sz)
+static uint8_t format(char *  buf, const uint8_t sz)
 {
 	const uint8_t temp = get_temp();
 	if (temp)

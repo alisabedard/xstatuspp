@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 void xstatus_create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
-	const xcb_window_t win, const char * restrict fg,
-	const char * restrict bg)
+	const xcb_window_t win, const char *  fg,
+	const char *  bg)
 {
 	jb_create_gc(xc, gc, win, fg, bg);
 	xcb_change_gc(xc, gc, XCB_GC_FONT, &(uint32_t){xstatus_get_font(xc)});
