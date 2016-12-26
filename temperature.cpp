@@ -4,8 +4,10 @@ extern "C" {
 #include "libjb/JBDim.h"
 }
 #include <cstdio>
+#include "Buffer.h"
 #include "config.h"
 #include "font.h"
+#include "Renderer.h"
 #include "util.h"
 #include "xdata.h"
 using namespace xstatus;
@@ -36,18 +38,34 @@ namespace {
 		else
 			return 0;
 	}
+	class TempBuf : public Buffer {
+		public:
+			TempBuf(void) : Buffer(4) {
+				size = format(buffer, size);
+			}
+	};
+	class TempRenderer : public Renderer {
+		private:
+			JBDim f;
+			Buffer * b;
+			int x;
+		public:
+			TempRenderer(xcb_connection_t * xc, Buffer * b, int x)
+				: Renderer(xc), f(get_font_size()),
+				b(b), x(x) {}
+			int draw(void)
+			{
+				const size_t sz = b->get_size();
+				xcb_image_text_8(xc, sz, win, gc, x, f.h,
+					b->buffer);
+				return x + f.w * sz;
+			}
+	};
 }
 // Returns x offset for next item
 uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset)
 {
-	uint8_t sz = 4;
-	const struct JBDim f = xstatus::get_font_size();
-	const int16_t x = offset + XSTATUS_CONST_PAD;
-	{ // buf scope
-		char buf[sz];
-		sz = format(buf, sz);
-		xcb_image_text_8(xc, sz, get_window(xc),
-			get_gc(xc), x, f.h, buf);
-	}
-	return x + f.w * sz;
+	TempBuf b;
+	TempRenderer r(xc, &b, offset + XSTATUS_CONST_PAD);
+	return r.draw();
 }
