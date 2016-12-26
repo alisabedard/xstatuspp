@@ -5,6 +5,7 @@ extern "C" {
 }
 #include <cstdio>
 #include <cstdlib>
+#include "Buffer.h"
 #include "config.h"
 #include "font.h"
 namespace {
@@ -20,13 +21,16 @@ namespace {
 __attribute__((nonnull))
 uint16_t xstatus::load::draw(xcb_connection_t * xc, const uint16_t x)
 {
-	const struct JBDim f = xstatus::get_font_size();
-	uint8_t sz=6;
-	{ // buf scope
-		char buf[sz];
-		sz = format(buf, sz);
-		xcb_image_text_8(xc, sz, xstatus::get_window(xc),
-			xstatus::get_gc(xc), x, f.h, buf);
-	}
-	return x + f.w * sz + XSTATUS_CONST_PAD;
+	const struct JBDim f = get_font_size();
+	class LoadBuffer : public Buffer {
+		public:
+			LoadBuffer(void) : Buffer(6)
+			{
+				size = format(buffer, size);
+			}
+	};
+	LoadBuffer b;
+	xcb_image_text_8(xc, b.get_size(), xstatus::get_window(xc),
+		xstatus::get_gc(xc), x, f.h, b.buffer);
+	return x + f.w * b.get_size() + XSTATUS_CONST_PAD;
 }

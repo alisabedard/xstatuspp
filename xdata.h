@@ -9,5 +9,17 @@ namespace xstatus {
 	xcb_gcontext_t get_gc(xcb_connection_t * xc);
 	xcb_gcontext_t get_invert_gc(xcb_connection_t * xc);
 	xcb_screen_t * get_screen(xcb_connection_t * xc);
+	class XData {
+		protected:
+			xcb_connection_t * xc;
+			xcb_window_t win;
+			xcb_gcontext_t gc;
+			xcb_screen_t * scr;
+		public:
+			XData(xcb_connection_t * xc)
+				: xc(xc), win(get_window(xc)), gc(get_gc(xc)),
+				scr(get_screen(xc))
+		{}
+	};
 }
 #endif//!XS_XDATA_H
