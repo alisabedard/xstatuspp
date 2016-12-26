@@ -3,6 +3,7 @@ extern "C" {
 #include "temperature.h"
 #include "config.h"
 #include "font.h"
+#include "libjb/JBDim.h"
 #include "util.h"
 #include "xdata.h"
 #include <stdio.h>

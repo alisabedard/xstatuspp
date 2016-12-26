@@ -3,6 +3,7 @@ extern "C" {
 #include "clock.h"
 #include "config.h"
 #include "font.h"
+#include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }

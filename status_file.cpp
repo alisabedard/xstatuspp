@@ -3,6 +3,7 @@ extern "C" {
 #include "status_file.h"
 #include "config.h"
 #include "font.h"
+#include "libjb/JBDim.h"
 #include "libjb/file.h"
 #include "libjb/util.h"
 #include "xdata.h"

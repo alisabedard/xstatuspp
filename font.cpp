@@ -1,6 +1,7 @@
 // Copyright 2016, Jeffrey E. Bedard
 extern "C" {
 #include "font.h"
+#include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 #include <stdlib.h>

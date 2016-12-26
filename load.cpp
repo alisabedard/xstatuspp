@@ -1,5 +1,6 @@
 // Copyright 2016, Jeffrey E. Bedard
 extern "C" {
+#include "libjb/JBDim.h"
 #include "load.h"
 #include "config.h"
 #include "font.h"

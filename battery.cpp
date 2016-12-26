@@ -2,6 +2,7 @@
 #include "battery.h"
 extern "C" {
 #include "font.h"
+#include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/macros.h"
 #include "libjb/util.h"
