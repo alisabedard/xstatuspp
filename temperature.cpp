@@ -30,18 +30,17 @@ namespace {
 		}
 		return temp / 1000;
 	}
-	uint8_t format(char *  buf, const uint8_t sz)
-	{
-		const uint8_t temp = get_temp();
-		if (temp)
-			return snprintf(buf, sz, "%dC", temp);
-		else
-			return 0;
-	}
 	class TempBuf : public Buffer {
+		private:
+			void format(void)
+			{
+				const uint8_t temp = get_temp();
+				size = temp ? snprintf(buffer, size, "%dC",
+					temp) : 0;
+			}
 		public:
 			TempBuf(void) : Buffer(4) {
-				size = format(buffer, size);
+				format();
 			}
 	};
 	class TempRenderer : public Renderer {
