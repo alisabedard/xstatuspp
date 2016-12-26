@@ -6,10 +6,10 @@ extern "C" {
 #include "libjb/log.h"
 #include "libjb/macros.h"
 #include "libjb/util.h"
-#include "util.h"
 #include "xdata.h"
 }
 #include "config.h"
+#include "util.h"
 #include "xstatus.h"
 //#define XSTATUS_DEBUG_BATTERY
 #ifndef XSTATUS_DEBUG_BATTERY

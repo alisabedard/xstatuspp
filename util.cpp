@@ -1,13 +1,13 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "util.h"
+extern "C" {
 #include "font.h"
 #include "libjb/file.h"
 #include "libjb/xcb.h"
 #include <fcntl.h>
-#include <stdlib.h>
 #include <unistd.h>
 }
+#include <cstdlib>
 void xstatus_create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 	const xcb_window_t win, const char *  fg,
 	const char *  bg)

@@ -3,11 +3,11 @@ extern "C" {
 #include "temperature.h"
 #include "font.h"
 #include "libjb/JBDim.h"
-#include "util.h"
 #include "xdata.h"
 }
 #include <cstdio>
 #include "config.h"
+#include "util.h"
 static int32_t get_temp_raw(void)
 {
 	return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);

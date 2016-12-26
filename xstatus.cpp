@@ -13,8 +13,8 @@ extern "C" {
 #include "xdata.h"
 #include "font.h"
 #include "window.h"
-#include "util.h"
 }
+#include "util.h"
 using namespace xstatus;
 static uint16_t poll_status(xcb_connection_t *  xc,
 	const char * filename, const uint16_t widget_start)
