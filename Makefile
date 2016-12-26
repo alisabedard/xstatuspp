@@ -2,13 +2,14 @@ objs=util.o main.o font.o xdata.o button.o
 objs+=clock.o load.o status_file.o window.o toolbar.o
 objs+=battery.o temperature.o xstatus.o Buffer.o
 include config.mk
-cflags+=-std=c11
+cflags+=-std=c++11
 cflags+=-D_XOPEN_SOURCE=700
 cflags+=-D_DEFAULT_SOURCE
 cflags+=-D_BSD_SOURCE
 ldflags+=-lxcb -lxcb-cursor
 ldlags+=${LDFLAGS}
 cflags+=${CFLAGS}
+CXXFLAGS=${cflags}
 PREFIX=/usr
 exe=xspp
 installdir=${DESTDIR}${PREFIX}
