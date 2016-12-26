@@ -8,6 +8,8 @@ extern "C" {
 #include "font.h"
 #include "util.h"
 #include "xdata.h"
+using namespace xstatus;
+namespace {
 static int32_t get_temp_raw(void)
 {
 	return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);
@@ -34,8 +36,9 @@ static uint8_t format(char *  buf, const uint8_t sz)
 	else
 		return 0;
 }
+}
 // Returns x offset for next item
-uint16_t draw_temp(xcb_connection_t * xc, const uint16_t offset)
+uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset)
 {
 	uint8_t sz = 4;
 	const struct JBDim f = xstatus::get_font_size();
