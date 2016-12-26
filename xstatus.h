@@ -8,6 +8,7 @@ namespace xstatus {
 	};
 	class XStatus : public XData{
 		private:
+			unsigned int widget_start;
 			XStatusOptions * opt;
 		public:
 			XStatus(XStatusOptions * opt);
