@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "config.h"
 #include "xstatus.h"
+#include <cstring>
 using namespace std;
 static void usage(void)
 {
@@ -26,7 +27,8 @@ static void parse_command_line(int argc, char ** argv, XStatusOptions * o)
 			o->delay = atoi(optarg);
 			break;
 		case 'f':
-			o->filename = optarg;
+			free(o->filename);
+			o->filename = strdup(optarg);
 			break;
 		case 'h':
 		default:
@@ -36,9 +38,17 @@ static void parse_command_line(int argc, char ** argv, XStatusOptions * o)
 }
 int main(int argc, char ** argv)
 {
-	char default_filename[] = XSTATUS_STATUS_FILE;
-	XStatusOptions o = {.filename = default_filename,
-		.delay = 1};
-	parse_command_line(argc, argv, &o);
-	xstatus::start(&o);
+	class Main {
+		XStatusOptions opt;
+		public:
+			Main(int argc, char ** argv)
+			{
+				opt.delay = 1;
+				opt.filename = strdup(XSTATUS_STATUS_FILE);
+				parse_command_line(argc, argv, &opt);
+			}
+			~Main(void) {free(opt.filename);}
+			XStatusOptions * get_options(void) { return &opt; }
+	} m(argc, argv);
+	xstatus::start(m.get_options());
 }
