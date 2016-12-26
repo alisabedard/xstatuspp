@@ -10,7 +10,7 @@ ldflags+=-lxcb -lxcb-cursor
 ldlags+=${LDFLAGS}
 cflags+=${CFLAGS}
 PREFIX=/usr
-exe=xstatuspp
+exe=xspp
 installdir=${DESTDIR}${PREFIX}
 ${exe}: libjb/libjb.a ${objs}
 	${CXX} ${cflags} ${ldflags} ${objs} ${static} -o $@
