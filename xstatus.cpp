@@ -16,7 +16,7 @@ extern "C" {
 #include "window.h"
 #include "xdata.h"
 using namespace xstatus;
-static uint16_t poll_status(xcb_connection_t *  xc,
+static uint16_t poll_status(xcb_connection_t * xc,
 	const char * filename, const uint16_t widget_start)
 {
 	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
@@ -25,16 +25,16 @@ static uint16_t poll_status(xcb_connection_t *  xc,
 	offset = status_file::draw(xc, offset, filename);
 	return offset;
 }
-static void update(xcb_connection_t *  xc,
-	const char *  filename, const uint16_t widget_start)
+static void update(xcb_connection_t * xc,
+	const char * filename, const uint16_t widget_start)
 {
 	Battery::draw(xc, poll_status(xc, filename, widget_start),
 		clock::draw(xc));
 }
 // returns if update needed
 __attribute__((nonnull))
-static void handle_events(xcb_connection_t *  xc,
-	xcb_generic_event_t *  e, const char *  filename,
+static void handle_events(xcb_connection_t * xc,
+	xcb_generic_event_t * e, const char * filename,
 	const uint16_t widget_start)
 {
 	switch (e->response_type) {
@@ -67,8 +67,8 @@ static void handle_events(xcb_connection_t *  xc,
 	free(e);
 }
 __attribute__((noreturn))
-static void event_loop(xcb_connection_t *  xc,
-	const uint8_t delay, const char *  filename,
+static void event_loop(xcb_connection_t * xc,
+	const uint8_t delay, const char * filename,
 	const uint16_t widget_start)
 {
 	xcb_generic_event_t * e;
@@ -79,20 +79,20 @@ event_loop:
 		update(xc, filename, widget_start);
 	goto event_loop;
 }
-static void initialize_font(xcb_connection_t *  xc)
+static void initialize_font(xcb_connection_t * xc)
 {
 	if (!open_font(xc, XSTATUS_FONT)) // default
 		if (!open_font(xc, "fixed")) // fallback
 			LIBJB_ERROR("Could not load any font");
 }
-static void setup_invert_gc(xcb_connection_t *  xc,
+static void setup_invert_gc(xcb_connection_t * xc,
 	const xcb_window_t w)
 {
 	xcb_gcontext_t gc = get_invert_gc(xc);
 	uint32_t v = XCB_GX_INVERT;
 	xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 }
-static void initialize_gcs(xcb_connection_t *  xc)
+static void initialize_gcs(xcb_connection_t * xc)
 {
 	const xcb_window_t w = get_window(xc);
 	xstatus_create_gc(xc, get_gc(xc), w,
@@ -101,17 +101,15 @@ static void initialize_gcs(xcb_connection_t *  xc)
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
 	setup_invert_gc(xc, w);
 }
-static uint16_t initialize(xcb_connection_t *  xc)
+static uint16_t initialize(xcb_connection_t * xc)
 {
 	xstatus_create_window(xc);
 	initialize_font(xc); // font needed for gc
 	initialize_gcs(xc);
 	return toolbar::initialize(xc);
 }
-namespace xstatus {
-	void start(struct XStatusOptions *  opt)
-	{
-		xcb_connection_t * xc = jb_get_xcb_connection(NULL, NULL);
-		event_loop(xc, opt->delay, opt->filename, initialize(xc));
-	}
+void xstatus::start(struct XStatusOptions * opt)
+{
+	xcb_connection_t * xc = jb_get_xcb_connection(NULL, NULL);
+	event_loop(xc, opt->delay, opt->filename, initialize(xc));
 }
