@@ -1,10 +1,10 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "window.h"
-#include "config.h"
+extern "C" {
 #include "libjb/xcb.h"
-#include "xdata.h"
 }
+#include "config.h"
+#include "xdata.h"
 __attribute__((const))
 static inline int16_t get_y(const uint16_t screen_height)
 {

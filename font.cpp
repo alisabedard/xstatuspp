@@ -1,12 +1,12 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "font.h"
+extern "C" {
 #include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
-#include <stdlib.h>
-#include <string.h>
 }
+#include <cstdlib>
+#include <cstring>
 namespace xstatus {
 	static struct JBDim font_size;
 	xcb_font_t get_font(xcb_connection_t * xc)

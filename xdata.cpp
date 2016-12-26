@@ -1,5 +1,6 @@
-extern "C" {
+// Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #include "xdata.h"
+extern "C" {
 #include "libjb/xcb.h"
 }
 namespace xstatus {

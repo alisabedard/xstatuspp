@@ -1,16 +1,16 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "status_file.h"
-#include "config.h"
-#include "font.h"
+extern "C" {
 #include "libjb/JBDim.h"
 #include "libjb/file.h"
 #include "libjb/util.h"
-#include "xdata.h"
-#include <stdio.h>
+}
+#include <cstdio>
 #include <sys/stat.h> // include per man page of fchmod()
 #include <unistd.h> // include per man page of read()
-}
+#include "config.h"
+#include "font.h"
+#include "xdata.h"
 static ssize_t poll_status_file(const char *  filename,
 	char *  buf)
 {

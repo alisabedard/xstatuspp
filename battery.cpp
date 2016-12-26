@@ -1,15 +1,15 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "battery.h"
 extern "C" {
-#include "font.h"
 #include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/macros.h"
 #include "libjb/util.h"
-#include "xdata.h"
 }
 #include "config.h"
+#include "font.h"
 #include "util.h"
+#include "xdata.h"
 #include "xstatus.h"
 //#define XSTATUS_DEBUG_BATTERY
 #ifndef XSTATUS_DEBUG_BATTERY

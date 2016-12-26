@@ -1,11 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "toolbar.h"
+extern "C" {
+#include "libjb/log.h"
 }
 #include <cstdlib>
 #include "button.h"
 #include "config.h"
-#include "libjb/log.h"
 using namespace std;
 namespace xstatus {
 	namespace toolbar {

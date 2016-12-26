@@ -1,20 +1,20 @@
 // Copyright 2016, Jeffrey E. Bedard
+#include "xstatus.h"
 extern "C" {
 #include "libjb/log.h"
 #include "libjb/xcb.h"
-#include "xstatus.h"
+}
 #include "battery.h"
 #include "clock.h"
 #include "config.h"
+#include "font.h"
 #include "load.h"
 #include "status_file.h"
 #include "temperature.h"
 #include "toolbar.h"
-#include "xdata.h"
-#include "font.h"
-#include "window.h"
-}
 #include "util.h"
+#include "window.h"
+#include "xdata.h"
 using namespace xstatus;
 static uint16_t poll_status(xcb_connection_t *  xc,
 	const char * filename, const uint16_t widget_start)

@@ -1,11 +1,9 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
+#include "config.h"
 #include "xstatus.h"
-}
 #define XSTATUS_HELPTEXT \
 	"DESCRIPTION:  Simple X toolbar for minimalistic"\
 	" window managers.\n" \

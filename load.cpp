@@ -1,12 +1,12 @@
 // Copyright 2016, Jeffrey E. Bedard
+#include "load.h"
 extern "C" {
 #include "libjb/JBDim.h"
-#include "load.h"
+}
+#include <cstdio>
+#include <cstdlib>
 #include "config.h"
 #include "font.h"
-#include <stdio.h>
-#include <stdlib.h>
-}
 __attribute__((nonnull))
 static uint8_t format(char *  buf, const uint8_t sz)
 {

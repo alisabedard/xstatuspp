@@ -1,12 +1,12 @@
 // Copyright 2016, Jeffrey E. Bedard
-extern "C" {
 #include "clock.h"
-#include "config.h"
-#include "font.h"
+extern "C" {
 #include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }
+#include "config.h"
+#include "font.h"
 //#define XSTATUS_DEBUG_CLOCK
 #ifndef XSTATUS_DEBUG_CLOCK
 #undef LOG

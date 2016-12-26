@@ -1,15 +1,15 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "button.h"
 extern "C" {
-#include "config.h"
-#include "font.h"
 #include "libjb/JBDim.h"
 #include "libjb/xcb.h"
-#include "xdata.h"
-#include "window.h"
 }
 #include <cstdlib>
 #include <cstring>
+#include "config.h"
+#include "font.h"
+#include "window.h"
+#include "xdata.h"
 using namespace std;
 static void draw(XSButton * b)
 {
