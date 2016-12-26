@@ -10,9 +10,6 @@ namespace xstatus {
 		private:
 			unsigned int widget_start;
 			XStatusOptions * opt;
-			void initialize_gcs(void);
-			void initialize_font(void);
-			void event_loop(void);
 		public:
 			XStatus(XStatusOptions * opt);
 			~XStatus(void);

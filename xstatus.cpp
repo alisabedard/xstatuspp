@@ -68,26 +68,18 @@ namespace {
 		xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 	}
 }
-void XStatus::initialize_font(void)
+XStatus::XStatus(XStatusOptions * opt)
+	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
+	xstatus_create_window(xc);
 	if (!open_font(xc, XSTATUS_FONT)) // default
 		if (!open_font(xc, "fixed")) // fallback
 			LIBJB_ERROR("Could not load any font");
-}
-void XStatus::initialize_gcs(void)
-{
 	xstatus_create_gc(xc, get_gc(xc), win,
 		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
 	xstatus_create_gc(xc, get_button_gc(xc), win,
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
 	setup_invert_gc(xc, win);
-}
-XStatus::XStatus(XStatusOptions * opt)
-	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
-{
-	xstatus_create_window(xc);
-	initialize_font();
-	initialize_gcs();
 	widget_start = toolbar::initialize(xc);
 }
 XStatus::~XStatus(void)
