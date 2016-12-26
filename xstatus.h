@@ -1,19 +1,20 @@
 #ifndef XSTATUS_XSTATUS_H
 #define XSTATUS_XSTATUS_H
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <stdint.h>
-#ifdef __cplusplus
-}
-#endif
-struct XStatusOptions {
-	char * filename;
-	uint8_t delay;
-};
-#ifdef __cplusplus
+#include "xdata.h"
 namespace xstatus {
-	void start(struct XStatusOptions * opt);
+	struct XStatusOptions {
+		char * filename;
+		uint8_t delay;
+	};
+	class XStatus : public XData{
+		private:
+			XStatusOptions * opt;
+		public:
+			XStatus(XStatusOptions * opt);
+			~XStatus(void);
+			void run(void);
+			static void instance(XStatusOptions * opt);
+	};
+	void start(XStatusOptions * opt);
 }
-#endif//__cplusplus
 #endif//!XSTATUS_XSTATUS_H

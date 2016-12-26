@@ -5,6 +5,7 @@
 #include "xstatus.h"
 #include <cstring>
 using namespace std;
+using namespace xstatus;
 class Main {
 	XStatusOptions options;
 	static void usage(void);
@@ -57,5 +58,5 @@ int main(int argc, char ** argv)
 {
 	Main app;
 	app.parse(argc, argv);
-	xstatus::start(app.get_options());
+	XStatus::instance(app.get_options());
 }

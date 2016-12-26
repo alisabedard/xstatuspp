@@ -108,8 +108,19 @@ static uint16_t initialize(xcb_connection_t * xc)
 	initialize_gcs(xc);
 	return toolbar::initialize(xc);
 }
-void xstatus::start(struct XStatusOptions * opt)
+XStatus::XStatus(XStatusOptions * opt)
+	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
+{}
+XStatus::~XStatus(void)
 {
-	xcb_connection_t * xc = jb_get_xcb_connection(NULL, NULL);
+	xcb_disconnect(xc);
+}
+void XStatus::run(void)
+{
 	event_loop(xc, opt->delay, opt->filename, initialize(xc));
+}
+void XStatus::instance(struct XStatusOptions * opt)
+{
+	XStatus x(opt);
+	x.run();
 }
