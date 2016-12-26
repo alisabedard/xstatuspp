@@ -29,7 +29,7 @@ static void update(xcb_connection_t *  xc,
 	const char *  filename, const uint16_t widget_start)
 {
 	Battery::draw(xc, poll_status(xc, filename, widget_start),
-		draw_clock(xc));
+		clock::draw(xc));
 }
 // returns if update needed
 __attribute__((nonnull))

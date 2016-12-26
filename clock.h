@@ -3,6 +3,8 @@
 #define XSTATUS_CLOCK_H
 #include "xdata.h"
 namespace xstatus {
-	uint16_t draw_clock(xcb_connection_t * xc);
+	namespace clock {
+		uint16_t draw(xcb_connection_t * xc);
+	}
 }
 #endif//!XSTATUS_CLOCK_H
