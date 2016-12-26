@@ -62,21 +62,21 @@ namespace {
 class StatusRenderer : public Renderer {
 	private:
 		enum { PAD = XSTATUS_CONST_PAD << 1 };
-		Buffer b;
+		Buffer * b;
 		int x;
 		JBDim f;
 		int offset(void)
 		{
-			return f.w * b.get_size() + x + PAD + PAD;
+			return f.w * b->get_size() + x + PAD + PAD;
 		}
 	public:
 		int draw(void)
 		{
-			xcb_image_text_8(xc, b.get_size(), win, gc, x + PAD,
-				f.h, b.buffer);
+			xcb_image_text_8(xc, b->get_size(), win, gc, x + PAD,
+				f.h, b->buffer);
 			return offset();
 		}
-		StatusRenderer(xcb_connection_t * xc, Buffer b, int x)
+		StatusRenderer(xcb_connection_t * xc, Buffer * b, int x)
 			: Renderer(xc), b(b), x(x), f(get_font_size()) {}
 };
 // Returns offset for next widget
@@ -87,6 +87,6 @@ uint16_t xstatus::status_file::draw(xcb_connection_t * xc,
 	StatusBuffer b(filename);
 	if (!b.poll())
 		return x_offset + XSTATUS_CONST_PAD;
-	StatusRenderer r(xc, b, x_offset);
+	StatusRenderer r(xc, &b, x_offset);
 	return r.draw();
 }
