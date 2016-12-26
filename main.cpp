@@ -5,7 +5,16 @@
 #include "xstatus.h"
 #include <cstring>
 using namespace std;
-static void usage(void)
+class Main {
+	XStatusOptions options;
+	static void usage(void);
+	public:
+		Main(void);
+		~Main(void);
+		void parse(int argc, char ** argv);
+		XStatusOptions * get_options(void) {return &options;}
+};
+void Main::usage(void)
 {
 	cout << "DESCRIPTION: Simple X toolbar for minimalistic "
 		"window managers.\n"
@@ -18,37 +27,35 @@ static void usage(void)
 		"Project page: https://github.com/jefbed/xstatus\n";
 	exit(1);
 }
-static void parse_command_line(int argc, char ** argv, XStatusOptions * o)
+void Main::parse(int argc, char ** argv)
 {
-	int8_t opt;
-	while((opt = getopt(argc, argv, "d:f:h")) != -1) {
-		switch(opt) {
+	char o;
+	while ((o = getopt(argc, argv, "d:f:h:")) >= 0)
+		switch (o) {
 		case 'd':
-			o->delay = atoi(optarg);
+			options.delay = atoi(optarg);
 			break;
 		case 'f':
-			free(o->filename);
-			o->filename = strdup(optarg);
+			free(options.filename);
+			options.filename = strdup(optarg);
 			break;
 		case 'h':
 		default:
 			usage();
 		}
-	}
+}
+Main::Main(void)
+{
+	options.delay = 1;
+	options.filename = strdup(XSTATUS_STATUS_FILE);
+}
+Main::~Main(void)
+{
+	free(options.filename);
 }
 int main(int argc, char ** argv)
 {
-	class Main {
-		XStatusOptions opt;
-		public:
-			Main(int argc, char ** argv)
-			{
-				opt.delay = 1;
-				opt.filename = strdup(XSTATUS_STATUS_FILE);
-				parse_command_line(argc, argv, &opt);
-			}
-			~Main(void) {free(opt.filename);}
-			XStatusOptions * get_options(void) { return &opt; }
-	} m(argc, argv);
-	xstatus::start(m.get_options());
+	Main app;
+	app.parse(argc, argv);
+	xstatus::start(app.get_options());
 }
