@@ -22,7 +22,7 @@ static uint16_t poll_status(xcb_connection_t *  xc,
 	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
 	offset = load::draw(xc, offset);
 	offset = draw_temp(xc, offset);
-	offset = draw_status_file(xc, offset, filename);
+	offset = status_file::draw(xc, offset, filename);
 	return offset;
 }
 static void update(xcb_connection_t *  xc,
