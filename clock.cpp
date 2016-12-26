@@ -77,7 +77,6 @@ namespace xstatus {
 		{
 			Clock c(XSTATUS_TIME_BUFFER_SIZE);
 			c.format();
-			Buffer b = c;
 			Renderer r(xc, &c);
 			return r.draw();
 		}
