@@ -8,8 +8,7 @@ extern "C" {
 #include <string>
 #include "config.h"
 #include "font.h"
-using namespace std;
-namespace xstatus {
+namespace {
 	class Buffer {
 		protected:
 			size_t size;
@@ -22,7 +21,7 @@ namespace xstatus {
 			{
 				size = obj.size;
 				buffer = new char [size];
-				string(obj.buffer).copy(buffer, size);
+				std::string(obj.buffer).copy(buffer, size);
 			}
 			~Buffer(void) { delete buffer; }
 			size_t get_size(void) {return size;}
@@ -55,10 +54,10 @@ namespace xstatus {
 		public:
 			Renderer(xcb_connection_t * xc, Buffer * c)
 				: xc(xc), c(c),
-				win(get_window(xc)),
-				gc(get_gc(xc)),
-				scr(get_screen(xc)),
-				font_size(get_font_size())
+				win(xstatus::get_window(xc)),
+				gc(xstatus::get_gc(xc)),
+				scr(xstatus::get_screen(xc)),
+				font_size(xstatus::get_font_size())
 			{}
 			int draw(void);
 		};
@@ -70,7 +69,8 @@ namespace xstatus {
 			c->buffer);
 		return offset;
 	}
-
+}
+namespace xstatus {
 	namespace clock {
 		uint16_t draw(xcb_connection_t * xc)
 		{
