@@ -11,21 +11,18 @@ extern "C" {
 #include "window.h"
 #include "xdata.h"
 using namespace std;
-static void draw(XSButton * b)
+void XSButton::draw(void)
 {
-	xcb_connection_t * xc = b->xc;
-	xcb_image_text_8(xc, strlen(b->label), b->get_window(),
+	xcb_image_text_8(xc, strlen(label), window,
 		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
-		xstatus::get_font_size().height, b->label);
+		xstatus::get_font_size().height, label);
 }
-static void invert(XSButton * b)
+void XSButton::invert(void)
 {
-	xcb_connection_t * xc = b->xc;
-	const xcb_window_t w = b->get_window();
-	const xcb_gcontext_t gc = xstatus::get_invert_gc(xc);
-	const struct JBDim f = xstatus::get_font_size();
-	xcb_rectangle_t r = {0, 0, b->get_geometry().width, f.h};
-	xcb_poly_fill_rectangle(xc, w, gc, 1, &r);
+	xcb_rectangle_t r = geometry;
+	r.x = r.y = 0;
+	xcb_poly_fill_rectangle(xc, window,
+		xstatus::get_invert_gc(xc), 1, &r);
 	xcb_flush(xc);
 }
 static pixel_t get_bg(xcb_connection_t *  xc)
@@ -53,23 +50,24 @@ void XSButton::create_window(void)
 {
 	class Values {
 		private:
+			enum {
+				VM = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK,
+				EM = XCB_EVENT_MASK_EXPOSURE
+					| XCB_EVENT_MASK_BUTTON_PRESS
+					| XCB_EVENT_MASK_ENTER_WINDOW
+					| XCB_EVENT_MASK_LEAVE_WINDOW,
+			};
 			uint32_t v[2];
 		public:
 			Values(xcb_connection_t * xc)
 			{
 
-				enum {
-					EM = XCB_EVENT_MASK_EXPOSURE
-						| XCB_EVENT_MASK_BUTTON_PRESS
-						| XCB_EVENT_MASK_ENTER_WINDOW
-						| XCB_EVENT_MASK_LEAVE_WINDOW,
-				};
 				v[0] = get_bg(xc);
 				v[1] = EM;
 			}
 			uint32_t get_mask(void)
 			{
-				return XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
+				return VM;
 			}
 			const uint32_t * get_values(void) {return v;}
 	};
@@ -91,9 +89,7 @@ XSButton::XSButton(xcb_connection_t *  xc, const int16_t x, char * label)
 {
 	window = xcb_generate_id(xc);
 	create_window();
-	this->draw = ::draw;
-	this->enter = this->leave = invert;
-	draw(this);
+	draw();
 }
 XSButton::~XSButton(void)
 {

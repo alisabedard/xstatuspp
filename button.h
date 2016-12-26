@@ -10,9 +10,8 @@ class XSButton {
 		xcb_rectangle_t get_geometry(void){return geometry;}
 		XSButton * next;
 		void (*cb)(XSButton *);
-		void (*draw) (XSButton *);
-		void (*enter) (XSButton *);
-		void (*leave) (XSButton *);
+		void draw(void);
+		void invert(void);
 		char * cb_data;
 		xcb_connection_t * xc;
 		char * label;

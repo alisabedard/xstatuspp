@@ -84,10 +84,20 @@ namespace xstatus {
 			}
 			return false;
 		}
+		static bool iterate_buttons_member(const xcb_window_t ewin,
+			void (XSButton::*func)(void))
+		{
+			XSButton * b = find_button_r(ewin, xstatus_head_button);
+			if (b) {
+				(b->*func)();
+				return true;
+			}
+			return false;
+		}
 		bool handle_expose(const xcb_window_t event_window)
 		{
-			return iterate_buttons(event_window,
-				xstatus_head_button->draw);
+			return iterate_buttons_member(event_window,
+				&XSButton::draw);
 		}
 		bool handle_button_press(const xcb_window_t event_window)
 		{
@@ -96,13 +106,13 @@ namespace xstatus {
 		}
 		bool handle_button_enter(const xcb_window_t event_window)
 		{
-			return iterate_buttons(event_window,
-				xstatus_head_button->enter);
+			return iterate_buttons_member(event_window,
+				&XSButton::invert);
 		}
 		bool handle_button_leave(const xcb_window_t event_window)
 		{
-			return iterate_buttons(event_window,
-				xstatus_head_button->leave);
+			return iterate_buttons_member(event_window,
+				&XSButton::invert);
 		}
 	}
 }
