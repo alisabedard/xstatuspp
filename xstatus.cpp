@@ -85,8 +85,8 @@ XStatus::~XStatus(void)
 }
 void XStatus::run(void)
 {
-	xcb_generic_event_t * e;
 	for (;;) {
+		xcb_generic_event_t * e;
 		if (jb_next_event_timed(xc, &e, opt->delay * 1000000) && e)
 			handle_events(e);
 		else
