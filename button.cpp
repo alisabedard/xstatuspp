@@ -51,24 +51,39 @@ void XSButton::set_geometry(void)
 }
 void XSButton::create_window(void)
 {
-	{ // g scope, vm scope, em scope
-		enum {
-			VM = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK,
-			EM = XCB_EVENT_MASK_EXPOSURE
-				| XCB_EVENT_MASK_BUTTON_PRESS
-				| XCB_EVENT_MASK_ENTER_WINDOW
-				| XCB_EVENT_MASK_LEAVE_WINDOW,
-			CFP = XCB_COPY_FROM_PARENT,
-			BORDER = 0
-		};
-		set_geometry();
-		const xcb_rectangle_t g = this->geometry;
-		uint32_t v[] = {get_bg(this->xc), EM};
-		xcb_create_window(this->xc, CFP, this->window,
-			xstatus::get_window(this->xc),
-			g.x, g.y, g.width, g.height, BORDER,
-			CFP, CFP, VM, v);
-	}
+	class Values {
+		private:
+			uint32_t v[2];
+		public:
+			Values(xcb_connection_t * xc)
+			{
+
+				enum {
+					EM = XCB_EVENT_MASK_EXPOSURE
+						| XCB_EVENT_MASK_BUTTON_PRESS
+						| XCB_EVENT_MASK_ENTER_WINDOW
+						| XCB_EVENT_MASK_LEAVE_WINDOW,
+				};
+				v[0] = get_bg(xc);
+				v[1] = EM;
+			}
+			uint32_t get_mask(void)
+			{
+				return XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
+			}
+			const uint32_t * get_values(void) {return v;}
+	};
+	set_geometry();
+	enum {
+		CFP = XCB_COPY_FROM_PARENT,
+		BORDER = 0
+	};
+	const xcb_rectangle_t g = this->geometry;
+	Values v(xc);
+	xcb_create_window(this->xc, CFP, this->window,
+		xstatus::get_window(this->xc),
+		g.x, g.y, g.width, g.height, BORDER,
+		CFP, CFP, v.get_mask(), v.get_values());
 	xcb_map_window(this->xc, this->window);
 }
 XSButton::XSButton(xcb_connection_t *  xc, const int16_t x, char * label)
