@@ -16,23 +16,19 @@ extern "C" {
 #include "window.h"
 #include "xdata.h"
 using namespace xstatus;
-namespace {
-	static uint16_t poll_status(xcb_connection_t * xc,
-		const char * filename, const uint16_t widget_start)
-	{
-		uint16_t offset = widget_start + XSTATUS_CONST_PAD;
-		offset = load::draw(xc, offset);
-		offset = temperature::draw(xc, offset);
-		offset = status_file::draw(xc, offset, filename);
-		return offset;
-	}
-	static void setup_invert_gc(xcb_connection_t * xc,
-		const xcb_window_t w)
-	{
-		xcb_gcontext_t gc = get_invert_gc(xc);
-		uint32_t v = XCB_GX_INVERT;
-		xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
-	}
+void XStatus::setup_invert_gc(void)
+{
+	const uint32_t v = XCB_GX_INVERT;
+	xcb_create_gc(xc, get_invert_gc(xc),
+		win, XCB_GC_FUNCTION, &v);
+}
+uint16_t XStatus::poll(void)
+{
+	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
+	offset = load::draw(xc, offset);
+	offset = temperature::draw(xc, offset);
+	offset = status_file::draw(xc, offset, opt->filename);
+	return offset;
 }
 // returns if update needed
 void XStatus::handle_events(xcb_generic_event_t * e)
@@ -62,8 +58,7 @@ void XStatus::handle_events(xcb_generic_event_t * e)
 }
 void XStatus::update(void)
 {
-	Battery::draw(xc, poll_status(xc, opt->filename, widget_start),
-		clock::draw(xc));
+	Battery::draw(xc, poll(), clock::draw(xc));
 }
 XStatus::XStatus(XStatusOptions * opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
@@ -76,7 +71,7 @@ XStatus::XStatus(XStatusOptions * opt)
 		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
 	xstatus_create_gc(xc, get_button_gc(xc), win,
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
-	setup_invert_gc(xc, win);
+	setup_invert_gc();
 	widget_start = toolbar::initialize(xc);
 }
 XStatus::~XStatus(void)

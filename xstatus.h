@@ -12,6 +12,8 @@ namespace xstatus {
 			XStatusOptions * opt;
 			void update(void);
 			void handle_events(xcb_generic_event_t * e);
+			uint16_t poll(void);
+			void setup_invert_gc(void);
 		public:
 			XStatus(XStatusOptions * opt);
 			~XStatus(void);
