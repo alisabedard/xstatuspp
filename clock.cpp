@@ -9,6 +9,7 @@ extern "C" {
 #include "Buffer.h"
 #include "config.h"
 #include "font.h"
+#include "Renderer.h"
 #include "xdata.h"
 using namespace xstatus;
 namespace {
@@ -30,17 +31,17 @@ namespace {
 					localtime(&current_time));
 			}
 	};
-	class Renderer : public XData {
+	class ClockRenderer : public Renderer {
 		Buffer * c;
 		const struct JBDim font_size;
 		public:
-		Renderer(xcb_connection_t * xc, Buffer * c);
+		ClockRenderer(xcb_connection_t * xc, Buffer * c);
 		int draw(void);
 	};
-	Renderer::Renderer(xcb_connection_t * xc, Buffer * c)
-		: XData(xc), c(c), font_size(get_font_size())
+	ClockRenderer::ClockRenderer(xcb_connection_t * xc, Buffer * c)
+		: Renderer(xc), c(c), font_size(get_font_size())
 	{}
-	int Renderer::draw(void)
+	int ClockRenderer::draw(void)
 	{
 		const size_t sz = c->get_size();
 		int offset = scr->width_in_pixels - font_size.w * sz;
@@ -53,6 +54,6 @@ uint16_t clock::draw(xcb_connection_t * xc)
 {
 	Clock c(XSTATUS_TIME_BUFFER_SIZE);
 	c.format();
-	Renderer r(xc, &c);
+	ClockRenderer r(xc, &c);
 	return r.draw();
 }
