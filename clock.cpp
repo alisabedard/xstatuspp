@@ -6,26 +6,11 @@ extern "C" {
 #include "libjb/xcb.h"
 }
 #include <string>
+#include "Buffer.h"
 #include "config.h"
 #include "font.h"
+using namespace xstatus;
 namespace {
-	class Buffer {
-		protected:
-			size_t size;
-		public:
-			char * buffer;
-			Buffer(size_t sz)
-				: size(sz), buffer(new char [sz])
-			{}
-			Buffer(const Buffer &obj) // copy
-			{
-				size = obj.size;
-				buffer = new char [size];
-				std::string(obj.buffer).copy(buffer, size);
-			}
-			~Buffer(void) { delete buffer; }
-			size_t get_size(void) {return size;}
-	};
 	class Time {
 		protected:
 			time_t current_time;
@@ -34,15 +19,15 @@ namespace {
 	};
 	class Clock : public Buffer, public Time {
 		public:
-		Clock(size_t size)
-			: Buffer(size)
-		{}
-		void format(void)
-		{
-			size = strftime(buffer, size,
-				XSTATUS_TIME_FORMAT,
-				localtime(&current_time));
-		}
+			Clock(size_t size)
+				: Buffer(size)
+			{}
+			void format(void)
+			{
+				size = strftime(buffer, size,
+					XSTATUS_TIME_FORMAT,
+					localtime(&current_time));
+			}
 	};
 	class Renderer {
 		xcb_connection_t * xc;
@@ -52,15 +37,15 @@ namespace {
 		xcb_screen_t * scr;
 		const struct JBDim font_size;
 		public:
-			Renderer(xcb_connection_t * xc, Buffer * c);
-			int draw(void);
-		};
+		Renderer(xcb_connection_t * xc, Buffer * c);
+		int draw(void);
+	};
 	Renderer::Renderer(xcb_connection_t * xc, Buffer * c)
 		: xc(xc), c(c),
-		win(xstatus::get_window(xc)),
-		gc(xstatus::get_gc(xc)),
-		scr(xstatus::get_screen(xc)),
-		font_size(xstatus::get_font_size())
+		win(get_window(xc)),
+		gc(get_gc(xc)),
+		scr(get_screen(xc)),
+		font_size(get_font_size())
 	{}
 	int Renderer::draw(void)
 	{
@@ -71,14 +56,10 @@ namespace {
 		return offset;
 	}
 }
-namespace xstatus {
-	namespace clock {
-		uint16_t draw(xcb_connection_t * xc)
-		{
-			Clock c(XSTATUS_TIME_BUFFER_SIZE);
-			c.format();
-			Renderer r(xc, &c);
-			return r.draw();
-		}
-	}
+uint16_t clock::draw(xcb_connection_t * xc)
+{
+	Clock c(XSTATUS_TIME_BUFFER_SIZE);
+	c.format();
+	Renderer r(xc, &c);
+	return r.draw();
 }
