@@ -26,40 +26,6 @@ namespace {
 		offset = status_file::draw(xc, offset, filename);
 		return offset;
 	}
-	static void update(xcb_connection_t * xc,
-		const char * filename, const uint16_t widget_start)
-	{
-		Battery::draw(xc, poll_status(xc, filename,
-			widget_start), clock::draw(xc));
-	}
-	// returns if update needed
-	static void handle_events(xcb_connection_t * xc,
-		xcb_generic_event_t * e, const char * filename,
-		const uint16_t widget_start)
-	{
-		switch (e->response_type) {
-		case XCB_ENTER_NOTIFY:
-			toolbar::handle_button_enter(
-				((xcb_enter_notify_event_t*)e)->event);
-			break;
-		case XCB_LEAVE_NOTIFY:
-			toolbar::handle_button_leave(
-				((xcb_leave_notify_event_t*)e)->event);
-			break;
-		case XCB_EXPOSE:
-			if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
-				->window))
-				update(xc, filename, widget_start);
-			break;
-		case XCB_BUTTON_PRESS:
-			toolbar::handle_button_press(
-				((xcb_button_press_event_t *)e)->event);
-			break;
-		default:
-			LOG("event: %d", e->response_type);
-		}
-		free(e);
-	}
 	static void setup_invert_gc(xcb_connection_t * xc,
 		const xcb_window_t w)
 	{
@@ -67,6 +33,37 @@ namespace {
 		uint32_t v = XCB_GX_INVERT;
 		xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 	}
+}
+// returns if update needed
+void XStatus::handle_events(xcb_generic_event_t * e)
+{
+	switch (e->response_type) {
+	case XCB_ENTER_NOTIFY:
+		toolbar::handle_button_enter(
+			((xcb_enter_notify_event_t*)e)->event);
+		break;
+	case XCB_LEAVE_NOTIFY:
+		toolbar::handle_button_leave(
+			((xcb_leave_notify_event_t*)e)->event);
+		break;
+	case XCB_EXPOSE:
+		if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
+			->window))
+			update();
+		break;
+	case XCB_BUTTON_PRESS:
+		toolbar::handle_button_press(
+			((xcb_button_press_event_t *)e)->event);
+		break;
+	default:
+		LOG("event: %d", e->response_type);
+	}
+	free(e);
+}
+void XStatus::update(void)
+{
+	Battery::draw(xc, poll_status(xc, opt->filename, widget_start),
+		clock::draw(xc));
 }
 XStatus::XStatus(XStatusOptions * opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
@@ -91,9 +88,9 @@ void XStatus::run(void)
 	xcb_generic_event_t * e;
 	for (;;) {
 		if (jb_next_event_timed(xc, &e, opt->delay * 1000000) && e)
-			handle_events(xc, e, opt->filename, widget_start);
+			handle_events(e);
 		else
-			update(xc, opt->filename, widget_start);
+			update();
 	}
 }
 void XStatus::instance(struct XStatusOptions * opt)
