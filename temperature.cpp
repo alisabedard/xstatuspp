@@ -10,32 +10,32 @@ extern "C" {
 #include "xdata.h"
 using namespace xstatus;
 namespace {
-static int32_t get_temp_raw(void)
-{
-	return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);
-}
-static uint8_t get_temp(void)
-{
-	// may only fail once:
-	static bool get_temp_failed;
-	if (get_temp_failed)
-		return 0; // 0 indicates unsupported
-	// type must hold at least 100000, signed
-	int32_t temp = get_temp_raw();
-	if (temp == -1) { // could not open system file
-		get_temp_failed = true;
-		return 0;
+	int32_t get_temp_raw(void)
+	{
+		return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);
 	}
-	return temp / 1000;
-}
-static uint8_t format(char *  buf, const uint8_t sz)
-{
-	const uint8_t temp = get_temp();
-	if (temp)
-		return snprintf(buf, sz, "%dC", temp);
-	else
-		return 0;
-}
+	uint8_t get_temp(void)
+	{
+		// may only fail once:
+		static bool get_temp_failed;
+		if (get_temp_failed)
+			return 0; // 0 indicates unsupported
+		// type must hold at least 100000, signed
+		int32_t temp = get_temp_raw();
+		if (temp == -1) { // could not open system file
+			get_temp_failed = true;
+			return 0;
+		}
+		return temp / 1000;
+	}
+	uint8_t format(char *  buf, const uint8_t sz)
+	{
+		const uint8_t temp = get_temp();
+		if (temp)
+			return snprintf(buf, sz, "%dC", temp);
+		else
+			return 0;
+	}
 }
 // Returns x offset for next item
 uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset)
@@ -46,8 +46,8 @@ uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset)
 	{ // buf scope
 		char buf[sz];
 		sz = format(buf, sz);
-		xcb_image_text_8(xc, sz, xstatus::get_window(xc),
-			xstatus::get_gc(xc), x, f.h, buf);
+		xcb_image_text_8(xc, sz, get_window(xc),
+			get_gc(xc), x, f.h, buf);
 	}
 	return x + f.w * sz;
 }
