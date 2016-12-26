@@ -1,13 +1,13 @@
 // Copyright 2016, Jeffrey E. Bedard
 extern "C" {
 #include "temperature.h"
-#include "config.h"
 #include "font.h"
 #include "libjb/JBDim.h"
 #include "util.h"
 #include "xdata.h"
-#include <stdio.h>
 }
+#include <cstdio>
+#include "config.h"
 static int32_t get_temp_raw(void)
 {
 	return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);
