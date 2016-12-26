@@ -29,64 +29,36 @@ namespace {
 	static void update(xcb_connection_t * xc,
 		const char * filename, const uint16_t widget_start)
 	{
-		Battery::draw(xc, poll_status(xc, filename, widget_start),
-			clock::draw(xc));
+		Battery::draw(xc, poll_status(xc, filename,
+			widget_start), clock::draw(xc));
 	}
 	// returns if update needed
-	__attribute__((nonnull))
-		static void handle_events(xcb_connection_t * xc,
-			xcb_generic_event_t * e, const char * filename,
-			const uint16_t widget_start)
-		{
-			switch (e->response_type) {
-			case XCB_ENTER_NOTIFY:
-#if LOG_LEVEL > 8
-				LOG("enter");
-#endif//LOG_LEVEL
-				toolbar::handle_button_enter(
-					((xcb_enter_notify_event_t*)e)->event);
-				break;
-			case XCB_LEAVE_NOTIFY:
-#if LOG_LEVEL > 8
-				LOG("leave");
-#endif//LOG_LEVEL
-				toolbar::handle_button_leave(
-					((xcb_leave_notify_event_t*)e)->event);
-				break;
-			case XCB_EXPOSE:
-				if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
-					->window))
-					update(xc, filename, widget_start);
-				break;
-			case XCB_BUTTON_PRESS:
-				toolbar::handle_button_press(
-					((xcb_button_press_event_t *)e)->event);
-				break;
-			default:
-				LOG("event: %d", e->response_type);
-			}
-			free(e);
-		}
-	__attribute__((noreturn))
-	static void event_loop(xcb_connection_t * xc,
-		const uint8_t delay, const char * filename,
-		const uint16_t widget_start) 
+	static void handle_events(xcb_connection_t * xc,
+		xcb_generic_event_t * e, const char * filename,
+		const uint16_t widget_start)
 	{
-		xcb_generic_event_t * e;
-		for (;;) {
-			if (jb_next_event_timed(xc, &e,
-				delay * 1000000) && e)
-				handle_events(xc, e,
-					filename, widget_start);
-			else
+		switch (e->response_type) {
+		case XCB_ENTER_NOTIFY:
+			toolbar::handle_button_enter(
+				((xcb_enter_notify_event_t*)e)->event);
+			break;
+		case XCB_LEAVE_NOTIFY:
+			toolbar::handle_button_leave(
+				((xcb_leave_notify_event_t*)e)->event);
+			break;
+		case XCB_EXPOSE:
+			if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
+				->window))
 				update(xc, filename, widget_start);
+			break;
+		case XCB_BUTTON_PRESS:
+			toolbar::handle_button_press(
+				((xcb_button_press_event_t *)e)->event);
+			break;
+		default:
+			LOG("event: %d", e->response_type);
 		}
-	}
-	static void initialize_font(xcb_connection_t * xc)
-	{
-		if (!open_font(xc, XSTATUS_FONT)) // default
-			if (!open_font(xc, "fixed")) // fallback
-				LIBJB_ERROR("Could not load any font");
+		free(e);
 	}
 	static void setup_invert_gc(xcb_connection_t * xc,
 		const xcb_window_t w)
@@ -95,22 +67,27 @@ namespace {
 		uint32_t v = XCB_GX_INVERT;
 		xcb_create_gc(xc, gc, w, XCB_GC_FUNCTION, &v);
 	}
-	static void initialize_gcs(xcb_connection_t * xc)
-	{
-		const xcb_window_t w = get_window(xc);
-		xstatus_create_gc(xc, get_gc(xc), w,
-			XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
-		xstatus_create_gc(xc, get_button_gc(xc), w,
-			XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
-		setup_invert_gc(xc, w);
-	}
+}
+void XStatus::initialize_font(void)
+{
+	if (!open_font(xc, XSTATUS_FONT)) // default
+		if (!open_font(xc, "fixed")) // fallback
+			LIBJB_ERROR("Could not load any font");
+}
+void XStatus::initialize_gcs(void)
+{
+	xstatus_create_gc(xc, get_gc(xc), win,
+		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
+	xstatus_create_gc(xc, get_button_gc(xc), win,
+		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
+	setup_invert_gc(xc, win);
 }
 XStatus::XStatus(XStatusOptions * opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	xstatus_create_window(xc);
-	initialize_font(xc);
-	initialize_gcs(xc);
+	initialize_font();
+	initialize_gcs();
 	widget_start = toolbar::initialize(xc);
 }
 XStatus::~XStatus(void)
@@ -119,7 +96,13 @@ XStatus::~XStatus(void)
 }
 void XStatus::run(void)
 {
-	event_loop(xc, opt->delay, opt->filename, widget_start);
+	xcb_generic_event_t * e;
+	for (;;) {
+		if (jb_next_event_timed(xc, &e, opt->delay * 1000000) && e)
+			handle_events(xc, e, opt->filename, widget_start);
+		else
+			update(xc, opt->filename, widget_start);
+	}
 }
 void XStatus::instance(struct XStatusOptions * opt)
 {
