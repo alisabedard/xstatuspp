@@ -4,7 +4,6 @@ extern "C" {
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }
-#include <iostream>
 #include <string>
 #include "battery.h"
 #include "clock.h"
@@ -97,24 +96,18 @@ void XStatus::run(void)
 }
 XStatusOptions::XStatusOptions(char * filename)
 {
-	cout << "create\n";
-	cout.flush();
 	string s(filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
 XStatusOptions::XStatusOptions(const XStatusOptions& obj)
 {
-	cout << "copy\n";
-	cout.flush();
 	string s(obj.filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
 XStatusOptions::~XStatusOptions(void)
 {
-	cout << "destroy\n";
-	cout.flush();
 	delete filename;
 }
 void XStatusOptions::set_filename(char * filename)
