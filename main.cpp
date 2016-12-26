@@ -6,14 +6,11 @@
 #include <cstring>
 using namespace std;
 using namespace xstatus;
-class Main {
-	XStatusOptions options;
+class Main : public XStatusOptions {
 	static void usage(void);
 	public:
-		Main(void);
-		~Main(void);
+		Main(char * filename);
 		void parse(int argc, char ** argv);
-		XStatusOptions * get_options(void) {return &options;}
 };
 void Main::usage(void)
 {
@@ -34,29 +31,22 @@ void Main::parse(int argc, char ** argv)
 	while ((o = getopt(argc, argv, "d:f:h:")) >= 0)
 		switch (o) {
 		case 'd':
-			options.delay = atoi(optarg);
+			delay = atoi(optarg);
 			break;
 		case 'f':
-			free(options.filename);
-			options.filename = strdup(optarg);
+			set_filename(optarg);
 			break;
 		case 'h':
 		default:
 			usage();
 		}
 }
-Main::Main(void)
-{
-	options.delay = 1;
-	options.filename = strdup(XSTATUS_STATUS_FILE);
-}
-Main::~Main(void)
-{
-	free(options.filename);
-}
+Main::Main(char * filename) : XStatusOptions(filename) {}
 int main(int argc, char ** argv)
 {
-	Main app;
+	char f[] = XSTATUS_STATUS_FILE;
+	Main app(f);
 	app.parse(argc, argv);
-	XStatus::instance(app.get_options());
+	XStatus x(app);
+	x.run();
 }

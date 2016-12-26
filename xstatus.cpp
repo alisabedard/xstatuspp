@@ -4,6 +4,8 @@ extern "C" {
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }
+#include <iostream>
+#include <string>
 #include "battery.h"
 #include "clock.h"
 #include "config.h"
@@ -16,6 +18,7 @@ extern "C" {
 #include "window.h"
 #include "xdata.h"
 using namespace xstatus;
+using namespace std;
 void XStatus::setup_invert_gc(void)
 {
 	const uint32_t v = XCB_GX_INVERT;
@@ -27,7 +30,7 @@ uint16_t XStatus::poll(void)
 	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
 	offset = load::draw(xc, offset);
 	offset = temperature::draw(xc, offset);
-	offset = status_file::draw(xc, offset, opt->filename);
+	offset = status_file::draw(xc, offset, opt.filename);
 	return offset;
 }
 // returns if update needed
@@ -60,7 +63,7 @@ void XStatus::update(void)
 {
 	Battery::draw(xc, poll(), clock::draw(xc));
 }
-XStatus::XStatus(XStatusOptions * opt)
+XStatus::XStatus(XStatusOptions opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	xstatus_create_window(xc);
@@ -76,20 +79,45 @@ XStatus::XStatus(XStatusOptions * opt)
 }
 XStatus::~XStatus(void)
 {
+	xcb_destroy_window(xc, win);
 	xcb_disconnect(xc);
 }
 void XStatus::run(void)
 {
 	for (;;) {
 		xcb_generic_event_t * e;
-		if (jb_next_event_timed(xc, &e, opt->delay * 1000000) && e)
+		if (jb_next_event_timed(xc, &e, opt.delay * 1000000) && e)
 			handle_events(e);
 		else
 			update();
 	}
 }
-void XStatus::instance(struct XStatusOptions * opt)
+XStatusOptions::XStatusOptions(char * filename)
 {
-	XStatus x(opt);
-	x.run();
+	cout << "create\n";
+	cout.flush();
+	string s(filename);
+	this->filename = new char[s.size()];
+	s.copy(this->filename, s.size());
+}
+XStatusOptions::XStatusOptions(const XStatusOptions& obj)
+{
+	cout << "copy\n";
+	cout.flush();
+	string s(obj.filename);
+	this->filename = new char[s.size()];
+	s.copy(this->filename, s.size());
+}
+XStatusOptions::~XStatusOptions(void)
+{
+	cout << "destroy\n";
+	cout.flush();
+	delete filename;
+}
+void XStatusOptions::set_filename(char * filename)
+{
+	delete this->filename;
+	string s(filename);
+	this->filename = new char[s.size()];
+	s.copy(this->filename, s.size());
 }
