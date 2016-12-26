@@ -11,7 +11,8 @@ namespace xstatus {
 		bool handle_button_enter(const xcb_window_t event_window);
 		bool handle_button_leave(const xcb_window_t event_window);
 		// returns true if event was processed:
-		bool handle_button_press(const xcb_window_t event_window);
+		bool handle_button_press(const xcb_window_t event_window,
+			bool * keep_going);
 		// returns true if event was processed:
 		bool handle_expose(const xcb_window_t event_window);
 	}

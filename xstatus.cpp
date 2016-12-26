@@ -34,8 +34,9 @@ uint16_t XStatus::poll(void)
 	return offset;
 }
 // returns if update needed
-void XStatus::handle_events(xcb_generic_event_t * e)
+bool XStatus::handle_events(xcb_generic_event_t * e)
 {
+	bool keep_going = true;
 	switch (e->response_type) {
 	case XCB_ENTER_NOTIFY:
 		toolbar::handle_button_enter(
@@ -52,12 +53,13 @@ void XStatus::handle_events(xcb_generic_event_t * e)
 		break;
 	case XCB_BUTTON_PRESS:
 		toolbar::handle_button_press(
-			((xcb_button_press_event_t *)e)->event);
+			((xcb_button_press_event_t *)e)->event, &keep_going);
 		break;
 	default:
 		LOG("event: %d", e->response_type);
 	}
 	free(e);
+	return keep_going;
 }
 void XStatus::update(void)
 {
@@ -84,10 +86,11 @@ XStatus::~XStatus(void)
 }
 void XStatus::run(void)
 {
-	for (;;) {
+	bool keep_going =  true;
+	while (keep_going) {
 		xcb_generic_event_t * e;
 		if (jb_next_event_timed(xc, &e, opt.delay * 1000000) && e)
-			handle_events(e);
+			keep_going = handle_events(e);
 		else
 			update();
 	}

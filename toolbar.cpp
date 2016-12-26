@@ -75,10 +75,12 @@ namespace xstatus {
 				i->next) : NULL;
 		}
 		static bool iterate_buttons(const xcb_window_t ewin,
-			void (*func)(XSButton * ))
+			void (*func)(XSButton * ), bool * keep_going)
 		{
 			XSButton * b = find_button_r(ewin, xstatus_head_button);
 			if (b) {
+				if (func == b->cb && !b->cb_data)
+					*keep_going = false;
 				func(b);
 				return true;
 			}
@@ -99,10 +101,11 @@ namespace xstatus {
 			return iterate_buttons_member(event_window,
 				&XSButton::draw);
 		}
-		bool handle_button_press(const xcb_window_t event_window)
+		bool handle_button_press(const xcb_window_t event_window,
+			bool * keep_going)
 		{
 			return iterate_buttons(event_window,
-				xstatus_head_button->cb);
+				xstatus_head_button->cb, keep_going);
 		}
 		bool handle_button_enter(const xcb_window_t event_window)
 		{
