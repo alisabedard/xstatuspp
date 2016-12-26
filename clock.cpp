@@ -11,41 +11,32 @@ extern "C" {
 using namespace std;
 namespace xstatus {
 	class Buffer {
+		protected:
+			size_t size;
 		public:
 			char * buffer;
 			Buffer(size_t sz)
-			{
-				buffer = new char [sz];
-			}
+				: size(sz), buffer(new char [sz])
+			{}
 			Buffer(const Buffer &obj) // copy
 			{
-				string s(obj.buffer);
-				int i = s.size();
-				buffer = new char [i];
-				while (i >= 0) {
-					--i;
-					buffer[i] = obj.buffer[i];
-				}
+				size = obj.size;
+				buffer = new char [size];
+				string(obj.buffer).copy(buffer, size);
 			}
-			~Buffer(void)
-			{
-				delete buffer;
-			}
+			~Buffer(void) { delete buffer; }
+			size_t get_size(void) {return size;}
 	};
 	class Time {
 		protected:
 			time_t current_time;
 		public:
-			Time()
-			{
-				current_time = time(NULL);
-			}
+			Time() { current_time = time(NULL); }
 	};
 	class Clock : public Buffer, public Time {
-		size_t size;
 		public:
 		Clock(size_t size)
-			: Buffer(size), size(size)
+			: Buffer(size)
 		{}
 		void format(void)
 		{
@@ -53,17 +44,16 @@ namespace xstatus {
 				XSTATUS_TIME_FORMAT,
 				localtime(&current_time));
 		}
-		size_t get_size(void) {return size;}
 	};
 	class Renderer {
 		xcb_connection_t * xc;
-		Clock * c;
+		Buffer * c;
 		xcb_window_t win;
 		xcb_gcontext_t gc;
 		xcb_screen_t * scr;
 		const struct JBDim font_size;
 		public:
-			Renderer(xcb_connection_t * xc, Clock * c)
+			Renderer(xcb_connection_t * xc, Buffer * c)
 				: xc(xc), c(c),
 				win(get_window(xc)),
 				gc(get_gc(xc)),
@@ -86,6 +76,7 @@ namespace xstatus {
 		{
 			Clock c(XSTATUS_TIME_BUFFER_SIZE);
 			c.format();
+			Buffer b = c;
 			Renderer r(xc, &c);
 			return r.draw();
 		}
