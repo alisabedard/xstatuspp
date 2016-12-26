@@ -52,15 +52,16 @@ namespace {
 		xcb_screen_t * scr;
 		const struct JBDim font_size;
 		public:
-			Renderer(xcb_connection_t * xc, Buffer * c)
-				: xc(xc), c(c),
-				win(xstatus::get_window(xc)),
-				gc(xstatus::get_gc(xc)),
-				scr(xstatus::get_screen(xc)),
-				font_size(xstatus::get_font_size())
-			{}
+			Renderer(xcb_connection_t * xc, Buffer * c);
 			int draw(void);
 		};
+	Renderer::Renderer(xcb_connection_t * xc, Buffer * c)
+		: xc(xc), c(c),
+		win(xstatus::get_window(xc)),
+		gc(xstatus::get_gc(xc)),
+		scr(xstatus::get_screen(xc)),
+		font_size(xstatus::get_font_size())
+	{}
 	int Renderer::draw(void)
 	{
 		const size_t sz = c->get_size();
