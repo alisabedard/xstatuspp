@@ -8,13 +8,6 @@ extern "C" {
 #include <string>
 #include "config.h"
 #include "font.h"
-#if 0
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include "window.h"
-#include "xdata.h"
-#endif
 using namespace std;
 void xstatus::XSButton::draw(void)
 
@@ -54,19 +47,16 @@ void xstatus::XSButton::create_window(void)
 	const pixel_t bg = jb_get_pixel(xc, get_colormap(xc),
 		XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
-	xcb_create_window(this->xc, CFP, this->window,
-		xstatus::get_window(this->xc),
-		g.x, g.y, g.width, g.height, BORDER,
-		CFP, CFP, VM, v);
-	xcb_map_window(this->xc, this->window);
+	xcb_create_window(xc, CFP, window, xstatus::get_window(xc),
+		g.x, g.y, g.width, g.height, BORDER, CFP, CFP, VM, v);
+	xcb_map_window(xc, window);
 }
 xstatus::XSButton::XSButton(xcb_connection_t * xc,
 	const int16_t x, char * label)
-	: XData(xc), x(x)
+	: XData(xc), x(x), label(new string(label)),
+	window(xcb_generate_id(xc))
 {
 	LOG("XSButton constructor");
-	this->label = new string(label);
-	window = xcb_generate_id(xc);
 	create_window();
 	draw();
 }

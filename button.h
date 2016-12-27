@@ -7,10 +7,10 @@
 namespace xstatus {
 	class XSButton : public XData {
 		private:
+			int16_t x;
 			std::string * label;
 			xcb_window_t window;
 			xcb_rectangle_t geometry;
-			int16_t x;
 			void set_geometry(void);
 			void create_window(void);
 		public:
