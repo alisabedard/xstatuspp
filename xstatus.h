@@ -3,13 +3,15 @@
 #include "xdata.h"
 namespace xstatus {
 	class XStatusOptions {
+		protected:
+			uint8_t delay = 1;
 		public:
 			XStatusOptions(char * filename);
 			XStatusOptions(const XStatusOptions& obj);
 			~XStatusOptions(void);
 			void set_filename(char * filename);
+			uint8_t get_delay(void) { return delay; }
 			char * filename;
-			uint8_t delay = 1;
 	};
 	class XStatus : public XData{
 		private:

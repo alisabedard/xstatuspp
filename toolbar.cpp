@@ -20,11 +20,12 @@ namespace xstatus {
 				? get_last_button_r(xstatus_head_button)
 				: NULL;
 		}
-		static void system_cb(XSButton * b)
+		static bool system_cb(XSButton * b)
 		{
 			const char *cmd = b->cb_data;
 			if (system(cmd))
 				LIBJB_WARN("Cannot execute %s", cmd);
+			return true;
 		}
 		static uint16_t btn(xcb_connection_t * xc, const int16_t offset,
 			char *  label, char *  cmd)
@@ -33,6 +34,23 @@ namespace xstatus {
 			XSButton * b = new XSButton(xc, offset, label);
 			b->cb = system_cb;
 			b->cb_data = cmd;
+			*(i ? &i->next : &xstatus_head_button) = b;
+			return offset + b->get_geometry().width +
+				XSTATUS_CONST_PAD;
+		}
+		static bool exit_cb(XSButton * b)
+		{
+			delete b;
+			return false;
+		}
+		static uint16_t exit_btn(xcb_connection_t * xc,
+			const int16_t offset)
+		{
+			XSButton * i = get_last_button();
+			static char label[] = "Exit";
+			XSButton * b = new XSButton(xc, offset, label);
+			b->cb = exit_cb;
+			b->cb_data = NULL;
 			*(i ? &i->next : &xstatus_head_button) = b;
 			return offset + b->get_geometry().width +
 				XSTATUS_CONST_PAD;
@@ -66,6 +84,7 @@ namespace xstatus {
 			static char lock[] = "Lock",
 				    lock_cmd[] = XSTATUS_LOCK_COMMAND;
 			off = btn(xc, off, lock, lock_cmd);
+			off = exit_btn(xc, off);
 			return off;
 		}
 		static XSButton * find_button_r(const xcb_window_t w, XSButton
@@ -74,14 +93,12 @@ namespace xstatus {
 			return i ? i->get_window() == w ? i : find_button_r(w,
 				i->next) : NULL;
 		}
-		static bool iterate_buttons(const xcb_window_t ewin,
-			void (*func)(XSButton * ), bool * keep_going)
+		static bool do_cb(const xcb_window_t ewin, bool * keep_going)
 		{
-			XSButton * b = find_button_r(ewin, xstatus_head_button);
+			XSButton * b = find_button_r(ewin,
+				xstatus_head_button);
 			if (b) {
-				if (func == b->cb && !b->cb_data)
-					*keep_going = false;
-				func(b);
+				*keep_going = b->cb(b);
 				return true;
 			}
 			return false;
@@ -104,8 +121,7 @@ namespace xstatus {
 		bool handle_button_press(const xcb_window_t event_window,
 			bool * keep_going)
 		{
-			return iterate_buttons(event_window,
-				xstatus_head_button->cb, keep_going);
+			return do_cb(event_window, keep_going);
 		}
 		bool handle_button_enter(const xcb_window_t event_window)
 		{
