@@ -11,7 +11,7 @@ namespace xstatus {
 			Buffer(size_t sz)
 				: size(sz), buffer(new char [sz]) {}
 			Buffer(const Buffer &obj); // copy constructor
-			~Buffer(void) { delete buffer; }
+			~Buffer(void) { delete[] buffer; }
 			size_t get_size(void) {return size;}
 	};
 }

@@ -119,7 +119,7 @@ namespace xstatus {
 			LOG("Could not get percent, returning");
 			return;
 		}
-		struct JBDim range = {start, end};
+		struct JBDim range = {{start}, {end}};
 		draw_for_percent(xc, range, pct);
 		xcb_flush(xc);
 	}

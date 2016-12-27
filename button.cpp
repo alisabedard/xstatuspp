@@ -5,20 +5,23 @@ extern "C" {
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }
-#include <cstdlib>
-#include <cstring>
 #include <string>
 #include "config.h"
 #include "font.h"
+#if 0
+#include <cstdlib>
+#include <cstring>
+#include <string>
 #include "window.h"
 #include "xdata.h"
+#endif
 using namespace std;
 void xstatus::XSButton::draw(void)
 
 {
-	xcb_image_text_8(xc, strlen(label), window,
+	xcb_image_text_8(xc, label->size(), window,
 		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
-		xstatus::get_font_size().height, label);
+		xstatus::get_font_size().height, label->c_str());
 }
 void xstatus::XSButton::invert(void)
 {
@@ -31,7 +34,7 @@ void xstatus::XSButton::invert(void)
 void xstatus::XSButton::set_geometry(void)
 {
 	const struct JBDim f = xstatus::get_font_size();
-	const uint16_t w = f.w * strlen(label) + f.w;
+	const uint16_t w = f.w * label->size() + f.w;
 	const uint16_t h = f.h + (XSTATUS_CONST_PAD >> 1);
 	geometry = {x, 0, w, h};
 }
@@ -48,7 +51,8 @@ void xstatus::XSButton::create_window(void)
 	};
 	set_geometry();
 	const xcb_rectangle_t & g = this->geometry;
-	const pixel_t bg = jb_get_pixel(xc, get_colormap(xc), XSTATUS_BUTTON_BG);
+	const pixel_t bg = jb_get_pixel(xc, get_colormap(xc),
+		XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
 	xcb_create_window(this->xc, CFP, this->window,
 		xstatus::get_window(this->xc),
@@ -56,10 +60,12 @@ void xstatus::XSButton::create_window(void)
 		CFP, CFP, VM, v);
 	xcb_map_window(this->xc, this->window);
 }
-xstatus::XSButton::XSButton(xcb_connection_t * xc, const int16_t x, char * label)
-	: XData(xc), label(strdup(label)), x(x)
+xstatus::XSButton::XSButton(xcb_connection_t * xc,
+	const int16_t x, char * label)
+	: XData(xc), x(x)
 {
 	LOG("XSButton constructor");
+	this->label = new string(label);
 	window = xcb_generate_id(xc);
 	create_window();
 	draw();
@@ -67,6 +73,6 @@ xstatus::XSButton::XSButton(xcb_connection_t * xc, const int16_t x, char * label
 xstatus::XSButton::~XSButton(void)
 {
 	LOG("XSButton destructor");
+	delete label;
 	xcb_destroy_window(xc, window);
-	free(label);
 }

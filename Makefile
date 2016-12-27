@@ -23,8 +23,10 @@ libjb/libjb.a:
 	cd libjb && ${MAKE} libjb.a
 include depend.mk
 clean:
-	cd libjb && ${MAKE} clean
 	rm -f ${exe} *.o
+distclean: clean
+	cd libjb && ${MAKE} clean
+	rm -f config.mk
 install:
 	install -d ${installdir}/bin
 	install -s ${exe} ${installdir}/bin
