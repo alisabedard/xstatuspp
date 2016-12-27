@@ -38,21 +38,16 @@ bool XStatus::handle_events(xcb_generic_event_t * e)
 	bool keep_going = true;
 	switch (e->response_type) {
 	case XCB_ENTER_NOTIFY:
-		toolbar::handle_button_enter(
-			((xcb_enter_notify_event_t*)e)->event);
-		break;
 	case XCB_LEAVE_NOTIFY:
-		toolbar::handle_button_leave(
-			((xcb_leave_notify_event_t*)e)->event);
+		tb->focus(((xcb_enter_notify_event_t*)e)->event);
 		break;
 	case XCB_EXPOSE:
-		if (!toolbar::handle_expose(((xcb_expose_event_t*)e)
-			->window))
+		if (!tb->expose(((xcb_expose_event_t*)e)->window))
 			update();
 		break;
 	case XCB_BUTTON_PRESS:
-		toolbar::handle_button_press(
-			((xcb_button_press_event_t *)e)->event, &keep_going);
+		tb->button(((xcb_button_press_event_t *)e)->event,
+			keep_going);
 		break;
 	default:
 		LOG("event: %d", e->response_type);
@@ -67,6 +62,7 @@ void XStatus::update(void)
 XStatus::XStatus(XStatusOptions opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
+	LOG("XStatus constructor");
 	xstatus_create_window(xc);
 	if (!open_font(xc, XSTATUS_FONT)) // default
 		if (!open_font(xc, "fixed")) // fallback
@@ -76,15 +72,19 @@ XStatus::XStatus(XStatusOptions opt)
 	xstatus_create_gc(xc, get_button_gc(xc), win,
 		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
 	setup_invert_gc();
-	widget_start = toolbar::initialize(xc);
+	tb = new Toolbar(xc);
+	widget_start = tb->get_offset();
 }
 XStatus::~XStatus(void)
 {
+	LOG("XStatus destructor");
+	delete tb;
 	xcb_destroy_window(xc, win);
 	xcb_disconnect(xc);
 }
 void XStatus::run(void)
 {
+	LOG("XStatus::run()");
 	bool keep_going =  true;
 	while (keep_going) {
 		xcb_generic_event_t * e;
@@ -96,18 +96,21 @@ void XStatus::run(void)
 }
 XStatusOptions::XStatusOptions(char * filename)
 {
+	LOG("XStatusOptions constructor");
 	string s(filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
 XStatusOptions::XStatusOptions(const XStatusOptions& obj)
 {
+	LOG("XStatusOptions copy constructor");
 	string s(obj.filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
 XStatusOptions::~XStatusOptions(void)
 {
+	LOG("XStatusOptions destructor");
 	delete filename;
 }
 void XStatusOptions::set_filename(char * filename)
