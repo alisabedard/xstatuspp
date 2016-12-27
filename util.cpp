@@ -1,19 +1,14 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "util.h"
 extern "C" {
-#include "libjb/file.h"
 #include "libjb/xcb.h"
 }
-#include <cstdlib>
-#include <fcntl.h>
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <unistd.h>
 #include "font.h"
 void xstatus_create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
-	const xcb_window_t win, const char *  fg,
-	const char *  bg)
+	const xcb_window_t win, const char * fg,
+	const char * bg)
 {
 	jb_create_gc(xc, gc, win, fg, bg);
 	uint32_t v = xstatus::get_font(xc);
