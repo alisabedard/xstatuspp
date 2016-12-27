@@ -88,11 +88,11 @@ cc_err()
 	exit 1
 }
 if [ ! "$CC" ]; then
-	search search clang CC && search cc CC && search gcc CC\
+	search clang CC && search cc CC && search gcc CC\
 		&& cc_err CC
 fi
 if [ ! "$CXX" ]; then
-	search search clang CXX && search cc CXX && search gcc CXX\
+	search clang CXX && search cc CXX && search gcc CXX\
 		&& cc_err CXX
 fi
 if $OPT_DEBUG; then
