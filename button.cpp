@@ -1,4 +1,4 @@
-// Copyright 2016, Jeffrey E. Bedard
+// Copyright 2017, Jeffrey E. Bedard
 #include "button.h"
 extern "C" {
 #include "libjb/JBDim.h"
