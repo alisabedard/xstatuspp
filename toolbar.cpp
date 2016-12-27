@@ -53,9 +53,7 @@ bool xstatus::Toolbar::iterate_buttons_member(const xcb_window_t ewin,
 	for(list<XSButton *>::iterator i = buttons.begin(); i != buttons.end();
 		++i) {
 		if ((*i)->get_window() == ewin) {
-			XSButton * b = *i;
-			//(i->*func)();
-			(b->*func)();
+			((*i)->*func)();
 			return true;
 		}
 	}
