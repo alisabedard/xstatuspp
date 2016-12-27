@@ -83,17 +83,17 @@ search() # 1: cmd 2: var
 }
 cc_err()
 {
-	echo 'Error: Cannot find a suitable compiler.'
-	echo "Please set ${1} to a valid C compiler command"
+	echo "Error: Cannot find a suitable ${1} compiler."
+	echo "Please set ${2} to a valid compiler command"
 	exit 1
 }
 if [ ! "$CC" ]; then
 	search clang CC && search cc CC && search gcc CC\
-		&& cc_err CC
+		&& cc_err 'C' 'CC'
 fi
 if [ ! "$CXX" ]; then
-	search clang CXX && search cc CXX && search gcc CXX\
-		&& cc_err CXX
+	search clang++ CXX && search c++ CXX && search g++ CXX\
+		&& cc_err 'C++' 'CXX'
 fi
 if $OPT_DEBUG; then
 	echo -n 'Enabling debug options... '
