@@ -2,6 +2,7 @@
 #include "xstatus.h"
 extern "C" {
 #include "libjb/log.h"
+#include "libjb/util.h"
 #include "libjb/xcb.h"
 }
 #include <string>
@@ -26,10 +27,11 @@ void XStatus::setup_invert_gc(void)
 }
 uint16_t XStatus::poll(void)
 {
+	const JBDim fsz = font->get_size();
 	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
-	offset = load::draw(xc, offset);
-	offset = temperature::draw(xc, offset);
-	offset = status_file::draw(xc, offset, opt.filename);
+	offset = load::draw(xc, offset, fsz);
+	offset = temperature::draw(xc, offset, fsz);
+	offset = status_file::draw(xc, offset, opt.filename, fsz);
 	return offset;
 }
 // returns if update needed
@@ -57,28 +59,30 @@ bool XStatus::handle_events(xcb_generic_event_t * e)
 }
 void XStatus::update(void)
 {
-	Battery::draw(xc, poll(), clock::draw(xc));
+	const Font f = *font;
+	battery::draw(xc, f, poll(), clock::draw(xc, f));
 }
 XStatus::XStatus(XStatusOptions opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	LOG("XStatus constructor");
 	xstatus_create_window(xc);
-	if (!open_font(xc, XSTATUS_FONT)) // default
-		if (!open_font(xc, "fixed")) // fallback
-			LIBJB_ERROR("Could not load any font");
-	xstatus_create_gc(xc, get_gc(xc), win,
-		XSTATUS_PANEL_FOREGROUND, XSTATUS_PANEL_BACKGROUND);
-	xstatus_create_gc(xc, get_button_gc(xc), win,
-		XSTATUS_BUTTON_FG, XSTATUS_BUTTON_BG);
+	font = new Font(xc);
+	jb_require(font->open(XSTATUS_FONT), "Could not load a font");
+	const Font f = *font;
+	create_gc(xc, get_gc(xc), win, XSTATUS_PANEL_FOREGROUND,
+		XSTATUS_PANEL_BACKGROUND, f);
+	create_gc(xc, get_button_gc(xc), win, XSTATUS_BUTTON_FG,
+		XSTATUS_BUTTON_BG, f);
 	setup_invert_gc();
-	tb = new Toolbar(xc);
+	tb = new Toolbar(xc, font);
 	widget_start = tb->get_offset();
 }
 XStatus::~XStatus(void)
 {
 	LOG("XStatus destructor");
 	delete tb;
+	delete font;
 	xcb_destroy_window(xc, win);
 	xcb_disconnect(xc);
 }

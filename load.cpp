@@ -10,7 +10,7 @@ extern "C" {
 #include "font.h"
 namespace {
 	__attribute__((nonnull))
-		static uint8_t format(char *  buf, const uint8_t sz)
+		static uint8_t get_load(char *  buf, const uint8_t sz)
 		{
 			double l;
 			getloadavg(&l, 1);
@@ -19,18 +19,19 @@ namespace {
 }
 // Returns x offset for next item
 __attribute__((nonnull))
-uint16_t xstatus::load::draw(xcb_connection_t * xc, const uint16_t x)
+uint16_t xstatus::load::draw(xcb_connection_t * xc, const uint16_t x,
+	const JBDim font_size)
 {
-	const struct JBDim f = get_font_size();
 	class LoadBuffer : public Buffer {
 		public:
 			LoadBuffer(void) : Buffer(6)
 			{
-				size = format(buffer, size);
+				size = get_load(buffer, size);
 			}
 	};
 	LoadBuffer b;
-	xcb_image_text_8(xc, b.get_size(), xstatus::get_window(xc),
-		xstatus::get_gc(xc), x, f.h, b.buffer);
-	return x + f.w * b.get_size() + XSTATUS_CONST_PAD;
+	const size_t bsz = b.get_size();
+	xcb_image_text_8(xc, bsz, xstatus::get_window(xc),
+		xstatus::get_gc(xc), x, font_size.height, b.buffer);
+	return x + font_size.width * bsz + XSTATUS_CONST_PAD;
 }

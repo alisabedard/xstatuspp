@@ -19,29 +19,29 @@ namespace {
 		public:
 			Time() { current_time = time(NULL); }
 	};
-	class Clock : public Buffer, public Time {
+	class Format : public Buffer, public Time {
 		public:
-			Clock(size_t size)
+			Format(size_t size)
 				: Buffer(size)
-			{}
-			void format(void)
 			{
 				size = strftime(buffer, size,
 					XSTATUS_TIME_FORMAT,
 					localtime(&current_time));
 			}
 	};
-	class ClockRenderer : public Renderer {
-		Buffer * c;
-		const struct JBDim font_size;
+	class Widget : public Renderer {
+		private:
+			Buffer * c;
+			const struct JBDim font_size;
 		public:
-		ClockRenderer(xcb_connection_t * xc, Buffer * c);
-		int draw(void);
+			Widget(xcb_connection_t * xc, Buffer * c,
+				const Font & f)
+				: Renderer(xc), c(c),
+				font_size(f.get_size())
+			{}
+			int draw(void);
 	};
-	ClockRenderer::ClockRenderer(xcb_connection_t * xc, Buffer * c)
-		: Renderer(xc), c(c), font_size(get_font_size())
-	{}
-	int ClockRenderer::draw(void)
+	int Widget::draw(void)
 	{
 		const size_t sz = c->get_size();
 		int offset = scr->width_in_pixels - font_size.w * sz;
@@ -50,10 +50,9 @@ namespace {
 		return offset;
 	}
 }
-uint16_t clock::draw(xcb_connection_t * xc)
+uint16_t clock::draw(xcb_connection_t * xc, const Font & f)
 {
-	Clock c(XSTATUS_TIME_BUFFER_SIZE);
-	c.format();
-	ClockRenderer r(xc, &c);
+	Format c(XSTATUS_TIME_BUFFER_SIZE);
+	Widget r(xc, &c, f);
 	return r.draw();
 }

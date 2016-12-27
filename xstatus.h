@@ -1,5 +1,6 @@
 #ifndef XSTATUS_XSTATUS_H
 #define XSTATUS_XSTATUS_H
+#include "font.h"
 #include "toolbar.h"
 #include "xdata.h"
 namespace xstatus {
@@ -14,7 +15,7 @@ namespace xstatus {
 			uint8_t get_delay(void) { return delay; }
 			char * filename;
 	};
-	class XStatus : public XData{
+	class XStatus : public XData {
 		private:
 			unsigned int widget_start;
 			XStatusOptions opt;
@@ -23,6 +24,7 @@ namespace xstatus {
 			uint16_t poll(void);
 			void setup_invert_gc(void);
 			Toolbar * tb;
+			Font * font;
 		public:
 			XStatus(XStatusOptions opt);
 			~XStatus(void);

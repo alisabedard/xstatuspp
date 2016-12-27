@@ -14,7 +14,7 @@ using namespace xstatus;
 namespace {
 	int32_t get_temp_raw(void)
 	{
-		return xstatus_system_value(XSTATUS_SYSFILE_TEMPERATURE);
+		return system_value(XSTATUS_SYSFILE_TEMPERATURE);
 	}
 	uint8_t get_temp(void)
 	{
@@ -49,9 +49,9 @@ namespace {
 			Buffer * b;
 			int x;
 		public:
-			TempRenderer(xcb_connection_t * xc, Buffer * b, int x)
-				: Renderer(xc), f(get_font_size()),
-				b(b), x(x) {}
+			TempRenderer(xcb_connection_t * xc, Buffer * b, int x,
+				const JBDim font_size)
+				: Renderer(xc), f(font_size), b(b), x(x) {}
 			int draw(void)
 			{
 				const size_t sz = b->get_size();
@@ -62,9 +62,10 @@ namespace {
 	};
 }
 // Returns x offset for next item
-uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset)
+uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset,
+	const JBDim font_size)
 {
 	TempBuf b;
-	TempRenderer r(xc, &b, offset + XSTATUS_CONST_PAD);
+	TempRenderer r(xc, &b, offset + XSTATUS_CONST_PAD, font_size);
 	return r.draw();
 }

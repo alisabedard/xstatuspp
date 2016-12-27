@@ -76,17 +76,18 @@ class StatusRenderer : public Renderer {
 				f.h, b->buffer);
 			return offset();
 		}
-		StatusRenderer(xcb_connection_t * xc, Buffer * b, int x)
-			: Renderer(xc), b(b), x(x), f(get_font_size()) {}
+		StatusRenderer(xcb_connection_t * xc, Buffer * b, int x, const
+			JBDim font_size)
+			: Renderer(xc), b(b), x(x), f(font_size) {}
 };
 // Returns offset for next widget
 uint16_t xstatus::status_file::draw(xcb_connection_t * xc,
 	const uint16_t x_offset,
-	const char * filename)
+	const char * filename, const JBDim font_size)
 {
 	StatusBuffer b(filename);
 	if (!b.poll())
 		return x_offset + XSTATUS_CONST_PAD;
-	StatusRenderer r(xc, &b, x_offset);
+	StatusRenderer r(xc, &b, x_offset, font_size);
 	return r.draw();
 }

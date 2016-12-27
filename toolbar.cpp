@@ -26,7 +26,7 @@ namespace {
 void xstatus::Toolbar::btn(char * label, char * cb_data,
 	bool (*cb)(XSButton *))
 {
-	XSButton * b = new XSButton(xc, offset, label);
+	XSButton * b = new XSButton(xc, *font, offset, label);
 	b->cb = cb;
 	b->cb_data = cb_data;
 	offset += b->get_geometry().width + XSTATUS_CONST_PAD;
@@ -74,8 +74,8 @@ bool xstatus::Toolbar::focus(const xcb_window_t event_window)
 	return iterate_buttons_member(event_window,
 		&XSButton::invert);
 }
-xstatus::Toolbar::Toolbar(xcb_connection_t * xc)
-	: XData(xc), offset(0)
+xstatus::Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
+	: XData(xc), offset(0), font(f)
 {
 	static char menu[] = "Menu",
 		    menu_cmd[]= XSTATUS_MENU_COMMAND;

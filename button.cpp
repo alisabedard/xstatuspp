@@ -10,11 +10,10 @@ extern "C" {
 #include "font.h"
 using namespace std;
 void xstatus::XSButton::draw(void)
-
 {
 	xcb_image_text_8(xc, label->size(), window,
 		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
-		xstatus::get_font_size().height, label->c_str());
+		font_size.height, label->c_str());
 }
 void xstatus::XSButton::invert(void)
 {
@@ -26,7 +25,7 @@ void xstatus::XSButton::invert(void)
 }
 void xstatus::XSButton::set_geometry(void)
 {
-	const struct JBDim f = xstatus::get_font_size();
+	JBDim & f = font_size;
 	const uint16_t w = f.w * label->size() + f.w;
 	const uint16_t h = f.h + (XSTATUS_CONST_PAD >> 1);
 	geometry = {x, 0, w, h};
@@ -51,9 +50,9 @@ void xstatus::XSButton::create_window(void)
 		g.x, g.y, g.width, g.height, BORDER, CFP, CFP, VM, v);
 	xcb_map_window(xc, window);
 }
-xstatus::XSButton::XSButton(xcb_connection_t * xc,
+xstatus::XSButton::XSButton(xcb_connection_t * xc, const Font & f,
 	const int16_t x, char * label)
-	: XData(xc), x(x), label(new string(label)),
+	: XData(xc), x(x), font_size(f.get_size()), label(new string(label)),
 	window(xcb_generate_id(xc))
 {
 	LOG("XSButton constructor");
