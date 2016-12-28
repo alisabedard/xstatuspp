@@ -4,12 +4,10 @@ extern "C" {
 #include "libjb/JBDim.h"
 }
 #include <cstdio>
-#include "Buffer.h"
 #include "config.h"
-#include "font.h"
+#include "Buffer.h"
 #include "Renderer.h"
 #include "util.h"
-#include "xdata.h"
 using namespace xstatus;
 namespace {
 	int32_t get_temp_raw(void)
