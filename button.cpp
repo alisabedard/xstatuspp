@@ -11,16 +11,14 @@ extern "C" {
 using namespace std;
 void xstatus::XSButton::draw(void)
 {
-	xcb_image_text_8(xc, label->size(), window,
-		xstatus::get_button_gc(xc), XSTATUS_CONST_PAD,
-		font_size.height, label->c_str());
+	xcb_image_text_8(xc, label->size(), window, XData(xc).button_gc,
+		XSTATUS_CONST_PAD, font_size.height, label->c_str());
 }
 void xstatus::XSButton::invert(void)
 {
 	xcb_rectangle_t r = geometry;
 	r.x = r.y = 0;
-	xcb_poly_fill_rectangle(xc, window,
-		xstatus::get_invert_gc(xc), 1, &r);
+	xcb_poly_fill_rectangle(xc, window, XData(xc).invert_gc, 1, &r);
 	xcb_flush(xc);
 }
 void xstatus::XSButton::set_geometry(void)
@@ -43,17 +41,15 @@ void xstatus::XSButton::create_window(void)
 	};
 	set_geometry();
 	const xcb_rectangle_t & g = this->geometry;
-	const pixel_t bg = jb_get_pixel(xc, get_colormap(xc),
+	XData X(xc);
+	const pixel_t bg = jb_get_pixel(xc, X.colormap,
 		XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
-	xcb_create_window(xc, CFP, window, xstatus::get_window(xc),
-		g.x, g.y, g.width, g.height, BORDER, CFP, CFP, VM, v);
-	xcb_map_window(xc, window);
+	create(X.main_window.get_window(), g, BORDER, VM, v);
 }
 xstatus::XSButton::XSButton(xcb_connection_t * xc, const Font & f,
 	const int16_t x, char * label)
-	: XData(xc), x(x), font_size(f.get_size()), label(new string(label)),
-	window(xcb_generate_id(xc))
+	: Window(xc), x(x), font_size(f.get_size()), label(new string(label))
 {
 	LOG("XSButton constructor");
 	create_window();
@@ -63,5 +59,4 @@ xstatus::XSButton::~XSButton(void)
 {
 	LOG("XSButton destructor");
 	delete label;
-	xcb_destroy_window(xc, window);
 }

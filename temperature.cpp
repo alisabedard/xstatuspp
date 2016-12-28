@@ -53,8 +53,8 @@ namespace {
 			int draw(void)
 			{
 				const size_t sz = b->get_size();
-				xcb_image_text_8(xc, sz, win, gc, x, f.h,
-					b->buffer);
+				xcb_image_text_8(xc, sz, main_window.get_window(),
+					gc, x, f.h, b->buffer);
 				return x + f.w * sz;
 			}
 	};

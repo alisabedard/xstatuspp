@@ -42,8 +42,8 @@ namespace {
 	int ClockWidget::draw(void)
 	{
 		const size_t sz = c->get_size() - 1;
-		int offset = scr->width_in_pixels - font_size.w * sz;
-		xcb_image_text_8(xc, sz, win, gc, offset, font_size.h,
+		int offset = screen->width_in_pixels - font_size.w * sz;
+		xcb_image_text_8(xc, sz, main_window.get_window(), gc, offset, font_size.h,
 			c->buffer);
 		return offset;
 	}

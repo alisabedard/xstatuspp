@@ -72,7 +72,8 @@ class StatusRenderer : public Renderer {
 	public:
 		int draw(void)
 		{
-			xcb_image_text_8(xc, b->get_size(), win, gc, x + PAD,
+			xcb_image_text_8(xc, b->get_size(),
+				main_window.get_window(), gc, x + PAD,
 				f.h, b->buffer);
 			return offset();
 		}

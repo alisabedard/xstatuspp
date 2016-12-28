@@ -31,7 +31,8 @@ uint16_t xstatus::load::draw(xcb_connection_t * xc, const uint16_t x,
 	};
 	LoadBuffer b;
 	const size_t bsz = b.get_size();
-	xcb_image_text_8(xc, bsz, xstatus::get_window(xc),
-		xstatus::get_gc(xc), x, font_size.height, b.buffer);
+	XData X(xc);
+	xcb_image_text_8(xc, bsz, X.main_window.get_window(), X.gc,
+		x, font_size.height, b.buffer);
 	return x + font_size.width * bsz + XSTATUS_CONST_PAD;
 }

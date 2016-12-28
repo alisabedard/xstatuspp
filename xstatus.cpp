@@ -22,8 +22,8 @@ using namespace std;
 void XStatus::setup_invert_gc(void)
 {
 	const uint32_t v = XCB_GX_INVERT;
-	xcb_create_gc(xc, get_invert_gc(xc),
-		win, XCB_GC_FUNCTION, &v);
+	xcb_create_gc(xc, invert_gc, main_window.get_window(),
+		XCB_GC_FUNCTION, &v);
 }
 uint16_t XStatus::poll(void)
 {
@@ -66,13 +66,13 @@ XStatus::XStatus(XStatusOptions opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	LOG("XStatus constructor");
-	window::create(xc);
+	xcb_window_t w = Window::create_main_window(this);
 	font = new Font(xc);
 	jb_require(font->open(XSTATUS_FONT), "Could not load a font");
 	const Font f = *font;
-	create_gc(xc, get_gc(xc), win, XSTATUS_PANEL_FOREGROUND,
+	create_gc(xc, gc, w, XSTATUS_PANEL_FOREGROUND,
 		XSTATUS_PANEL_BACKGROUND, f);
-	create_gc(xc, get_button_gc(xc), win, XSTATUS_BUTTON_FG,
+	create_gc(xc, button_gc, w, XSTATUS_BUTTON_FG,
 		XSTATUS_BUTTON_BG, f);
 	setup_invert_gc();
 	tb = new Toolbar(xc, font);
@@ -83,7 +83,7 @@ XStatus::~XStatus(void)
 	LOG("XStatus destructor");
 	delete tb;
 	delete font;
-	xcb_destroy_window(xc, win);
+	xcb_destroy_window(xc, main_window.get_window());
 	xcb_disconnect(xc);
 }
 void XStatus::run(void)

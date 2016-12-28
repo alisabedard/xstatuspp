@@ -3,35 +3,34 @@
 extern "C" {
 #include "libjb/xcb.h"
 }
-namespace xstatus {
-	xcb_screen_t * get_screen(xcb_connection_t * xc)
+#include "window.h"
+using namespace xstatus;
+namespace {
+	xstatus::Window & get_main_window_class(xcb_connection_t * xc)
 	{
-		static xcb_screen_t * s;
-		return s ? s : (s = jb_get_xcb_screen(xc));
+		static xstatus::Window w(xc);
+		return w;
 	}
-	xcb_colormap_t get_colormap(xcb_connection_t * xc)
-	{
-		static xcb_colormap_t c;
-		return c ? c : (c = get_screen(xc)->default_colormap);
-	}
-	xcb_gcontext_t get_gc(xcb_connection_t * xc)
-	{
-		static xcb_gcontext_t g;
-		return g ? g : (g = xcb_generate_id(xc));
-	}
-	xcb_gcontext_t get_button_gc(xcb_connection_t * xc)
-	{
-		static xcb_gcontext_t g;
-		return g ? g : (g = xcb_generate_id(xc));
-	}
-	xcb_gcontext_t get_invert_gc(xcb_connection_t * xc)
-	{
-		static xcb_gcontext_t g;
-		return g ? g : (g = xcb_generate_id(xc));
-	}
-	xcb_window_t get_window(xcb_connection_t *  xc)
-	{
-		static xcb_window_t w;
-		return w ? w : (w = xcb_generate_id(xc));
-	}
+}
+xcb_connection_t * XData::xc = nullptr;
+xcb_screen_t * XData::screen = nullptr;
+typedef xcb_gcontext_t gc;
+gc XData::gc, XData::invert_gc, XData::button_gc;
+xcb_colormap_t XData::colormap;
+bool XData::xdata_init_done = false;
+void XData::init(xcb_connection_t * xc)
+{
+	XData::xc = xc;
+	XData::gc = xcb_generate_id(xc);
+	XData::button_gc = xcb_generate_id(xc);
+	XData::invert_gc = xcb_generate_id(xc);
+	XData::screen = jb_get_xcb_screen(xc);
+	XData::colormap = XData::screen->default_colormap;
+	XData::xdata_init_done = true;
+}
+XData::XData(xcb_connection_t * xc)
+	: main_window(get_main_window_class(xc))
+{
+	if (!xdata_init_done)
+		XData::init(xc);
 }

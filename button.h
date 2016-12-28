@@ -5,15 +5,14 @@
 #include <xcb/xcb.h>
 #include "font.h"
 #include "libjb/JBDim.h"
+#include "window.h"
 #include "xdata.h"
 namespace xstatus {
-	class XSButton : public XData {
+	class XSButton : public Window {
 		private:
 			int16_t x;
 			JBDim font_size;
 			std::string * label;
-			xcb_window_t window;
-			xcb_rectangle_t geometry;
 			void set_geometry(void);
 			void create_window(void);
 		public:
