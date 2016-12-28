@@ -17,7 +17,7 @@ namespace xstatus {
 	};
 	class XStatus : public XData {
 		private:
-			unsigned int widget_start;
+			uint16_t widget_start;
 			XStatusOptions opt;
 			void update(void);
 			bool handle_events(xcb_generic_event_t * e);
