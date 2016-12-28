@@ -3,7 +3,8 @@
 #include <string>
 xstatus::Buffer::Buffer(const Buffer &obj) // copy
 {
-	size = obj.size;
+	std::string s(obj.buffer);
+	size = s.size();
 	buffer = new char [size];
-	std::string(obj.buffer).copy(buffer, size);
+	s.copy(buffer, size);
 }
