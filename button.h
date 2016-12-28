@@ -27,7 +27,5 @@ namespace xstatus {
 			bool (*cb)(XSButton *);
 			char * cb_data;
 	};
-	XSButton * xstatus_create_button(xcb_connection_t * xc,
-		const int16_t x, char * label);
 }
 #endif//XSTATUS_BUTTON_H
