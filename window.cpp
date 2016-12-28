@@ -5,6 +5,7 @@ extern "C" {
 }
 #include "config.h"
 #include "xdata.h"
+using namespace xstatus;
 namespace {
 	__attribute__((const)) int16_t get_y(const uint16_t screen_height)
 		{
@@ -24,9 +25,9 @@ namespace {
 		}
 }
 __attribute__((nonnull))
-void xstatus_create_window(xcb_connection_t * xc)
+void window::create(xcb_connection_t * xc)
 {
-	const xcb_window_t w = xstatus::get_window(xc);
+	const xcb_window_t w = get_window(xc);
 	{ // * s, em, vm, and g scope
 		enum {
 			VM = XCB_CW_BACK_PIXEL | XCB_CW_OVERRIDE_REDIRECT
@@ -34,7 +35,7 @@ void xstatus_create_window(xcb_connection_t * xc)
 			EM = XCB_EVENT_MASK_EXPOSURE,
 			CFP = XCB_COPY_FROM_PARENT
 		};
-		xcb_screen_t * s = xstatus::get_screen(xc);
+		xcb_screen_t * s = get_screen(xc);
 		const xcb_rectangle_t g = get_geometry(s);
 		uint32_t v[] = {get_bg(xc, s), true, EM};
 		xcb_create_window(xc, CFP, w, s->root, g.x, g.y, g.width,

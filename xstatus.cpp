@@ -66,7 +66,7 @@ XStatus::XStatus(XStatusOptions opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	LOG("XStatus constructor");
-	xstatus_create_window(xc);
+	window::create(xc);
 	font = new Font(xc);
 	jb_require(font->open(XSTATUS_FONT), "Could not load a font");
 	const Font f = *font;
