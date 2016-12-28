@@ -22,9 +22,9 @@ namespace xstatus {
 			~XSButton(void);
 			xcb_window_t get_window(void){return window;}
 			xcb_rectangle_t get_geometry(void){return geometry;}
-			bool (*cb)(XSButton *);
 			void draw(void);
 			void invert(void);
+			bool (*cb)(XSButton *);
 			char * cb_data;
 	};
 	XSButton * xstatus_create_button(xcb_connection_t * xc,
