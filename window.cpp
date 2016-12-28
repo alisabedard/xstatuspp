@@ -5,26 +5,26 @@ extern "C" {
 }
 #include "config.h"
 #include "xdata.h"
-__attribute__((const))
-static inline int16_t get_y(const uint16_t screen_height)
-{
-	return screen_height - XSTATUS_CONST_HEIGHT - XSTATUS_CONST_BORDER;
+namespace {
+	__attribute__((const)) int16_t get_y(const uint16_t screen_height)
+		{
+			return screen_height - XSTATUS_CONST_HEIGHT -
+				XSTATUS_CONST_BORDER;
+		}
+	__attribute__((nonnull)) pixel_t get_bg(xcb_connection_t * xc,
+		xcb_screen_t * s)
+		{
+			return jb_get_pixel(xc, s->default_colormap,
+				XSTATUS_PANEL_BACKGROUND);
+		}
+	__attribute__((nonnull)) xcb_rectangle_t get_geometry(xcb_screen_t * s)
+		{
+			return (xcb_rectangle_t){0, get_y(s->height_in_pixels),
+				s->width_in_pixels, XSTATUS_CONST_HEIGHT};
+		}
 }
 __attribute__((nonnull))
-static inline pixel_t get_bg(xcb_connection_t *  xc,
-	xcb_screen_t *  s)
-{
-	return jb_get_pixel(xc, s->default_colormap,
-		XSTATUS_PANEL_BACKGROUND);
-}
-__attribute__((nonnull))
-static inline xcb_rectangle_t get_geometry(xcb_screen_t *  s)
-{
-	return (xcb_rectangle_t){0, get_y(s->height_in_pixels),
-		s->width_in_pixels, XSTATUS_CONST_HEIGHT};
-}
-__attribute__((nonnull))
-void xstatus_create_window(xcb_connection_t *  xc)
+void xstatus_create_window(xcb_connection_t * xc)
 {
 	const xcb_window_t w = xstatus::get_window(xc);
 	{ // * s, em, vm, and g scope
