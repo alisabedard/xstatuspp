@@ -1,16 +1,12 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "battery.h"
 extern "C" {
-#include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/macros.h"
-#include "libjb/util.h"
 }
 #include "config.h"
-#include "font.h"
 #include "util.h"
 #include "xdata.h"
-#include "xstatus.h"
 //#define XSTATUS_BATTERY_TEST
 using namespace xstatus;
 namespace {
