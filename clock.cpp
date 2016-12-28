@@ -8,9 +8,7 @@ extern "C" {
 #include <string>
 #include "Buffer.h"
 #include "config.h"
-#include "font.h"
 #include "Renderer.h"
-#include "xdata.h"
 using namespace xstatus;
 namespace {
 	class Time {
@@ -43,7 +41,7 @@ namespace {
 	};
 	int Widget::draw(void)
 	{
-		const size_t sz = c->get_size();
+		const size_t sz = c->get_size() - 1;
 		int offset = scr->width_in_pixels - font_size.w * sz;
 		xcb_image_text_8(xc, sz, win, gc, offset, font_size.h,
 			c->buffer);
