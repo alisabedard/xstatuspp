@@ -15,7 +15,7 @@ extern "C" {
 using namespace xstatus;
 namespace {
 	// get percent value, maximum 100, -1 on error
-	static int8_t get_percent(void)
+	int8_t get_percent(void)
 	{
 		return JB_MIN(system_value(XSTATUS_SYSFILE_BATTERY),
 			100);
@@ -24,18 +24,18 @@ namespace {
 	enum BATGCs { BATTERY_GC_BACKGROUND, BATTERY_GC_AC, BATTERY_GC_BATTERY,
 		BATTERY_GC_CRITICAL, BATTERY_GC_SIZE };
 	// Selects a gc to use based on ac/battery status
-	static uint8_t get_gc(const uint8_t pct)
+	uint8_t get_gc(const uint8_t pct)
 	{
 		return system_value(XSTATUS_SYSFILE_AC)
 			? BATTERY_GC_AC : pct
 			< XSTATUS_CONST_CRITICAL_PERCENT
 			? BATTERY_GC_CRITICAL : BATTERY_GC_BATTERY;
 	}
-	static uint8_t format(char * buf, const uint8_t sz, const uint8_t pct)
+	uint8_t format(char * buf, const uint8_t sz, const uint8_t pct)
 	{
 		return snprintf(buf, sz, " %d%% ", pct);
 	}
-	static void draw_percent(xcb_connection_t *  xc, const xcb_gcontext_t gc,
+	void draw_percent(xcb_connection_t *  xc, const xcb_gcontext_t gc,
 		const uint8_t pct, const int16_t x, const Font & f)
 	{
 		enum {BUF_SZ = 7};
@@ -44,13 +44,13 @@ namespace {
 		xcb_image_text_8(xc, format(buf, BUF_SZ, pct), w,
 			gc, x, f.get_size().h, buf);
 	}
-	static void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
+	void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
 		xcb_gcontext_t *  gc, const char *  fg, const Font & f)
 	{
 		create_gc(xc, *gc = xcb_generate_id(xc), w, fg,
 			XSTATUS_BATTERY_BACKGROUND_COLOR, f);
 	}
-	static void initialize_gcs(xcb_connection_t *  xc,
+	void initialize_gcs(xcb_connection_t *  xc,
 		const xcb_window_t w, xcb_gcontext_t *  gc, const Font & f)
 	{
 #define SETGC(color) set_gc(xc, w, gc + BATTERY_GC_##color, \
@@ -58,7 +58,7 @@ namespace {
 		SETGC(BACKGROUND); SETGC(AC); SETGC(BATTERY); SETGC(CRITICAL);
 #undef SETGC
 	}
-	static xcb_rectangle_t get_rectangle(const struct JBDim range)
+	xcb_rectangle_t get_rectangle(const struct JBDim range)
 	{
 		const int16_t x = range.start, y = (XSTATUS_CONST_HEIGHT >> 2) + 1;
 		const uint16_t height = XSTATUS_CONST_HEIGHT >> 1;
@@ -66,13 +66,12 @@ namespace {
 		const xcb_rectangle_t r = {x, y, width, height};
 		return r;
 	}
-	__attribute__((const))
-		static uint16_t get_width_for_percent(const uint16_t width,
-			const uint8_t pct)
-		{
-			return width * pct / 100;
-		}
-	static void draw_rectangles(xcb_connection_t *  xc,
+	uint16_t get_width_for_percent(const uint16_t width,
+		const uint8_t pct)
+	{
+		return width * pct / 100;
+	}
+	void draw_rectangles(xcb_connection_t *  xc,
 		const xcb_gcontext_t gc, const xcb_gcontext_t bg_gc,
 		const struct JBDim range,
 		const uint8_t pct)
@@ -85,19 +84,18 @@ namespace {
 		// fill rectangle per percent full:
 		xcb_poly_fill_rectangle(xc, w, gc, 1, &rect);
 	}
-	__attribute__((const))
-		static uint16_t get_x(const struct JBDim range)
-		{
-			return range.start + (range.end - range.start) / 2;
-		}
-	static void draw_for_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
+	uint16_t get_x(const struct JBDim range)
+	{
+		return range.start + (range.end - range.start) / 2;
+	}
+	void draw_for_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 		const xcb_gcontext_t bg_gc, const struct JBDim range,
 		const uint8_t pct, const Font & f)
 	{
 		draw_rectangles(xc, gc, bg_gc, range, pct);
 		draw_percent(xc, gc, pct, get_x(range), f);
 	}
-	static xcb_gcontext_t * get_gcs(xcb_connection_t *  xc, const Font & f)
+	xcb_gcontext_t * get_gcs(xcb_connection_t *  xc, const Font & f)
 	{
 		static xcb_gcontext_t gc[BATTERY_GC_SIZE];
 		if (!*gc) {
@@ -107,7 +105,7 @@ namespace {
 		}
 		return gc;
 	}
-	static void draw_for_percent(xcb_connection_t *  xc,
+	void draw_for_percent(xcb_connection_t *  xc,
 		const Font & f, const struct JBDim range, const uint8_t pct)
 	{
 		xcb_gcontext_t * gc = get_gcs(xc, f);
@@ -117,18 +115,16 @@ namespace {
 			range, pct, f);
 	}
 }
-namespace xstatus {
-	void battery::draw(xcb_connection_t * xc, const Font & f,
-		const uint16_t start, const uint16_t end)
-	{
-		const int8_t pct = get_percent();
-		if (pct < 0) { // error getting percent
-			// likely no battery or non-linux
-			LOG("Could not get percent, returning");
-			return;
-		}
-		struct JBDim range = {{start}, {end}};
-		draw_for_percent(xc, f, range, pct);
-		xcb_flush(xc);
+void battery::draw(xcb_connection_t * xc, const Font & f,
+	const uint16_t start, const uint16_t end)
+{
+	const int8_t pct = get_percent();
+	if (pct < 0) { // error getting percent
+		// likely no battery or non-linux
+		LOG("Could not get percent, returning");
+		return;
 	}
+	struct JBDim range = {{start}, {end}};
+	draw_for_percent(xc, f, range, pct);
+	xcb_flush(xc);
 }
