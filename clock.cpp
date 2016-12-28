@@ -27,19 +27,19 @@ namespace {
 					localtime(&current_time));
 			}
 	};
-	class Widget : public Renderer {
+	class ClockWidget : public Renderer {
 		private:
 			Buffer * c;
 			const struct JBDim font_size;
 		public:
-			Widget(xcb_connection_t * xc, Buffer * c,
+			ClockWidget(xcb_connection_t * xc, Buffer * c,
 				const Font & f)
 				: Renderer(xc), c(c),
 				font_size(f.get_size())
 			{}
 			int draw(void);
 	};
-	int Widget::draw(void)
+	int ClockWidget::draw(void)
 	{
 		const size_t sz = c->get_size() - 1;
 		int offset = scr->width_in_pixels - font_size.w * sz;
@@ -51,6 +51,6 @@ namespace {
 uint16_t clock::draw(xcb_connection_t * xc, const Font & f)
 {
 	Format c(XSTATUS_TIME_BUFFER_SIZE);
-	Widget r(xc, &c, f);
+	ClockWidget r(xc, &c, f);
 	return r.draw();
 }
