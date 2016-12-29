@@ -84,7 +84,8 @@ void XStatus::run(void)
 	bool keep_going =  true;
 	while (keep_going) {
 		xcb_generic_event_t * e;
-		if (jb_next_event_timed(xc, &e, opt.get_delay() * 1000000) && e)
+		if (jb_next_event_timed(xc, &e, opt.get_delay()
+			* 1000000) && e)
 			keep_going = handle_events(e);
 		else
 			update();
