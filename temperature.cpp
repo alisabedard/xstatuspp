@@ -44,28 +44,28 @@ namespace {
 	}
 	class TemperatureRenderer : public Renderer {
 		private:
-			JBDim f;
-			Buffer * b;
 			int x;
 		public:
-			TemperatureRenderer(xcb_connection_t * xc, Buffer * b,
-				int x, const JBDim & font_size)
-				: Renderer(xc), f(font_size), b(b), x(x) {}
+			TemperatureRenderer(xcb_connection_t * xc,
+				Buffer & buffer, const Font & font,
+				int x = 0)
+				: Renderer(xc, buffer, font), x(x) {}
 			int draw(void);
 	};
 	int TemperatureRenderer::draw(void)
 	{
-		const unsigned int sz = *b;
+		const unsigned int sz = buffer;
+		const JBDim f = font;
 		xcb_image_text_8(xc, sz, main_window,
-			get_gc(), x, f.h, b->buffer);
+			get_gc(), x, f.h, buffer);
 		return x + f.w * sz;
 	}
 }
 // Returns x offset for next item
 int temperature::draw(xcb_connection_t * xc,
-	const unsigned short offset, const JBDim & font_size)
+	const unsigned short offset, const Font & font)
 {
 	TemperatureBuffer b;
-	TemperatureRenderer r(xc, &b, offset + XSTATUS_CONST_PAD, font_size);
+	TemperatureRenderer r(xc, b, font, offset + XSTATUS_CONST_PAD);
 	return r.draw();
 }

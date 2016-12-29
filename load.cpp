@@ -8,30 +8,43 @@ extern "C" {
 #include "Buffer.h"
 #include "config.h"
 #include "font.h"
+#include "Renderer.h"
+using namespace xstatus;
 namespace {
-	__attribute__((nonnull))
-		static uint8_t get_load(char *  buf, const uint8_t sz)
-		{
-			double l;
-			getloadavg(&l, 1);
-			return snprintf(buf, sz, "%.2f", l);
-		}
+	static uint8_t get_load(char *  buf, const uint8_t sz)
+	{
+		double l;
+		getloadavg(&l, 1);
+		return snprintf(buf, sz, "%.2f", l);
+	}
+	class LoadBuffer : public Buffer {
+		public:
+			LoadBuffer(void)
+				: Buffer(6)
+			{ size = get_load(buffer, size); }
+	};
+	class LoadRenderer : public Renderer {
+		private:
+			int x;
+		public:
+			LoadRenderer(xcb_connection_t * xc, Buffer & buffer,
+				const Font & font, int x)
+				: Renderer(xc, buffer, font), x(x) {}
+			int draw(void);
+	};
+	int LoadRenderer::draw(void)
+	{
+		const JBDim fs = font;
+		xcb_image_text_8(xc, buffer, main_window, get_gc(),
+			x, fs.height, buffer);
+		return x + fs.width * buffer + XSTATUS_CONST_PAD;
+	}
 }
 // Returns x offset for next item
 __attribute__((nonnull))
-unsigned short xstatus::load::draw(xcb_connection_t * xc,
-	const unsigned short x, const JBDim font_size)
+int load::draw(xcb_connection_t * xc, const Font & f, const int x)
 {
-	class LoadBuffer : public Buffer {
-		public:
-			LoadBuffer(void) : Buffer(6)
-			{
-				size = get_load(buffer, size);
-			}
-	};
 	LoadBuffer b;
-	XData X(xc);
-	xcb_image_text_8(xc, b, X.main_window, X.get_gc(),
-		x, font_size.height, b.buffer);
-	return x + font_size.width * b + XSTATUS_CONST_PAD;
+	LoadRenderer r(xc, b, f, x);
+	return r.draw();
 }

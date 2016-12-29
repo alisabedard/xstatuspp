@@ -1,9 +1,10 @@
 // Copyright 2016, Jeffrey E. Bedard
+#include <cstdlib>
 #include <iostream>
 #include <unistd.h>
 #include "config.h"
+#include "Options.h"
 #include "xstatus.h"
-#include <cstring>
 using namespace std;
 using namespace xstatus;
 class Main : public Options {

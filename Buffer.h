@@ -13,10 +13,7 @@ namespace xstatus {
 			Buffer(const Buffer &obj); // copy constructor
 			~Buffer(void) { delete[] buffer; }
 			operator unsigned int() const {return size;}
-			operator std::string() const
-			{
-				return std::string(buffer);
-			}
+			operator char *() const { return buffer; }
 	};
 }
 #endif//!XSTATUS_BUFFER_H

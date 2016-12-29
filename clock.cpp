@@ -28,29 +28,25 @@ namespace {
 			}
 	};
 	class ClockWidget : public Renderer {
-		private:
-			Buffer * c;
-			const struct JBDim font_size;
 		public:
-			ClockWidget(xcb_connection_t * xc, Buffer * c,
+			ClockWidget(xcb_connection_t * xc, Buffer & buffer,
 				const Font & f)
-				: Renderer(xc), c(c),
-				font_size(f.get_size())
-			{}
+				: Renderer(xc, buffer, f) {}
 			int draw(void);
 	};
 	int ClockWidget::draw(void)
 	{
-		const unsigned int sz = (unsigned int)*c - 1;
-		int offset = screen->width_in_pixels - font_size.w * sz;
-		xcb_image_text_8(xc, sz, main_window,
-			get_gc(), offset, font_size.h, c->buffer);
+		const unsigned int sz = buffer - 1;
+		const JBDim f = font.get_size();
+		int offset = screen->width_in_pixels - f.w * sz;
+		xcb_image_text_8(xc, sz, main_window, get_gc(), offset,
+			f.h, buffer);
 		return offset;
 	}
 }
 unsigned short clock::draw(xcb_connection_t * xc, const Font & f)
 {
 	Format c(XSTATUS_TIME_BUFFER_SIZE);
-	ClockWidget r(xc, &c, f);
+	ClockWidget r(xc, c, f);
 	return r.draw();
 }

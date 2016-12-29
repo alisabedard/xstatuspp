@@ -2,12 +2,12 @@
 #ifndef XSTATUS_TEMPERATURE_H
 #define XSTATUS_TEMPERATURE_H
 #include <xcb/xcb.h>
-#include "libjb/JBDim.h"
+#include "font.h"
 namespace xstatus {
 	namespace temperature {
 		// Returns x offset for next item
 		int draw(xcb_connection_t * xc,
-			const unsigned short offset, const JBDim & font_size);
+			const unsigned short offset, const Font & font);
 	}
 }
 #endif//!XSTATUS_TEMPERATURE_H

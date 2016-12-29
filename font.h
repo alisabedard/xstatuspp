@@ -18,6 +18,7 @@ namespace xstatus {
 			bool open(const char * font_name);
 			xcb_font_t get_font(void) const { return fid; }
 			JBDim get_size(void) const { return sz; }
+			operator JBDim() const { return sz; }
 	};
 }
 #endif//!XSTATUS_FONT_H

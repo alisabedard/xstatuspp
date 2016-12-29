@@ -21,11 +21,11 @@ void XStatus::setup_invert_gc(void)
 }
 unsigned short XStatus::poll(void)
 {
-	const JBDim fsz = font->get_size();
 	unsigned short offset = widget_start + XSTATUS_CONST_PAD;
-	offset = load::draw(xc, offset, fsz);
-	offset = temperature::draw(xc, offset, fsz);
-	offset = status_file::draw(xc, offset, opt.filename, fsz);
+	Font f = *font;
+	offset = load::draw(xc, f, offset);
+	offset = temperature::draw(xc, offset, f);
+	offset = status_file::draw(xc, offset, opt.filename, f);
 	return offset;
 }
 // returns if update needed
