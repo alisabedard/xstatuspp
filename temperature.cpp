@@ -62,7 +62,7 @@ namespace {
 	}
 }
 // Returns x offset for next item
-unsigned short temperature::draw(xcb_connection_t * xc,
+int temperature::draw(xcb_connection_t * xc,
 	const unsigned short offset, const JBDim & font_size)
 {
 	TemperatureBuffer b;

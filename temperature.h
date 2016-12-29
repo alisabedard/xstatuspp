@@ -6,7 +6,7 @@
 namespace xstatus {
 	namespace temperature {
 		// Returns x offset for next item
-		unsigned short draw(xcb_connection_t * xc,
+		int draw(xcb_connection_t * xc,
 			const unsigned short offset, const JBDim & font_size);
 	}
 }
