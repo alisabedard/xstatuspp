@@ -4,27 +4,30 @@ extern "C" {
 #include "libjb/JBDim.h"
 }
 #include <cstdio>
+#include <iostream>
 #include "config.h"
 #include "Buffer.h"
 #include "Renderer.h"
 #include "util.h"
 using namespace xstatus;
 namespace {
-	int32_t get_temp_raw(void)
+	int get_temp_raw(void)
 	{
 		return system_value(XSTATUS_SYSFILE_TEMPERATURE);
 	}
-	uint8_t get_temp(void)
+	int get_temp(void)
 	{
 		// may only fail once:
 		static bool get_temp_failed;
 		if (get_temp_failed)
-			return 0; // 0 indicates unsupported
+			return -1;
 		// type must hold at least 100000, signed
-		int32_t temp = get_temp_raw();
-		if (temp == -1) { // could not open system file
+		int temp = get_temp_raw();
+		if (temp < 0) {
+			std::cerr << "Could not read " <<
+				XSTATUS_SYSFILE_TEMPERATURE << '\n';
 			get_temp_failed = true;
-			return 0;
+			return -1;
 		}
 		return temp / 1000;
 	}
@@ -48,7 +51,7 @@ namespace {
 			int x;
 		public:
 			TempRenderer(xcb_connection_t * xc, Buffer * b, int x,
-				const JBDim font_size)
+				const JBDim & font_size)
 				: Renderer(xc), f(font_size), b(b), x(x) {}
 			int draw(void)
 			{
@@ -60,8 +63,8 @@ namespace {
 	};
 }
 // Returns x offset for next item
-unsigned short temperature::draw(xcb_connection_t * xc, const unsigned short offset,
-	const JBDim font_size)
+unsigned short temperature::draw(xcb_connection_t * xc,
+	const unsigned short offset, const JBDim & font_size)
 {
 	TempBuf b;
 	TempRenderer r(xc, &b, offset + XSTATUS_CONST_PAD, font_size);
