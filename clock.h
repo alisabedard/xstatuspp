@@ -5,7 +5,7 @@
 #include "xdata.h"
 namespace xstatus {
 	namespace clock {
-		uint16_t draw(xcb_connection_t * xc, const Font & f);
+		unsigned short draw(xcb_connection_t * xc, const Font & f);
 	}
 }
 #endif//!XSTATUS_CLOCK_H

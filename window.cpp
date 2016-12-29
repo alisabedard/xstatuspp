@@ -7,7 +7,7 @@ extern "C" {
 #include "xdata.h"
 using namespace xstatus;
 namespace {
-	int16_t get_y(const uint16_t screen_height)
+	int16_t get_y(const unsigned short screen_height)
 	{
 		return screen_height - XSTATUS_CONST_HEIGHT -
 			XSTATUS_CONST_BORDER;

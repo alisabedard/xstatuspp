@@ -6,7 +6,7 @@
 namespace xstatus {
 	namespace battery {
 		void draw(xcb_connection_t * xc, const Font & f,
-			const uint16_t start, const uint16_t end);
+			const unsigned short start, const unsigned short end);
 	}
 }
 #endif//!XSTATUS_BATTERY_H

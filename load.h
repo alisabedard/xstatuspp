@@ -6,8 +6,8 @@
 namespace xstatus {
 	namespace load {
 		// Returns x offset for next item
-		uint16_t draw(xcb_connection_t * xc,
-			const uint16_t x,
+		unsigned short draw(xcb_connection_t * xc,
+			const unsigned short x,
 			const JBDim font_size) __attribute__((nonnull));
 	}
 }

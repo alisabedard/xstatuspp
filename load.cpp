@@ -19,8 +19,8 @@ namespace {
 }
 // Returns x offset for next item
 __attribute__((nonnull))
-uint16_t xstatus::load::draw(xcb_connection_t * xc, const uint16_t x,
-	const JBDim font_size)
+unsigned short xstatus::load::draw(xcb_connection_t * xc,
+	const unsigned short x, const JBDim font_size)
 {
 	class LoadBuffer : public Buffer {
 		public:

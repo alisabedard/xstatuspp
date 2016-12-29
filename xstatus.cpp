@@ -19,10 +19,10 @@ void XStatus::setup_invert_gc(void)
 	const uint32_t v = XCB_GX_INVERT;
 	xcb_create_gc(xc, get_invert_gc(), main_window, XCB_GC_FUNCTION, &v);
 }
-uint16_t XStatus::poll(void)
+unsigned short XStatus::poll(void)
 {
 	const JBDim fsz = font->get_size();
-	uint16_t offset = widget_start + XSTATUS_CONST_PAD;
+	unsigned short offset = widget_start + XSTATUS_CONST_PAD;
 	offset = load::draw(xc, offset, fsz);
 	offset = temperature::draw(xc, offset, fsz);
 	offset = status_file::draw(xc, offset, opt.filename, fsz);

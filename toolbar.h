@@ -2,12 +2,7 @@
 #ifndef XSTATUS_TOOLBAR_H
 #define XSTATUS_TOOLBAR_H
 #include <list>
-#include <stdint.h>
-#include <xcb/xcb.h>
-#include <xcb/xproto.h>
 #include "button.h"
-#include "font.h"
-#include "xdata.h"
 namespace xstatus {
 	class Toolbar : public XData {
 		private:

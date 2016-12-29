@@ -58,13 +58,13 @@ namespace {
 	{
 		const int16_t x = range.start, y
 			= (XSTATUS_CONST_HEIGHT >> 2) + 1;
-		const uint16_t height = XSTATUS_CONST_HEIGHT >> 1;
-		const uint16_t width = range.end - range.start
+		const unsigned short height = XSTATUS_CONST_HEIGHT >> 1;
+		const unsigned short width = range.end - range.start
 			- XSTATUS_CONST_PAD;
 		const xcb_rectangle_t r = {x, y, width, height};
 		return r;
 	}
-	uint16_t get_width_for_percent(const uint16_t width,
+	unsigned short get_width_for_percent(const unsigned short width,
 		const uint8_t pct)
 	{
 		return width * pct / 100;
@@ -82,7 +82,7 @@ namespace {
 		// fill rectangle per percent full:
 		xcb_poly_fill_rectangle(xc, w, gc, 1, &rect);
 	}
-	uint16_t get_x(const struct JBDim range)
+	unsigned short get_x(const struct JBDim range)
 	{
 		return range.start + (range.end - range.start) / 2;
 	}
@@ -114,7 +114,7 @@ namespace {
 	}
 }
 void battery::draw(xcb_connection_t * xc, const Font & f,
-	const uint16_t start, const uint16_t end)
+	const unsigned short start, const unsigned short end)
 {
 	const int8_t pct = get_percent();
 	if (pct < 0) { // error getting percent

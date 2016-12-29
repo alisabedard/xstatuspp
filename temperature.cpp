@@ -60,7 +60,7 @@ namespace {
 	};
 }
 // Returns x offset for next item
-uint16_t temperature::draw(xcb_connection_t * xc, const uint16_t offset,
+unsigned short temperature::draw(xcb_connection_t * xc, const unsigned short offset,
 	const JBDim font_size)
 {
 	TempBuf b;

@@ -73,8 +73,8 @@ class StatusRenderer : public Renderer {
 			: Renderer(xc), b(b), x(x), f(font_size) {}
 };
 // Returns offset for next widget
-uint16_t xstatus::status_file::draw(xcb_connection_t * xc,
-	const uint16_t x_offset,
+unsigned short xstatus::status_file::draw(xcb_connection_t * xc,
+	const unsigned short x_offset,
 	const char * filename, const JBDim font_size)
 {
 	StatusBuffer b(filename);

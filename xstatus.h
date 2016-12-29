@@ -7,11 +7,11 @@
 namespace xstatus {
 	class XStatus : public XData {
 		private:
-			uint16_t widget_start;
+			unsigned short widget_start;
 			Options opt;
 			void update(void);
 			bool handle_events(xcb_generic_event_t * e);
-			uint16_t poll(void);
+			unsigned short poll(void);
 			void setup_invert_gc(void);
 			Toolbar * tb;
 			Font * font;

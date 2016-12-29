@@ -48,7 +48,7 @@ namespace {
 		return offset;
 	}
 }
-uint16_t clock::draw(xcb_connection_t * xc, const Font & f)
+unsigned short clock::draw(xcb_connection_t * xc, const Font & f)
 {
 	Format c(XSTATUS_TIME_BUFFER_SIZE);
 	ClockWidget r(xc, &c, f);
