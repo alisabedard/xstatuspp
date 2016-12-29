@@ -19,8 +19,9 @@ namespace xstatus {
 				const uint8_t border_width,
 				const uint32_t value_mask,
 				const void * value_list);
+			operator xcb_window_t(void) const { return window; }
+			// Keep this accessor for subclasses:
 			xcb_window_t get_window(void) const { return window; }
-			bool is_created(void) const { return created; }
 			static xcb_window_t create_main_window(XData * X);
 	};
 }

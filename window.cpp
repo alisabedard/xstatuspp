@@ -40,6 +40,7 @@ void Window::create(const xcb_window_t parent, const xcb_rectangle_t &
 	xcb_create_window(xc, CFP, window, parent, g.x, g.y, g.width,
 		g.height, border_width, CFP, CFP, value_mask, value_list);
 	xcb_map_window(xc, window);
+	created = true;
 }
 xcb_window_t Window::create_main_window(XData * X)
 {
@@ -52,5 +53,5 @@ xcb_window_t Window::create_main_window(XData * X)
 	xcb_screen_t * s = X->screen;
 	uint32_t v[] = {get_bg(X->xc, s), true, EM};
 	w.create(s->root, get_geometry(s), BRD, VM, v);
-	return w.get_window();
+	return w;
 }
