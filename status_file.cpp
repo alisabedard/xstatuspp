@@ -59,14 +59,13 @@ class StatusRenderer : public Renderer {
 		JBDim f;
 		int offset(void)
 		{
-			return f.w * b->get_size() + x + PAD + PAD;
+			return f.w * *b + x + PAD + PAD;
 		}
 	public:
 		int draw(void)
 		{
-			xcb_image_text_8(xc, b->get_size(),
-				main_window.get_window(), gc, x + PAD,
-				f.h, b->buffer);
+			xcb_image_text_8(xc, *b, main_window,
+				gc, x + PAD, f.h, b->buffer);
 			return offset();
 		}
 		StatusRenderer(xcb_connection_t * xc, Buffer * b, int x, const

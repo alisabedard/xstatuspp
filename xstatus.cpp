@@ -22,8 +22,7 @@ using namespace std;
 void XStatus::setup_invert_gc(void)
 {
 	const uint32_t v = XCB_GX_INVERT;
-	xcb_create_gc(xc, invert_gc, main_window.get_window(),
-		XCB_GC_FUNCTION, &v);
+	xcb_create_gc(xc, invert_gc, main_window, XCB_GC_FUNCTION, &v);
 }
 uint16_t XStatus::poll(void)
 {
@@ -83,7 +82,7 @@ XStatus::~XStatus(void)
 	LOG("XStatus destructor");
 	delete tb;
 	delete font;
-	xcb_destroy_window(xc, main_window.get_window());
+	xcb_destroy_window(xc, main_window);
 	xcb_disconnect(xc);
 }
 void XStatus::run(void)

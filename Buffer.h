@@ -1,7 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #ifndef XSTATUS_BUFFER_H
 #define XSTATUS_BUFFER_H
-#include <stddef.h>
+#include <string>
 namespace xstatus {
 	class Buffer {
 		protected:
@@ -12,7 +12,11 @@ namespace xstatus {
 				: size(sz), buffer(new char [sz]) {}
 			Buffer(const Buffer &obj); // copy constructor
 			~Buffer(void) { delete[] buffer; }
-			size_t get_size(void) {return size;}
+			operator unsigned int() const {return size;}
+			operator std::string() const
+			{
+				return std::string(buffer);
+			}
 	};
 }
 #endif//!XSTATUS_BUFFER_H

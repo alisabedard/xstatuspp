@@ -52,8 +52,8 @@ namespace {
 				: Renderer(xc), f(font_size), b(b), x(x) {}
 			int draw(void)
 			{
-				const size_t sz = b->get_size();
-				xcb_image_text_8(xc, sz, main_window.get_window(),
+				const unsigned int sz = *b;
+				xcb_image_text_8(xc, sz, main_window,
 					gc, x, f.h, b->buffer);
 				return x + f.w * sz;
 			}

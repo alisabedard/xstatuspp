@@ -36,7 +36,7 @@ namespace {
 	{
 		enum {BUF_SZ = 7};
 		char buf[BUF_SZ];
-		const xcb_window_t w = XData(xc).main_window.get_window();
+		const xcb_window_t w = XData(xc).main_window;
 		xcb_image_text_8(xc, format(buf, BUF_SZ, pct), w,
 			gc, x, f.get_size().h, buf);
 	}
@@ -56,9 +56,11 @@ namespace {
 	}
 	xcb_rectangle_t get_rectangle(const struct JBDim range)
 	{
-		const int16_t x = range.start, y = (XSTATUS_CONST_HEIGHT >> 2) + 1;
+		const int16_t x = range.start, y
+			= (XSTATUS_CONST_HEIGHT >> 2) + 1;
 		const uint16_t height = XSTATUS_CONST_HEIGHT >> 1;
-		const uint16_t width = range.end - range.start - XSTATUS_CONST_PAD;
+		const uint16_t width = range.end - range.start
+			- XSTATUS_CONST_PAD;
 		const xcb_rectangle_t r = {x, y, width, height};
 		return r;
 	}
@@ -73,7 +75,7 @@ namespace {
 		const uint8_t pct)
 	{
 		xcb_rectangle_t rect = get_rectangle(range);
-		const xcb_window_t w = XData(xc).main_window.get_window();
+		const xcb_window_t w = XData(xc).main_window;
 		// clear:
 		xcb_poly_fill_rectangle(xc, w, bg_gc, 1, &rect);
 		rect.width = get_width_for_percent(rect.width, pct);
@@ -96,7 +98,7 @@ namespace {
 		static xcb_gcontext_t gc[BATTERY_GC_SIZE];
 		if (!*gc) {
 
-			const xcb_window_t w = XData(xc).main_window.get_window();
+			const xcb_window_t w = XData(xc).main_window;
 			initialize_gcs(xc, w, gc, f);
 		}
 		return gc;

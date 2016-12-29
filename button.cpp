@@ -44,7 +44,7 @@ void xstatus::XSButton::create_window(void)
 	const pixel_t bg = jb_get_pixel(xc, X.colormap,
 		XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
-	create(X.main_window.get_window(), this->geometry, BORDER, VM, v);
+	create(X.main_window, this->geometry, BORDER, VM, v);
 }
 xstatus::XSButton::XSButton(xcb_connection_t * xc, const Font & f,
 	const int16_t x, char * label)

@@ -41,10 +41,10 @@ namespace {
 	};
 	int ClockWidget::draw(void)
 	{
-		const size_t sz = c->get_size() - 1;
+		const unsigned int sz = (unsigned int)*c - 1;
 		int offset = screen->width_in_pixels - font_size.w * sz;
-		xcb_image_text_8(xc, sz, main_window.get_window(), gc, offset, font_size.h,
-			c->buffer);
+		xcb_image_text_8(xc, sz, main_window,
+			gc, offset, font_size.h, c->buffer);
 		return offset;
 	}
 }
