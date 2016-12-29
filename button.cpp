@@ -8,10 +8,23 @@ extern "C" {
 #include <string>
 #include "config.h"
 #include "font.h"
+#include "util.h"
 using namespace std;
+xcb_gcontext_t xstatus::XSButton::button_gc = 0;
+xcb_gcontext_t xstatus::XSButton::get_button_gc(void)
+{
+	if (button_gc)
+		return button_gc;
+	else {
+		button_gc = xcb_generate_id(X);
+		xstatus::create_gc(xc, button_gc, X, XSTATUS_BUTTON_FG,
+			XSTATUS_BUTTON_BG, font);
+		return button_gc;
+	};
+}
 void xstatus::XSButton::draw(void)
 {
-	xcb_image_text_8(xc, label->size(), window, X.get_button_gc(),
+	xcb_image_text_8(xc, label->size(), window, get_button_gc(),
 		XSTATUS_CONST_PAD, font_size.height, label->c_str());
 }
 void xstatus::XSButton::invert(void)
@@ -46,7 +59,8 @@ void xstatus::XSButton::create_window(void)
 }
 xstatus::XSButton::XSButton(XData & X, const Font & f,
 	const int16_t x, char * label)
-	: Window(X), X(X), x(x), font_size(f.get_size()), label(new string(label))
+	: Window(X), X(X), font(f), x(x), font_size(f.get_size()),
+	label(new string(label))
 {
 	LOG("XSButton constructor");
 	create_window();

@@ -10,7 +10,9 @@
 namespace xstatus {
 	class XSButton : public Window {
 		private:
+			static xcb_gcontext_t button_gc;
 			XData & X;
+			const Font & font;
 			int16_t x;
 			JBDim font_size;
 			std::string * label;
@@ -20,8 +22,11 @@ namespace xstatus {
 			XSButton(XData & X, const Font & f,
 				const int16_t x, char * label);
 			~XSButton(void);
-			xcb_window_t get_window(void){return window;}
-			xcb_rectangle_t get_geometry(void){return geometry;}
+			xcb_gcontext_t get_button_gc(void);
+			xcb_window_t get_window(void) const
+			{ return window; }
+			xcb_rectangle_t get_geometry(void) const
+			{ return geometry; }
 			void draw(void);
 			void invert(void);
 			bool (*cb)(XSButton *);

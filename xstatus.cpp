@@ -66,8 +66,6 @@ XStatus::XStatus(XStatusOptions opt)
 	const Font f = *font;
 	create_gc(xc, get_gc(), w, XSTATUS_PANEL_FOREGROUND,
 		XSTATUS_PANEL_BACKGROUND, f);
-	create_gc(xc, get_button_gc(), w, XSTATUS_BUTTON_FG,
-		XSTATUS_BUTTON_BG, f);
 	setup_invert_gc();
 	tb = new Toolbar(xc, font);
 	widget_start = tb->get_offset();

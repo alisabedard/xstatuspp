@@ -15,14 +15,13 @@ namespace {
 xcb_connection_t * XData::xc = nullptr;
 xcb_screen_t * XData::screen = nullptr;
 typedef xcb_gcontext_t gc;
-gc XData::gc, XData::invert_gc, XData::button_gc;
+gc XData::gc, XData::invert_gc;
 xcb_colormap_t XData::colormap;
 bool XData::xdata_init_done = false;
 void XData::init(xcb_connection_t * xc)
 {
 	XData::xc = xc;
 	XData::gc = xcb_generate_id(xc);
-	XData::button_gc = xcb_generate_id(xc);
 	XData::invert_gc = xcb_generate_id(xc);
 	XData::screen = jb_get_xcb_screen(xc);
 	XData::colormap = XData::screen->default_colormap;
