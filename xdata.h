@@ -18,10 +18,13 @@ namespace xstatus {
 			static xcb_screen_t * screen;
 			static xcb_colormap_t colormap;
 			XData(xc_t * xc);
-			operator xc_t*() const { return xc; }
 			gc_t get_gc(void) const { return gc; }
 			gc_t get_button_gc(void) const { return button_gc; }
 			gc_t get_invert_gc(void) const { return invert_gc; }
+			// convenience conversion accessors:
+			operator xc_t*() const { return xc; }
+			operator xcb_screen_t *() const { return screen; }
+			operator xcb_window_t() const { return main_window; }
 	};
 }
 #endif//!XS_XDATA_H

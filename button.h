@@ -10,13 +10,14 @@
 namespace xstatus {
 	class XSButton : public Window {
 		private:
+			XData & X;
 			int16_t x;
 			JBDim font_size;
 			std::string * label;
 			void set_geometry(void);
 			void create_window(void);
 		public:
-			XSButton(xcb_connection_t * xc, const Font & f,
+			XSButton(XData & X, const Font & f,
 				const int16_t x, char * label);
 			~XSButton(void);
 			xcb_window_t get_window(void){return window;}

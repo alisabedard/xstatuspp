@@ -26,7 +26,7 @@ namespace {
 void xstatus::Toolbar::btn(char * label, char * cb_data,
 	bool (*cb)(XSButton *))
 {
-	XSButton * b = new XSButton(xc, *font, offset, label);
+	XSButton * b = new XSButton(*this, *font, offset, label);
 	b->cb = cb;
 	b->cb_data = cb_data;
 	offset += b->get_geometry().width + XSTATUS_CONST_PAD;
