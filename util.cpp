@@ -23,6 +23,7 @@ int xstatus::system_value(const char *filename)
 	try {
 		f.open(filename);
 		std::getline(f, s);
+		f.close();
 	}
 	catch (std::ifstream::failure e) {
 		std::cerr << "Cannot get value from " << filename << '\n';
