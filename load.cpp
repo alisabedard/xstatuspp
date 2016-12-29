@@ -4,7 +4,6 @@ extern "C" {
 #include "libjb/JBDim.h"
 }
 #include <cstdio>
-#include <cstdlib>
 #include "Buffer.h"
 #include "config.h"
 #include "font.h"
@@ -41,10 +40,8 @@ namespace {
 	}
 }
 // Returns x offset for next item
-__attribute__((nonnull))
 int load::draw(xcb_connection_t * xc, const Font & f, const int x)
 {
 	LoadBuffer b;
-	LoadRenderer r(xc, b, f, x);
-	return r.draw();
+	return LoadRenderer(xc, b, f, x).draw();
 }
