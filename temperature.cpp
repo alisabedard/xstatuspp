@@ -3,7 +3,6 @@
 extern "C" {
 #include "libjb/JBDim.h"
 }
-#include <cstdio>
 #include <iostream>
 #include "config.h"
 #include "Buffer.h"
@@ -31,42 +30,42 @@ namespace {
 		}
 		return temp / 1000;
 	}
-	class TempBuf : public Buffer {
+	class TemperatureBuffer : public Buffer {
 		private:
-			void format(void)
-			{
-				const uint8_t temp = get_temp();
-				size = temp ? snprintf(buffer, size, "%dC",
-					temp) : 0;
-			}
+			void format(void);
 		public:
-			TempBuf(void) : Buffer(4) {
-				format();
-			}
+			TemperatureBuffer(void) : Buffer(4) { format(); }
 	};
-	class TempRenderer : public Renderer {
+	void TemperatureBuffer::format(void)
+	{
+		const uint8_t temp = get_temp();
+		size = temp ? snprintf(buffer, size, "%dC",
+			temp) : 0;
+	}
+	class TemperatureRenderer : public Renderer {
 		private:
 			JBDim f;
 			Buffer * b;
 			int x;
 		public:
-			TempRenderer(xcb_connection_t * xc, Buffer * b, int x,
-				const JBDim & font_size)
+			TemperatureRenderer(xcb_connection_t * xc, Buffer * b,
+				int x, const JBDim & font_size)
 				: Renderer(xc), f(font_size), b(b), x(x) {}
-			int draw(void)
-			{
-				const unsigned int sz = *b;
-				xcb_image_text_8(xc, sz, main_window,
-					get_gc(), x, f.h, b->buffer);
-				return x + f.w * sz;
-			}
+			int draw(void);
 	};
+	int TemperatureRenderer::draw(void)
+	{
+		const unsigned int sz = *b;
+		xcb_image_text_8(xc, sz, main_window,
+			get_gc(), x, f.h, b->buffer);
+		return x + f.w * sz;
+	}
 }
 // Returns x offset for next item
 unsigned short temperature::draw(xcb_connection_t * xc,
 	const unsigned short offset, const JBDim & font_size)
 {
-	TempBuf b;
-	TempRenderer r(xc, &b, offset + XSTATUS_CONST_PAD, font_size);
+	TemperatureBuffer b;
+	TemperatureRenderer r(xc, &b, offset + XSTATUS_CONST_PAD, font_size);
 	return r.draw();
 }
