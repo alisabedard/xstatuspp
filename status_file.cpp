@@ -65,7 +65,7 @@ class StatusRenderer : public Renderer {
 		int draw(void)
 		{
 			xcb_image_text_8(xc, *b, main_window,
-				gc, x + PAD, f.h, b->buffer);
+				get_gc(), x + PAD, f.h, b->buffer);
 			return offset();
 		}
 		StatusRenderer(xcb_connection_t * xc, Buffer * b, int x, const

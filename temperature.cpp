@@ -54,7 +54,7 @@ namespace {
 			{
 				const unsigned int sz = *b;
 				xcb_image_text_8(xc, sz, main_window,
-					gc, x, f.h, b->buffer);
+					get_gc(), x, f.h, b->buffer);
 				return x + f.w * sz;
 			}
 	};

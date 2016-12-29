@@ -44,7 +44,7 @@ namespace {
 		const unsigned int sz = (unsigned int)*c - 1;
 		int offset = screen->width_in_pixels - font_size.w * sz;
 		xcb_image_text_8(xc, sz, main_window,
-			gc, offset, font_size.h, c->buffer);
+			get_gc(), offset, font_size.h, c->buffer);
 		return offset;
 	}
 }

@@ -5,24 +5,19 @@ extern "C" {
 #include "libjb/util.h"
 #include "libjb/xcb.h"
 }
-#include <string>
 #include "battery.h"
 #include "clock.h"
 #include "config.h"
-#include "font.h"
 #include "load.h"
 #include "status_file.h"
 #include "temperature.h"
-#include "toolbar.h"
 #include "util.h"
-#include "window.h"
-#include "xdata.h"
 using namespace xstatus;
 using namespace std;
 void XStatus::setup_invert_gc(void)
 {
 	const uint32_t v = XCB_GX_INVERT;
-	xcb_create_gc(xc, invert_gc, main_window, XCB_GC_FUNCTION, &v);
+	xcb_create_gc(xc, get_invert_gc(), main_window, XCB_GC_FUNCTION, &v);
 }
 uint16_t XStatus::poll(void)
 {
@@ -69,9 +64,9 @@ XStatus::XStatus(XStatusOptions opt)
 	font = new Font(xc);
 	jb_require(font->open(XSTATUS_FONT), "Could not load a font");
 	const Font f = *font;
-	create_gc(xc, gc, w, XSTATUS_PANEL_FOREGROUND,
+	create_gc(xc, get_gc(), w, XSTATUS_PANEL_FOREGROUND,
 		XSTATUS_PANEL_BACKGROUND, f);
-	create_gc(xc, button_gc, w, XSTATUS_BUTTON_FG,
+	create_gc(xc, get_button_gc(), w, XSTATUS_BUTTON_FG,
 		XSTATUS_BUTTON_BG, f);
 	setup_invert_gc();
 	tb = new Toolbar(xc, font);

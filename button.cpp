@@ -11,14 +11,14 @@ extern "C" {
 using namespace std;
 void xstatus::XSButton::draw(void)
 {
-	xcb_image_text_8(xc, label->size(), window, XData(xc).button_gc,
+	xcb_image_text_8(xc, label->size(), window, XData(xc).get_button_gc(),
 		XSTATUS_CONST_PAD, font_size.height, label->c_str());
 }
 void xstatus::XSButton::invert(void)
 {
 	xcb_rectangle_t r = geometry;
 	r.x = r.y = 0;
-	xcb_poly_fill_rectangle(xc, window, XData(xc).invert_gc, 1, &r);
+	xcb_poly_fill_rectangle(xc, window, XData(xc).get_invert_gc(), 1, &r);
 	xcb_flush(xc);
 }
 void xstatus::XSButton::set_geometry(void)
@@ -41,8 +41,7 @@ void xstatus::XSButton::create_window(void)
 	};
 	set_geometry();
 	XData X(xc);
-	const pixel_t bg = jb_get_pixel(xc, X.colormap,
-		XSTATUS_BUTTON_BG);
+	const pixel_t bg = jb_get_pixel(xc, X.colormap, XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
 	create(X.main_window, this->geometry, BORDER, VM, v);
 }

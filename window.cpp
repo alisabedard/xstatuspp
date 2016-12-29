@@ -51,7 +51,7 @@ xcb_window_t Window::create_main_window(XData * X)
 	};
 	Window & w = X->main_window;
 	xcb_screen_t * s = X->screen;
-	uint32_t v[] = {get_bg(X->xc, s), true, EM};
+	uint32_t v[] = {get_bg(*X, s), true, EM};
 	w.create(s->root, get_geometry(s), BRD, VM, v);
 	return w;
 }
