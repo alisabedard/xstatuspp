@@ -1,13 +1,10 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "button.h"
 extern "C" {
-#include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 }
-#include <string>
 #include "config.h"
-#include "font.h"
 #include "util.h"
 using namespace std;
 xcb_gcontext_t xstatus::XSButton::button_gc = 0;
