@@ -1,18 +1,11 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "status_file.h"
-extern "C" {
-#include "libjb/JBDim.h"
-#include "libjb/file.h"
-#include "libjb/util.h"
-}
-#include <cstdio>
-#include <sys/stat.h> // include per man page of fchmod()
-#include <unistd.h> // include per man page of read()
+#include <fstream>
+#include <iostream>
 #include "Buffer.h"
 #include "config.h"
-#include "font.h"
 #include "Renderer.h"
-#include "xdata.h"
+using namespace std;
 using namespace xstatus;
 namespace {
 	class StatusBuffer : public Buffer {
@@ -32,20 +25,19 @@ namespace {
 		static bool warned;
 		if (warned)
 			return;
-		fprintf(stderr, "No data in status file: %s\n", filename);
+		cerr << "No data in status file " << filename << '\n';
 		warned = true;
 	}
 	ssize_t StatusBuffer::poll_status_file(void)
 	{
-		fd_t fd = jb_open(filename, O_RDONLY | O_CREAT);
-		if (fd < 0)
-			return -1;
-		fchmod(fd, 0600);
-		// Subtract 1 to avoid display of null terminator.
-		ssize_t r = read(fd, buffer, XSTATUS_CONST_BUFFER_SIZE) - 1;
-		jb_check(r != -1, "Could not read status file");
-		close(fd);
-		return r;
+		ifstream f;
+		string s;
+		f.open(filename);
+		if (f.rdstate())
+			return -1; // Could not open file.
+		getline(f, s);
+		f.close();
+		return s.copy(buffer, size);
 	}
 	bool StatusBuffer::poll(void)
 	{
