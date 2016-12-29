@@ -56,7 +56,7 @@ void XStatus::update(void)
 	const Font f = *font;
 	battery::draw(xc, f, poll(), clock::draw(xc, f));
 }
-XStatus::XStatus(XStatusOptions opt)
+XStatus::XStatus(Options opt)
 	: XData(jb_get_xcb_connection(NULL, NULL)), opt(opt)
 {
 	LOG("XStatus constructor");

@@ -8,7 +8,7 @@ namespace xstatus {
 	class XStatus : public XData {
 		private:
 			uint16_t widget_start;
-			XStatusOptions opt;
+			Options opt;
 			void update(void);
 			bool handle_events(xcb_generic_event_t * e);
 			uint16_t poll(void);
@@ -16,10 +16,10 @@ namespace xstatus {
 			Toolbar * tb;
 			Font * font;
 		public:
-			XStatus(XStatusOptions opt);
+			XStatus(Options opt);
 			~XStatus(void);
 			void run(void);
 	};
-	void start(XStatusOptions * opt);
+	void start(Options * opt);
 }
 #endif//!XSTATUS_XSTATUS_H

@@ -6,7 +6,7 @@
 #include <cstring>
 using namespace std;
 using namespace xstatus;
-class Main : public XStatusOptions {
+class Main : public Options {
 	static void usage(void);
 	public:
 		Main(char * filename);
@@ -41,7 +41,7 @@ void Main::parse(int argc, char ** argv)
 			usage();
 		}
 }
-Main::Main(char * filename) : XStatusOptions(filename) {}
+Main::Main(char * filename) : Options(filename) {}
 int main(int argc, char ** argv)
 {
 	char f[] = XSTATUS_STATUS_FILE;

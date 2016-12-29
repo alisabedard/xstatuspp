@@ -4,26 +4,26 @@
 #include "libjb/log.h"
 using namespace std;
 using namespace xstatus;
-XStatusOptions::XStatusOptions(char * filename)
+Options::Options(char * filename)
 {
-	LOG("XStatusOptions constructor");
+	LOG("Options constructor");
 	string s(filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
-XStatusOptions::XStatusOptions(const XStatusOptions& obj)
+Options::Options(const Options& obj)
 {
-	LOG("XStatusOptions copy constructor");
+	LOG("Options copy constructor");
 	string s(obj.filename);
 	this->filename = new char[s.size()];
 	s.copy(this->filename, s.size());
 }
-XStatusOptions::~XStatusOptions(void)
+Options::~Options(void)
 {
-	LOG("XStatusOptions destructor");
+	LOG("Options destructor");
 	delete filename;
 }
-void XStatusOptions::set_filename(char * filename)
+void Options::set_filename(char * filename)
 {
 	delete this->filename;
 	string s(filename);

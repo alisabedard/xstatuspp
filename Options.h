@@ -2,13 +2,13 @@
 #ifndef XSPP_OPTIONS_H
 #define XSPP_OPTIONS_H
 namespace xstatus {
-	class XStatusOptions {
+	class Options {
 		protected:
 			unsigned short delay = 1;
 		public:
-			XStatusOptions(char * filename);
-			XStatusOptions(const XStatusOptions& obj);
-			~XStatusOptions(void);
+			Options(char * filename);
+			Options(const Options& obj);
+			~Options(void);
 			void set_filename(char * filename);
 			unsigned short get_delay(void) { return delay; }
 			char * filename;
