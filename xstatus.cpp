@@ -90,29 +90,3 @@ void XStatus::run(void)
 			update();
 	}
 }
-XStatusOptions::XStatusOptions(char * filename)
-{
-	LOG("XStatusOptions constructor");
-	string s(filename);
-	this->filename = new char[s.size()];
-	s.copy(this->filename, s.size());
-}
-XStatusOptions::XStatusOptions(const XStatusOptions& obj)
-{
-	LOG("XStatusOptions copy constructor");
-	string s(obj.filename);
-	this->filename = new char[s.size()];
-	s.copy(this->filename, s.size());
-}
-XStatusOptions::~XStatusOptions(void)
-{
-	LOG("XStatusOptions destructor");
-	delete filename;
-}
-void XStatusOptions::set_filename(char * filename)
-{
-	delete this->filename;
-	string s(filename);
-	this->filename = new char[s.size()];
-	s.copy(this->filename, s.size());
-}
