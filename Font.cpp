@@ -1,5 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "font.h"
+#include "Font.h"
 extern "C" {
 #include "libjb/xcb.h"
 }

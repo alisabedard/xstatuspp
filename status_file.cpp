@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Buffer.h"
 #include "config.h"
-#include "font.h"
+#include "Font.h"
 #include "Renderer.h"
 using namespace std;
 using namespace xstatus;

@@ -3,7 +3,7 @@
 #define XSTATUS_BUTTON_H
 #include <string>
 #include <xcb/xcb.h>
-#include "font.h"
+#include "Font.h"
 #include "libjb/JBDim.h"
 #include "Window.h"
 #include "XData.h"

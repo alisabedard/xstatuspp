@@ -1,4 +1,4 @@
-objs=util.o main.o font.o XData.o Button.o Options.o
+objs=util.o main.o Font.o XData.o Button.o Options.o
 objs+=clock.o load.o status_file.o Window.o Toolbar.o
 objs+=battery.o temperature.o xstatus.o Buffer.o
 include config.mk

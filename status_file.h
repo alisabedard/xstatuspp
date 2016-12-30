@@ -2,7 +2,7 @@
 #ifndef XSTATUS_STATUS_FILE_H
 #define XSTATUS_STATUS_FILE_H
 #include <xcb/xcb.h>
-#include "font.h"
+#include "Font.h"
 namespace xstatus {
 	namespace status_file {
 		// Returns offset for next widget

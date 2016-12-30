@@ -1,7 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard
 #ifndef XSTATUS_CLOCK_H
 #define XSTATUS_CLOCK_H
-#include "font.h"
+#include "Font.h"
 #include "XData.h"
 namespace xstatus {
 	namespace clock {

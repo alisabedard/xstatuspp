@@ -6,7 +6,7 @@ extern "C" {
 #include <cstdio>
 #include "Buffer.h"
 #include "config.h"
-#include "font.h"
+#include "Font.h"
 #include "Renderer.h"
 using namespace xstatus;
 namespace {

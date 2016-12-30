@@ -2,7 +2,7 @@
 #ifndef XSTATUS_BATTERY_H
 #define XSTATUS_BATTERY_H
 #include <xcb/xcb.h>
-#include "font.h"
+#include "Font.h"
 namespace xstatus {
 	namespace battery {
 		void draw(xcb_connection_t * xc, const Font & f,

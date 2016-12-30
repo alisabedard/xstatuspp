@@ -2,7 +2,7 @@
 #ifndef XSTATUS_LOAD_H
 #define XSTATUS_LOAD_H
 #include <xcb/xcb.h>
-#include "font.h"
+#include "Font.h"
 namespace xstatus {
 	namespace load {
 		// Returns x offset for next item

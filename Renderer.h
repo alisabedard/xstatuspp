@@ -1,7 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #ifndef XSTATUS_RENDERER_H
 #define XSTATUS_RENDERER_H
-#include "font.h"
+#include "Font.h"
 #include "XData.h"
 namespace xstatus {
 	class Renderer : public XData {

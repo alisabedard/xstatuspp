@@ -1,6 +1,6 @@
 #ifndef XSTATUS_XSTATUS_H
 #define XSTATUS_XSTATUS_H
-#include "font.h"
+#include "Font.h"
 #include "Options.h"
 #include "Toolbar.h"
 #include "XData.h"

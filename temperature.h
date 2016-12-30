@@ -2,7 +2,7 @@
 #ifndef XSTATUS_TEMPERATURE_H
 #define XSTATUS_TEMPERATURE_H
 #include <xcb/xcb.h>
-#include "font.h"
+#include "Font.h"
 namespace xstatus {
 	namespace temperature {
 		// Returns x offset for next item

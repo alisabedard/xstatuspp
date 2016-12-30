@@ -5,7 +5,7 @@ extern "C" {
 }
 #include <fstream>
 #include <iostream>
-#include "font.h"
+#include "Font.h"
 void xstatus::create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 	const xcb_window_t win, const char * fg,
 	const char * bg, const Font & f)
