@@ -2,7 +2,7 @@
 #define XSTATUS_XSTATUS_H
 #include "font.h"
 #include "Options.h"
-#include "toolbar.h"
+#include "Toolbar.h"
 #include "xdata.h"
 namespace xstatus {
 	class XStatus : public XData {

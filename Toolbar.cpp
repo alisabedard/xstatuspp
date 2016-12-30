@@ -1,5 +1,5 @@
 // Copyright 2017, Jeffrey E. Bedard
-#include "toolbar.h"
+#include "Toolbar.h"
 #include <iostream>
 #include "config.h"
 #include "libjb/cpp.h"
