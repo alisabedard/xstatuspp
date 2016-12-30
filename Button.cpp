@@ -1,5 +1,5 @@
 // Copyright 2017, Jeffrey E. Bedard
-#include "button.h"
+#include "Button.h"
 extern "C" {
 #include "libjb/xcb.h"
 }
