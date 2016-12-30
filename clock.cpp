@@ -22,7 +22,7 @@ namespace {
 			Format(size_t size)
 				: Buffer(size)
 			{
-				size = strftime(buffer, size,
+				size = strftime(buffer, max_size,
 					XSTATUS_TIME_FORMAT,
 					localtime(&current_time));
 			}

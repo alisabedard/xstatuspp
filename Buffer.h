@@ -4,15 +4,17 @@
 #include <string>
 namespace xstatus {
 	class Buffer {
+		private:
+			static int instances;
 		protected:
 			size_t size;
+			const size_t max_size;
 		public:
 			char * buffer;
-			Buffer(size_t sz)
-				: size(sz), buffer(new char [sz]) {}
+			Buffer(size_t sz);
 			Buffer(const Buffer &obj); // copy constructor
-			~Buffer(void) { delete[] buffer; }
-			operator unsigned int() const {return size;}
+			~Buffer(void);
+			operator unsigned int() const { return size; }
 			operator char *() const { return buffer; }
 	};
 }

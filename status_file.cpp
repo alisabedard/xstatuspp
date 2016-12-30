@@ -38,7 +38,7 @@ namespace {
 			return -1; // Could not open file.
 		getline(f, s);
 		f.close();
-		return s.copy(buffer, size);
+		return s.copy(buffer, max_size);
 	}
 	bool StatusBuffer::poll(void)
 	{
