@@ -15,22 +15,22 @@ xcb_gcontext_t xstatus::Button::get_button_gc(void)
 		return button_gc;
 	else {
 		button_gc = xcb_generate_id(X);
-		xstatus::create_gc(xc, button_gc, X, XSTATUS_BUTTON_FG,
+		xstatus::create_gc(X, button_gc, X, XSTATUS_BUTTON_FG,
 			XSTATUS_BUTTON_BG, font);
 		return button_gc;
 	};
 }
 void xstatus::Button::draw(void)
 {
-	xcb_image_text_8(xc, label.size(), window, get_button_gc(),
+	xcb_image_text_8(X, label.size(), window, get_button_gc(),
 		XSTATUS_CONST_PAD, font_size.height, label.c_str());
 }
 void xstatus::Button::invert(void)
 {
 	xcb_rectangle_t r = geometry;
 	r.x = r.y = 0;
-	xcb_poly_fill_rectangle(xc, window, X.get_invert_gc(), 1, &r);
-	xcb_flush(xc);
+	xcb_poly_fill_rectangle(X, window, X.get_invert_gc(), 1, &r);
+	xcb_flush(X);
 }
 void xstatus::Button::set_geometry(void)
 {
@@ -51,7 +51,7 @@ void xstatus::Button::create_window(void)
 			| XCB_EVENT_MASK_LEAVE_WINDOW
 	};
 	set_geometry();
-	const pixel_t bg = jb_get_pixel(xc, X.colormap, XSTATUS_BUTTON_BG);
+	const pixel_t bg = jb_get_pixel(X, X.colormap, XSTATUS_BUTTON_BG);
 	uint32_t v[] = {bg, EM};
 	create(X.main_window, this->geometry, BORDER, VM, v);
 }

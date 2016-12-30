@@ -6,9 +6,9 @@ namespace xstatus {
 	class XData;
 	class Window {
 		private:
+			xcb_connection_t * xc;
 			bool created = false;
 		protected:
-			xcb_connection_t * xc;
 			xcb_window_t window;
 			xcb_rectangle_t geometry;
 		public:
