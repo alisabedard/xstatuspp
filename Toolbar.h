@@ -7,13 +7,13 @@ namespace xstatus {
 	class Toolbar : public XData {
 		private:
 			static int instances;
-			std::list<XSButton *> buttons;
+			std::list<Button *> buttons;
 			unsigned int offset;
 			Font * font;
 			bool do_cb(const xcb_window_t ewin, bool &
 				keep_going);
 			bool iterate_buttons_member(const xcb_window_t ewin,
-				void (XSButton::*func)(void));
+				void (Button::*func)(void));
 		public:
 			Toolbar(xcb_connection_t * xc, Font * f);
 			~Toolbar(void);
@@ -25,7 +25,7 @@ namespace xstatus {
 			// returns true if event was processed:
 			bool expose(const xcb_window_t event_window);
 			void btn(const char label[], const char cb_data[],
-				bool (*cb)(XSButton *));
+				bool (*cb)(Button *));
 			void btn(const char label[], const char cmd[]);
 	};
 }

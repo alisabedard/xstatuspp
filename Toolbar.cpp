@@ -7,23 +7,23 @@ using namespace std;
 using namespace xstatus;
 int Toolbar::instances = 0;
 namespace {
-	bool system_cb(XSButton * b)
+	bool system_cb(Button * b)
 	{
 		const char *cmd = b->cb_data;
 		if (system(cmd))
 			cerr << "Cannot execute " << cmd << '\n';
 		return true;
 	}
-	bool exit_cb(XSButton * b)
+	bool exit_cb(Button * b)
 	{
 		return false;
 	}
 }
 void Toolbar::btn(const char label[], const char cb_data[],
-	bool (*cb)(XSButton *))
+	bool (*cb)(Button *))
 {
 	string s(label);
-	XSButton * b = new XSButton(*this, *font, offset, s);
+	Button * b = new Button(*this, *font, offset, s);
 	b->cb = cb;
 	size_t sz = 0;
 	if (cb_data) {
@@ -41,7 +41,7 @@ void Toolbar::btn(const char label[], const char cmd[])
 }
 bool Toolbar::do_cb(const xcb_window_t ewin, bool & keep_going)
 {
-	for(list<XSButton *>::iterator i = buttons.begin();
+	for(list<Button *>::iterator i = buttons.begin();
 		i != buttons.end(); ++i) {
 		if ((*i)->get_window() == ewin) {
 			keep_going = (*i)->cb(*i);
@@ -51,9 +51,9 @@ bool Toolbar::do_cb(const xcb_window_t ewin, bool & keep_going)
 	return false;
 }
 bool Toolbar::iterate_buttons_member(const xcb_window_t ewin,
-	void (XSButton::*func)(void))
+	void (Button::*func)(void))
 {
-	for(list<XSButton *>::iterator i = buttons.begin(); i != buttons.end();
+	for(list<Button *>::iterator i = buttons.begin(); i != buttons.end();
 		++i) {
 		if ((*i)->get_window() == ewin) {
 			((*i)->*func)();
@@ -65,7 +65,7 @@ bool Toolbar::iterate_buttons_member(const xcb_window_t ewin,
 bool Toolbar::expose(const xcb_window_t event_window)
 {
 	return iterate_buttons_member(event_window,
-		&XSButton::draw);
+		&Button::draw);
 }
 bool Toolbar::button(const xcb_window_t event_window,
 	bool & keep_going)
@@ -75,7 +75,7 @@ bool Toolbar::button(const xcb_window_t event_window,
 bool Toolbar::focus(const xcb_window_t event_window)
 {
 	return iterate_buttons_member(event_window,
-		&XSButton::invert);
+		&Button::invert);
 }
 Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
 	: XData(xc), offset(0), font(f)
@@ -92,7 +92,7 @@ Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
 Toolbar::~Toolbar(void)
 {
 	JB_LOG_DEL(Toolbar, instances);
-	for (list<XSButton *>::iterator i = buttons.begin(); i !=
+	for (list<Button *>::iterator i = buttons.begin(); i !=
 		buttons.end(); ++i) {
 		delete *i;
 	}

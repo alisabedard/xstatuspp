@@ -8,7 +8,7 @@
 #include "Window.h"
 #include "XData.h"
 namespace xstatus {
-	class XSButton : public Window {
+	class Button : public Window {
 		private:
 			static int instances;
 			static xcb_gcontext_t button_gc;
@@ -20,9 +20,9 @@ namespace xstatus {
 			void set_geometry(void);
 			void create_window(void);
 		public:
-			XSButton(XData & X, const Font & f,
+			Button(XData & X, const Font & f,
 				const int16_t x, std::string & label);
-			~XSButton(void);
+			~Button(void);
 			xcb_gcontext_t get_button_gc(void);
 			xcb_window_t get_window(void) const
 			{ return window; }
@@ -30,7 +30,7 @@ namespace xstatus {
 			{ return geometry; }
 			void draw(void);
 			void invert(void);
-			bool (*cb)(XSButton *);
+			bool (*cb)(Button *);
 			char * cb_data = NULL;
 	};
 }
