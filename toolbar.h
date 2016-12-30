@@ -11,7 +11,6 @@ namespace xstatus {
 			Font * font;
 			bool do_cb(const xcb_window_t ewin, bool &
 				keep_going);
-
 			bool iterate_buttons_member(const xcb_window_t ewin,
 				void (XSButton::*func)(void));
 		public:
@@ -23,9 +22,9 @@ namespace xstatus {
 				bool & keep_going);
 			// returns true if event was processed:
 			bool expose(const xcb_window_t event_window);
-			void btn(char * label, char * cb_data,
+			void btn(const char label[], const char cb_data[],
 				bool (*cb)(XSButton *));
-			void btn(char * label, char * cmd);
+			void btn(const char label[], const char cmd[]);
 	};
 }
 #endif//!XSTATUS_TOOLBAR_H

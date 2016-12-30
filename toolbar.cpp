@@ -5,6 +5,7 @@ extern "C" {
 }
 #include <cstdlib>
 #include <list>
+#include <string>
 #include "button.h"
 #include "config.h"
 using namespace std;
@@ -23,16 +24,23 @@ namespace {
 		return false;
 	}
 }
-void xstatus::Toolbar::btn(char * label, char * cb_data,
+void xstatus::Toolbar::btn(const char label[], const char cb_data[],
 	bool (*cb)(XSButton *))
 {
-	XSButton * b = new XSButton(*this, *font, offset, label);
+	string s(label);
+	XSButton * b = new XSButton(*this, *font, offset, s);
 	b->cb = cb;
-	b->cb_data = cb_data;
+	size_t sz = 0;
+	if (cb_data) {
+		while (cb_data[++sz]);
+		b->cb_data = new char[sz];
+		for (int i = sz; i >= 0; --i)
+			b->cb_data[i] = cb_data[i];
+	}
 	offset += b->get_geometry().width + XSTATUS_CONST_PAD;
 	buttons.push_front(b);
 }
-void xstatus::Toolbar::btn(char * label, char * cmd)
+void xstatus::Toolbar::btn(const char label[], const char cmd[])
 {
 	btn(label, cmd, system_cb);
 }
@@ -77,38 +85,11 @@ bool xstatus::Toolbar::focus(const xcb_window_t event_window)
 xstatus::Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
 	: XData(xc), offset(0), font(f)
 {
-	static char menu[] = "Menu",
-		    menu_cmd[]= XSTATUS_MENU_COMMAND;
-	btn(menu, menu_cmd);
-	//	offset = btn(xc, offset, menu, menu_cmd);
-	static char term[] = "Terminal",
-		    term_cmd[] = XSTATUS_TERMINAL;
-	btn(term, term_cmd);
-	//	offset = btn(xc, offset, term, term_cmd);
-	static char edit[] = "Editor",
-		    edit_cmd[] = XSTATUS_EDITOR_COMMAND;
-	btn(edit, edit_cmd);
-	//	offset = btn(xc, offset, edit, edit_cmd);
-	{ // * browser scope
-		static char www_env[] = "XSTATUS_BROWSER_COMMAND",
-			    www[] = "Browser",
-			    default_www_cmd[]
-				    = XSTATUS_BROWSER_COMMAND;
-		char * browser=getenv(www_env);
-		if (!browser)
-			browser = default_www_cmd;
-		//		offset = btn(xc, offset, www, browser);
-		btn(www, browser);
-	}
-	static char mix[] = "Mixer",
-		    mix_cmd[] = XSTATUS_MIXER_COMMAND;
-	//	offset = btn(xc, offset, mix, mix_cmd);
-	btn(mix, mix_cmd);
-	static char lock[] = "Lock",
-		    lock_cmd[] = XSTATUS_LOCK_COMMAND;
-	//	offset = btn(xc, offset, lock, lock_cmd);
-	btn(lock, lock_cmd);
-	//	offset = exit_btn(xc, offset);
-	static char exit_label[] = "Exit";
-	btn(exit_label, NULL, exit_cb);
+	btn("Menu", XSTATUS_MENU_COMMAND);
+	btn("Terminal", XSTATUS_TERMINAL);
+	btn("Editor", XSTATUS_EDITOR_COMMAND);
+	btn("WWW", XSTATUS_BROWSER_COMMAND);
+	btn("Mixer", XSTATUS_MIXER_COMMAND);
+	btn("Lock", XSTATUS_LOCK_COMMAND);
+	btn("Exit", NULL, exit_cb);
 }

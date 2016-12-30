@@ -1,12 +1,13 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "button.h"
 extern "C" {
-#include "libjb/log.h"
 #include "libjb/xcb.h"
 }
 #include "config.h"
+#include "libjb/cpp.h"
 #include "util.h"
 using namespace std;
+int xstatus::XSButton::instances = 0;
 xcb_gcontext_t xstatus::XSButton::button_gc = 0;
 xcb_gcontext_t xstatus::XSButton::get_button_gc(void)
 {
@@ -21,8 +22,8 @@ xcb_gcontext_t xstatus::XSButton::get_button_gc(void)
 }
 void xstatus::XSButton::draw(void)
 {
-	xcb_image_text_8(xc, label->size(), window, get_button_gc(),
-		XSTATUS_CONST_PAD, font_size.height, label->c_str());
+	xcb_image_text_8(xc, label.size(), window, get_button_gc(),
+		XSTATUS_CONST_PAD, font_size.height, label.c_str());
 }
 void xstatus::XSButton::invert(void)
 {
@@ -34,7 +35,7 @@ void xstatus::XSButton::invert(void)
 void xstatus::XSButton::set_geometry(void)
 {
 	JBDim & f = font_size;
-	const unsigned short w = f.w * label->size() + f.w;
+	const unsigned short w = f.w * label.size() + f.w;
 	const unsigned short h = f.h + (XSTATUS_CONST_PAD >> 1);
 	geometry = {x, 0, w, h};
 }
@@ -55,16 +56,17 @@ void xstatus::XSButton::create_window(void)
 	create(X.main_window, this->geometry, BORDER, VM, v);
 }
 xstatus::XSButton::XSButton(XData & X, const Font & f,
-	const int16_t x, char * label)
+	const int16_t x, std::string & label)
 	: Window(X), X(X), font(f), x(x), font_size(f.get_size()),
-	label(new string(label))
+	label(label)
 {
-	LOG("XSButton constructor");
+	JB_LOG_ADD(XSButton, instances);
 	create_window();
 	draw();
 }
 xstatus::XSButton::~XSButton(void)
 {
-	LOG("XSButton destructor");
-	delete label;
+	JB_LOG_DEL(XSButton, instances);
+	if (cb_data)
+		delete[] cb_data;
 }
