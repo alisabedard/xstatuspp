@@ -2,7 +2,7 @@
 #ifndef XS_XDATA_H
 #define XS_XDATA_H
 #include <xcb/xcb.h>
-#include "window.h"
+#include "Window.h"
 namespace xstatus {
 	class XData {
 		private:

@@ -3,7 +3,7 @@
 extern "C" {
 #include "libjb/xcb.h"
 }
-#include "window.h"
+#include "Window.h"
 using namespace xstatus;
 namespace {
 	xstatus::Window & get_main_window_class(xcb_connection_t * xc)
