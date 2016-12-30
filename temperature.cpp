@@ -39,7 +39,7 @@ namespace {
 	void TemperatureBuffer::format(void)
 	{
 		const uint8_t temp = get_temp();
-		size = temp ? snprintf(buffer, max_size, "%dC", temp) : 0;
+		size = temp ? snprintf(buffer, get_max_size(), "%dC", temp) : 0;
 	}
 	class TemperatureRenderer : public Renderer {
 		private:
