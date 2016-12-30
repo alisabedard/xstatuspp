@@ -4,7 +4,7 @@ extern "C" {
 #include "libjb/xcb.h"
 }
 #include "config.h"
-#include "xdata.h"
+#include "XData.h"
 using namespace xstatus;
 namespace {
 	int16_t get_y(const unsigned short screen_height)

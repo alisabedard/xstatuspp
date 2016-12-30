@@ -2,7 +2,7 @@
 #ifndef XSTATUS_RENDERER_H
 #define XSTATUS_RENDERER_H
 #include "font.h"
-#include "xdata.h"
+#include "XData.h"
 namespace xstatus {
 	class Renderer : public XData {
 		protected:

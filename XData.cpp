@@ -1,5 +1,5 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
-#include "xdata.h"
+#include "XData.h"
 extern "C" {
 #include "libjb/xcb.h"
 }

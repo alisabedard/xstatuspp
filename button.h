@@ -6,7 +6,7 @@
 #include "font.h"
 #include "libjb/JBDim.h"
 #include "Window.h"
-#include "xdata.h"
+#include "XData.h"
 namespace xstatus {
 	class XSButton : public Window {
 		private:

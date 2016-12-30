@@ -3,7 +3,7 @@
 #include "font.h"
 #include "Options.h"
 #include "Toolbar.h"
-#include "xdata.h"
+#include "XData.h"
 namespace xstatus {
 	class XStatus : public XData {
 		private:

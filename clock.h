@@ -2,7 +2,7 @@
 #ifndef XSTATUS_CLOCK_H
 #define XSTATUS_CLOCK_H
 #include "font.h"
-#include "xdata.h"
+#include "XData.h"
 namespace xstatus {
 	namespace clock {
 		unsigned short draw(xcb_connection_t * xc, const Font & f);

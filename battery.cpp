@@ -6,7 +6,7 @@ extern "C" {
 }
 #include "config.h"
 #include "util.h"
-#include "xdata.h"
+#include "XData.h"
 //#define XSTATUS_BATTERY_TEST
 using namespace xstatus;
 namespace {
