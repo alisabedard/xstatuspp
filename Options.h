@@ -3,6 +3,8 @@
 #define XSPP_OPTIONS_H
 namespace xstatus {
 	class Options {
+		private:
+			static int instances;
 		protected:
 			unsigned short delay = 1;
 		public:
