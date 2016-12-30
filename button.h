@@ -5,7 +5,7 @@
 #include <xcb/xcb.h>
 #include "font.h"
 #include "libjb/JBDim.h"
-#include "window.h"
+#include "Window.h"
 #include "xdata.h"
 namespace xstatus {
 	class XSButton : public Window {

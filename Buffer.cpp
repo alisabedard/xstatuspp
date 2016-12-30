@@ -6,7 +6,7 @@
 #include "libjb/macros.h"
 using namespace xstatus;
 int Buffer::instances = 0;
-Buffer::Buffer(size_t sz) : size(sz), max_size(sz),
+Buffer::Buffer(size_t sz) : max_size(sz), size(sz),
 	buffer(new char [sz])
 {
 	JB_LOG_ADD(Buffer, instances);
