@@ -28,8 +28,7 @@ Window::Window(xcb_connection_t * xc)
 	: xc(xc), window(xcb_generate_id(xc)) {}
 Window::~Window(void)
 {
-	if (created)
-		xcb_destroy_window(xc, window);
+	destroy();
 }
 void Window::create(const xcb_window_t parent, const xcb_rectangle_t &
 	geometry, const uint8_t border_width, const uint32_t value_mask, const
@@ -54,4 +53,19 @@ xcb_window_t Window::create_main_window(XData * X)
 	uint32_t v[] = {get_bg(*X, s), true, EM};
 	w.create(s->root, get_geometry(s), BRD, VM, v);
 	return w;
+}
+void Window::map(void)
+{
+	xcb_map_window(xc, window);
+}
+void Window::unmap(void)
+{
+	xcb_unmap_window(xc, window);
+}
+void Window::destroy(void)
+{
+	if (created) {
+		xcb_destroy_window(xc, window);
+		created = false;
+	}
 }

@@ -23,6 +23,9 @@ namespace xstatus {
 			// Keep this accessor for subclasses:
 			xcb_window_t get_window(void) const { return window; }
 			static xcb_window_t create_main_window(XData * X);
+			void map(void);
+			void unmap(void);
+			void destroy(void);
 	};
 }
 #endif//!XSTATUS_WINDOW_H
