@@ -1,5 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "xstatus.h"
+#include "XStatus.h"
 extern "C" {
 #include "libjb/log.h"
 #include "libjb/util.h"

@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "config.h"
 #include "Options.h"
-#include "xstatus.h"
+#include "XStatus.h"
 using namespace std;
 using namespace xstatus;
 class Main : public Options {
