@@ -20,7 +20,7 @@ namespace {
 		public:
 			LoadBuffer(void)
 				: Buffer(6)
-			{ size = get_load(buffer, size); }
+			{ set_size(get_load(buffer, get_max_size())); }
 	};
 	class LoadRenderer : public Renderer {
 		private:

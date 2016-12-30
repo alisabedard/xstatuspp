@@ -7,7 +7,6 @@ namespace xstatus {
 		private:
 			static int instances;
 			const size_t max_size;
-		protected:
 			size_t size;
 		public:
 			char * buffer;
@@ -15,6 +14,7 @@ namespace xstatus {
 			Buffer(const Buffer &obj); // copy constructor
 			~Buffer(void);
 			size_t get_max_size(void) const { return max_size; }
+			void set_size(const size_t s);
 			operator unsigned int() const { return size; }
 			operator char *() const { return buffer; }
 	};

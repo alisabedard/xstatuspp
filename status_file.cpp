@@ -44,11 +44,11 @@ namespace {
 	{
 		const ssize_t s = poll_status_file();
 		if (s <= 0) {
-			size = 0;
+			set_size(0);
 			warn_no_data();
 			return false;
 		}
-		size = s;
+		set_size(s);
 		return true;
 	}
 }

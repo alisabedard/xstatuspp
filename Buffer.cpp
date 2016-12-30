@@ -1,12 +1,12 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #include "Buffer.h"
-#include <iostream>
+#include "libjb/log.h"
+#include "libjb/macros.h"
 using namespace xstatus;
 int Buffer::instances = 0;
-//#define DEBUG_BUFFER
+#define DEBUG_BUFFER
 #ifdef DEBUG_BUFFER
-#define log_init(msg, op) std::cerr << #msg << " Buffer "\
-	<< op instances << '\n';
+#define log_init(msg, op) LOG("%s Buffer %d", #msg, op instances);
 #else//!DEBUG_BUFFER
 #define log_init(msg, op)
 #endif//DEBUG_BUFFER
@@ -26,4 +26,9 @@ Buffer::~Buffer(void)
 {
 	log_init(delete, --);
 	delete[] buffer;
+}
+void Buffer::set_size(const size_t s)
+{
+	// validate the input first, restrict to max_size
+	size = JB_MIN(s, max_size);
 }
