@@ -5,6 +5,7 @@
 namespace xstatus {
 	class Buffer {
 		private:
+			static int instances;
 			const size_t max_size;
 			size_t size;
 		public:
