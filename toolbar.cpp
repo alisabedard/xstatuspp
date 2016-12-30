@@ -1,30 +1,25 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "toolbar.h"
-extern "C" {
-#include "libjb/log.h"
-}
-#include <cstdlib>
-#include <list>
-#include <string>
-#include "button.h"
+#include <iostream>
 #include "config.h"
+#include "libjb/cpp.h"
 using namespace std;
 using namespace xstatus;
+int Toolbar::instances = 0;
 namespace {
 	bool system_cb(XSButton * b)
 	{
 		const char *cmd = b->cb_data;
 		if (system(cmd))
-			LIBJB_WARN("Cannot execute %s", cmd);
+			cerr << "Cannot execute " << cmd << '\n';
 		return true;
 	}
 	bool exit_cb(XSButton * b)
 	{
-		delete b;
 		return false;
 	}
 }
-void xstatus::Toolbar::btn(const char label[], const char cb_data[],
+void Toolbar::btn(const char label[], const char cb_data[],
 	bool (*cb)(XSButton *))
 {
 	string s(label);
@@ -40,11 +35,11 @@ void xstatus::Toolbar::btn(const char label[], const char cb_data[],
 	offset += b->get_geometry().width + XSTATUS_CONST_PAD;
 	buttons.push_front(b);
 }
-void xstatus::Toolbar::btn(const char label[], const char cmd[])
+void Toolbar::btn(const char label[], const char cmd[])
 {
 	btn(label, cmd, system_cb);
 }
-bool xstatus::Toolbar::do_cb(const xcb_window_t ewin, bool & keep_going)
+bool Toolbar::do_cb(const xcb_window_t ewin, bool & keep_going)
 {
 	for(list<XSButton *>::iterator i = buttons.begin();
 		i != buttons.end(); ++i) {
@@ -55,7 +50,7 @@ bool xstatus::Toolbar::do_cb(const xcb_window_t ewin, bool & keep_going)
 	}
 	return false;
 }
-bool xstatus::Toolbar::iterate_buttons_member(const xcb_window_t ewin,
+bool Toolbar::iterate_buttons_member(const xcb_window_t ewin,
 	void (XSButton::*func)(void))
 {
 	for(list<XSButton *>::iterator i = buttons.begin(); i != buttons.end();
@@ -67,24 +62,25 @@ bool xstatus::Toolbar::iterate_buttons_member(const xcb_window_t ewin,
 	}
 	return false;
 }
-bool xstatus::Toolbar::expose(const xcb_window_t event_window)
+bool Toolbar::expose(const xcb_window_t event_window)
 {
 	return iterate_buttons_member(event_window,
 		&XSButton::draw);
 }
-bool xstatus::Toolbar::button(const xcb_window_t event_window,
+bool Toolbar::button(const xcb_window_t event_window,
 	bool & keep_going)
 {
 	return do_cb(event_window, keep_going);
 }
-bool xstatus::Toolbar::focus(const xcb_window_t event_window)
+bool Toolbar::focus(const xcb_window_t event_window)
 {
 	return iterate_buttons_member(event_window,
 		&XSButton::invert);
 }
-xstatus::Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
+Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
 	: XData(xc), offset(0), font(f)
 {
+	JB_LOG_ADD(Toolbar, instances);
 	btn("Menu", XSTATUS_MENU_COMMAND);
 	btn("Terminal", XSTATUS_TERMINAL);
 	btn("Editor", XSTATUS_EDITOR_COMMAND);
@@ -92,4 +88,12 @@ xstatus::Toolbar::Toolbar(xcb_connection_t * xc, Font * f)
 	btn("Mixer", XSTATUS_MIXER_COMMAND);
 	btn("Lock", XSTATUS_LOCK_COMMAND);
 	btn("Exit", NULL, exit_cb);
+}
+Toolbar::~Toolbar(void)
+{
+	JB_LOG_DEL(Toolbar, instances);
+	for (list<XSButton *>::iterator i = buttons.begin(); i !=
+		buttons.end(); ++i) {
+		delete *i;
+	}
 }

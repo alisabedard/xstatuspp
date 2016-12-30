@@ -6,6 +6,7 @@
 namespace xstatus {
 	class Toolbar : public XData {
 		private:
+			static int instances;
 			std::list<XSButton *> buttons;
 			unsigned int offset;
 			Font * font;
@@ -15,6 +16,7 @@ namespace xstatus {
 				void (XSButton::*func)(void));
 		public:
 			Toolbar(xcb_connection_t * xc, Font * f);
+			~Toolbar(void);
 			unsigned int get_offset(void) { return offset; }
 			bool focus(const xcb_window_t event_window);
 			// returns true if event was processed:
