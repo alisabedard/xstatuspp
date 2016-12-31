@@ -1,12 +1,32 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include <cstdlib>
 #include <iostream>
+#include <signal.h>
 #include <unistd.h>
 #include "config.h"
 #include "Options.h"
 #include "XStatus.h"
 using namespace std;
 using namespace xstatus;
+namespace {
+	static XStatus * xstatus_ptr;
+	void signal_cb(int sig)
+	{
+		cerr << "Caught signal " << sig << '\n';
+		if (xstatus_ptr) {
+			delete xstatus_ptr;
+			xstatus_ptr = nullptr;
+		}
+		exit(0);
+	}
+	void catch_signals()
+	{
+		signal(SIGHUP, &signal_cb);
+		signal(SIGINT, &signal_cb);
+		signal(SIGKILL, &signal_cb);
+		signal(SIGTERM, &signal_cb);
+	}
+}
 class Main : public Options {
 	static void usage(void);
 	public:
@@ -48,6 +68,9 @@ int main(int argc, char ** argv)
 	char f[] = XSTATUS_STATUS_FILE;
 	Main app(f);
 	app.parse(argc, argv);
-	XStatus x(app);
-	x.run();
+	xstatus_ptr = new XStatus(app);
+	catch_signals();
+	xstatus_ptr->run();
+	delete xstatus_ptr;
+	return 0;
 }
