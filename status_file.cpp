@@ -5,7 +5,7 @@
 #include "Buffer.h"
 #include "config.h"
 #include "Font.h"
-#include "Renderer.h"
+#include "Widget.h"
 using namespace std;
 using namespace xstatus;
 namespace {
@@ -52,34 +52,36 @@ namespace {
 		return true;
 	}
 }
-class StatusRenderer : public Renderer {
+class StatusWidget : public Widget {
 	private:
 		enum { PAD = XSTATUS_CONST_PAD << 1 };
-		int x;
 		JBDim f;
-		int offset(void)
+		int get_width(void)
 		{
-			return f.w * buffer + x + PAD + PAD;
+			return f.w * buffer + offset + PAD + PAD;
 		}
 	public:
-		int draw(void)
+		void draw(void)
 		{
-			xcb_image_text_8(xc, buffer, main_window,
-				get_gc(), x + PAD, f.h, buffer);
-			return offset();
+			xcb_image_text_8(*this, buffer, main_window,
+				get_gc(), offset + PAD, f.h, buffer);
+			width = get_width();
 		}
-		StatusRenderer(xcb_connection_t * xc, Buffer & b,
-			const Font & font, const int x)
-			: Renderer(xc, b, font), x(x), f(font) {}
+		StatusWidget(xcb_connection_t * xc, Buffer & b,
+			const Font & font, const int offset)
+			: Widget(xc, b, font), f(font)
+		{
+			this->offset=offset;
+		}
 };
 // Returns offset for next widget
 unsigned short xstatus::status_file::draw(xcb_connection_t * xc,
-	const unsigned short x_offset,
-	const char * filename, const Font & font)
+	const int x_offset, const char * filename, const Font & font)
 {
 	StatusBuffer b(filename);
 	if (!b.poll())
 		return x_offset + XSTATUS_CONST_PAD;
-	StatusRenderer r(xc, b, font, x_offset);
-	return r.draw();
+	StatusWidget r(xc, b, font, x_offset);
+	r.draw();
+	return r.get_next_offset();
 }

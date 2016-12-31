@@ -7,13 +7,16 @@
 namespace xstatus {
 	class Widget : public Window, public Renderer {
 		protected:
-			unsigned short offset;
+			int offset = 0;
+			int width = 0;
 		public:
 			Widget(xcb_connection_t * xc, Buffer & buffer,
 				const Font & font)
 				: Renderer(xc, buffer, font),
-				Window(xc)
+				Window(xc) {}
+			int get_next_offset(void) const
 			{
+				return offset + width;
 			}
 	};
 }

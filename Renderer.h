@@ -12,7 +12,7 @@ namespace xstatus {
 			Renderer(xcb_connection_t * xc, Buffer & buffer, const
 				Font & font)
 				: XData(xc), buffer(buffer), font(font) {}
-			virtual int draw(void) = 0;
+			virtual void draw(void) = 0;
 	};
 }
 #endif//!XSTATUS_RENDERER_H

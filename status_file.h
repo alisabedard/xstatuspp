@@ -7,8 +7,8 @@ namespace xstatus {
 	namespace status_file {
 		// Returns offset for next widget
 		unsigned short draw(xcb_connection_t * xc,
-			const unsigned short x_offset,
-			const char * filename, const Font & font);
+			const int x_offset, const char * filename,
+			const Font & font);
 	}
 }
 #endif//!XSTATUS_STATUS_FILE_H

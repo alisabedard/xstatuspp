@@ -1,14 +1,13 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "clock.h"
-extern "C" {
 #include "libjb/JBDim.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
-}
 #include <string>
 #include "Buffer.h"
 #include "config.h"
 #include "Renderer.h"
+#include "Widget.h"
 using namespace xstatus;
 namespace {
 	class Time {
@@ -27,26 +26,31 @@ namespace {
 					localtime(&current_time));
 			}
 	};
-	class ClockWidget : public Renderer {
+	class ClockWidget : public Widget {
+		private:
+			unsigned int screen_width;
 		public:
 			ClockWidget(xcb_connection_t * xc, Buffer & buffer,
 				const Font & f)
-				: Renderer(xc, buffer, f) {}
-			int draw(void);
+				: Widget(xc, buffer, f),
+				screen_width(screen->width_in_pixels) {}
+			int get_next_offset(void) const {return offset;}
+			void draw(void);
 	};
-	int ClockWidget::draw(void)
+	void ClockWidget::draw(void)
 	{
-		const unsigned int sz = buffer - 1;
+		const size_t sz = buffer - 1;
 		const JBDim f = font.get_size();
-		int offset = screen->width_in_pixels - f.w * sz;
-		xcb_image_text_8(xc, sz, main_window, get_gc(), offset,
-			f.h, buffer);
-		return offset;
+		width = f.w * sz;
+		offset = screen_width - width;
+		xcb_image_text_8(XData::xc, sz, main_window, get_gc(),
+			offset, f.h, buffer);
 	}
 }
 unsigned short clock::draw(xcb_connection_t * xc, const Font & f)
 {
 	Format c(XSTATUS_TIME_BUFFER_SIZE);
 	ClockWidget r(xc, c, f);
-	return r.draw();
+	r.draw();
+	return r.get_next_offset();
 }

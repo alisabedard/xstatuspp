@@ -39,22 +39,23 @@ namespace {
 			: 0);
 	}
 	class TemperatureWidget : public Widget {
-		private:
-			int x;
 		public:
 			TemperatureWidget(xcb_connection_t * xc,
 				Buffer & buffer, const Font & font,
-				int x = 0)
-				: Widget(xc, buffer, font), x(x) {}
-			int draw(void);
+				int offset = 0)
+				: Widget(xc, buffer, font)
+			{
+				this->offset = offset;
+			}
+			void draw(void);
 	};
-	int TemperatureWidget::draw(void)
+	void TemperatureWidget::draw(void)
 	{
 		const unsigned int sz = buffer;
 		const JBDim f = font;
 		xcb_image_text_8(XData::xc, sz, main_window,
-			get_gc(), x, f.h, buffer);
-		return x + f.w * sz;
+			get_gc(), offset, f.h, buffer);
+		this->width = f.w * sz;
 	}
 }
 // Returns x offset for next item
@@ -63,5 +64,6 @@ int temperature::draw(xcb_connection_t * xc,
 {
 	TemperatureBuffer b;
 	TemperatureWidget r(xc, b, font, offset + XSTATUS_CONST_PAD);
-	return r.draw();
+	r.draw();
+	return r.get_next_offset();
 }
