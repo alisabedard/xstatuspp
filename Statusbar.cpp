@@ -1,5 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "status_file.h"
+#include "Statusbar.h"
 #include <fstream>
 #include <iostream>
 #include "config.h"

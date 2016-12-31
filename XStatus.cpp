@@ -8,7 +8,7 @@
 #include "libjb/xcb.h"
 #include "libjb/util.h"
 #include "Load.h"
-#include "status_file.h"
+#include "Statusbar.h"
 #include "temperature.h"
 #include "util.h"
 using namespace xstatus;
