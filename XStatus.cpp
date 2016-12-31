@@ -7,7 +7,7 @@
 #include "libjb/log.h"
 #include "libjb/xcb.h"
 #include "libjb/util.h"
-#include "load.h"
+#include "Load.h"
 #include "status_file.h"
 #include "temperature.h"
 #include "util.h"
@@ -19,7 +19,6 @@ unsigned short XStatus::poll(void)
 	unsigned short offset = widget_start + XSTATUS_CONST_PAD;
 	Font f = *font;
 	offset = Load(xc, f, offset);
-//	offset = temperature::draw(xc, offset, f);
 	offset = Temperature(xc, f, offset);
 	offset = status_file::draw(xc, offset, opt.filename, f);
 	return offset;

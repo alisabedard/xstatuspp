@@ -1,9 +1,9 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "load.h"
+#include "Load.h"
 #include "config.h"
 using namespace xstatus;
 namespace {
-	static uint8_t get_load(char *  buf, const uint8_t sz)
+	static uint8_t get_load(char * buf, const uint8_t sz)
 	{
 		double l;
 		getloadavg(&l, 1);
