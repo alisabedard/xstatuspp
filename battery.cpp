@@ -1,58 +1,18 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "battery.h"
-extern "C" {
 #include "libjb/log.h"
 #include "libjb/macros.h"
-}
 #include "config.h"
 #include "util.h"
 #include "XData.h"
 //#define XSTATUS_BATTERY_TEST
 using namespace xstatus;
 namespace {
-	// get percent value, maximum 100, -1 on error
-	int8_t get_percent(void)
-	{
-		return JB_MIN(system_value(XSTATUS_SYSFILE_BATTERY),
-			100);
-	}
-	// index into gc array, keeps gc array private
-	enum BATGCs { BATTERY_GC_BACKGROUND, BATTERY_GC_AC, BATTERY_GC_BATTERY,
-		BATTERY_GC_CRITICAL, BATTERY_GC_SIZE };
-	// Selects a gc to use based on ac/battery status
-	uint8_t get_gc(const uint8_t pct)
-	{
-		return system_value(XSTATUS_SYSFILE_AC)
-			? BATTERY_GC_AC : pct
-			< XSTATUS_CONST_CRITICAL_PERCENT
-			? BATTERY_GC_CRITICAL : BATTERY_GC_BATTERY;
-	}
-	uint8_t format(char * buf, const uint8_t sz, const uint8_t pct)
-	{
-		return snprintf(buf, sz, " %d%% ", pct);
-	}
-	void draw_percent(xcb_connection_t *  xc, const xcb_gcontext_t gc,
-		const uint8_t pct, const int16_t x, const Font & f)
-	{
-		enum {BUF_SZ = 7};
-		char buf[BUF_SZ];
-		const xcb_window_t w = XData(xc).main_window;
-		xcb_image_text_8(xc, format(buf, BUF_SZ, pct), w,
-			gc, x, f.get_size().h, buf);
-	}
 	void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
-		xcb_gcontext_t *  gc, const char *  fg, const Font & f)
+		gc_t *  gc, const char *  fg, const Font & f)
 	{
 		create_gc(xc, *gc = xcb_generate_id(xc), w, fg,
 			XSTATUS_BATTERY_BACKGROUND_COLOR, f);
-	}
-	void initialize_gcs(xcb_connection_t *  xc,
-		const xcb_window_t w, xcb_gcontext_t *  gc, const Font & f)
-	{
-#define SETGC(color) set_gc(xc, w, gc + BATTERY_GC_##color, \
-	XSTATUS_BATTERY_##color##_COLOR, f);
-		SETGC(BACKGROUND); SETGC(AC); SETGC(BATTERY); SETGC(CRITICAL);
-#undef SETGC
 	}
 	xcb_rectangle_t get_rectangle(const struct JBDim range)
 	{
@@ -70,7 +30,7 @@ namespace {
 		return width * pct / 100;
 	}
 	void draw_rectangles(xcb_connection_t *  xc,
-		const xcb_gcontext_t gc, const xcb_gcontext_t bg_gc,
+		const gc_t gc, const gc_t bg_gc,
 		const struct JBDim range,
 		const uint8_t pct)
 	{
@@ -86,35 +46,46 @@ namespace {
 	{
 		return range.start + (range.end - range.start) / 2;
 	}
-	void draw_for_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
-		const xcb_gcontext_t bg_gc, const struct JBDim range,
-		const uint8_t pct, const Font & f)
-	{
-		draw_rectangles(xc, gc, bg_gc, range, pct);
-		draw_percent(xc, gc, pct, get_x(range), f);
-	}
-	xcb_gcontext_t * get_gcs(xcb_connection_t *  xc, const Font & f)
-	{
-		static xcb_gcontext_t gc[BATTERY_GC_SIZE];
-		if (!*gc) {
-
-			const xcb_window_t w = XData(xc).main_window;
-			initialize_gcs(xc, w, gc, f);
-		}
-		return gc;
-	}
-	void draw_for_percent(xcb_connection_t *  xc,
-		const Font & f, const struct JBDim range, const uint8_t pct)
-	{
-		xcb_gcontext_t * gc = get_gcs(xc, f);
-		const uint8_t i = get_gc(pct);
-		draw_for_gc(xc, gc[i],
-			gc[BATTERY_GC_BACKGROUND],
-			range, pct, f);
-	}
 }
-void battery::draw(xcb_connection_t * xc, const Font & f,
-	const unsigned short start, const unsigned short end)
+// Selects a gc to use based on ac/battery status
+uint8_t Battery::get_gc_index(void) const
+{
+	return system_value(XSTATUS_SYSFILE_AC)
+		? BATTERY_GC_AC : percent
+		< XSTATUS_CONST_CRITICAL_PERCENT
+		? BATTERY_GC_CRITICAL : BATTERY_GC_BATTERY;
+}
+Battery::Battery(xcb_connection_t * xc, const Font & f, const int16_t start,
+	const int16_t end) : XData(xc), font(f),
+	range({.start=start,.end=end}) {}
+	// Get percent value, maximum 100. Returns -1 on error. Update percent field.
+int8_t Battery::get_percent(void)
+{
+	percent = JB_MIN(system_value(XSTATUS_SYSFILE_BATTERY), 100);
+	return percent;
+}
+void Battery::draw_for_gc(const gc_t gc, const gc_t bg_gc)
+{
+	draw_rectangles(xc, gc, bg_gc, range, percent);
+	enum {BUF_SZ = 7};
+	char buf[BUF_SZ];
+	const xcb_window_t w = XData(xc).main_window;
+	xcb_image_text_8(xc, snprintf(buf, BUF_SZ, " %d%% ", percent), w, gc,
+		get_x(range), font.get_size().h, buf);
+}
+gc_t * Battery::get_gcs(void)
+{
+	static gc_t gc[BATTERY_GC_SIZE];
+	if (!*gc) {
+		const xcb_window_t w = main_window;
+#define SETGC(color) set_gc(xc, w, gc + BATTERY_GC_##color, \
+	XSTATUS_BATTERY_##color##_COLOR, font);
+		SETGC(BACKGROUND); SETGC(AC); SETGC(BATTERY); SETGC(CRITICAL);
+#undef SETGC
+	}
+	return gc;
+}
+void Battery::draw(void)
 {
 	const int8_t pct = get_percent();
 	if (pct < 0) { // error getting percent
@@ -122,7 +93,8 @@ void battery::draw(xcb_connection_t * xc, const Font & f,
 		LOG("Could not get percent, returning");
 		return;
 	}
-	struct JBDim range = {{start}, {end}};
-	draw_for_percent(xc, f, range, pct);
+	gc_t * gc = get_gcs();
+	const uint8_t i = get_gc_index();
+	draw_for_gc(gc[i], gc[BATTERY_GC_BACKGROUND]);
 	xcb_flush(xc);
 }

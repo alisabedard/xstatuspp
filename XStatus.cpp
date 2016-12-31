@@ -26,7 +26,8 @@ unsigned short XStatus::poll(void)
 void XStatus::update(void)
 {
 	const Font f = *font;
-	battery::draw(xc, f, poll(), clock::draw(xc, f));
+	Battery b(xc, f, poll(), clock::draw(xc, f));
+	b.draw();
 }
 // returns if update needed
 bool XStatus::handle_events(xcb_generic_event_t * e)
