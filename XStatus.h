@@ -1,12 +1,7 @@
 #ifndef XSTATUS_XSTATUS_H
 #define XSTATUS_XSTATUS_H
-#include <list>
-#include "Buffer.h"
-#include "Font.h"
-#include "load.h"
 #include "Options.h"
 #include "Toolbar.h"
-#include "Widget.h"
 #include "XData.h"
 namespace xstatus {
 	class XStatus : public XData {
