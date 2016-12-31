@@ -65,8 +65,3 @@ Temperature::Temperature(xcb_connection_t * xc, const Font & font, const int x)
 		XSTATUS_CONST_PAD);
 	widget->draw();
 }
-Temperature::~Temperature(void)
-{
-	delete buffer;
-	delete widget;
-}

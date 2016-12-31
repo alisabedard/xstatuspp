@@ -7,7 +7,6 @@ namespace xstatus {
 		public:
 			Temperature(xcb_connection_t * xc, const Font & font,
 				const int x);
-			~Temperature(void);
 	};
 }
 #endif//!XSTATUS_TEMPERATURE_H

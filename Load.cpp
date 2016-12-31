@@ -42,8 +42,3 @@ Load::Load(xcb_connection_t * xc, const Font & font, const int x)
 	widget = new LoadWidget(xc, *buffer, font, x);
 	widget->draw();
 }
-Load::~Load(void)
-{
-	delete buffer;
-	delete widget;
-}

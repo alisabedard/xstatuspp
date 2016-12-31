@@ -9,6 +9,11 @@ namespace xstatus {
 			Buffer * buffer;
 			Widget * widget;
 		public:
+			~BufferWidget(void)
+			{
+				delete buffer;
+				delete widget;
+			}
 			operator int(void) const
 			{ return widget->get_next_offset(); }
 	};

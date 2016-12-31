@@ -20,7 +20,7 @@ unsigned short XStatus::poll(void)
 	Font f = *font;
 	offset = Load(xc, f, offset);
 	offset = Temperature(xc, f, offset);
-	offset = status_file::draw(xc, offset, opt.filename, f);
+	offset = Statusbar(xc, f, offset, opt.filename);
 	return offset;
 }
 void XStatus::update(void)
@@ -28,7 +28,6 @@ void XStatus::update(void)
 	const Font f = *font;
 	battery::draw(xc, f, poll(), clock::draw(xc, f));
 }
-
 // returns if update needed
 bool XStatus::handle_events(xcb_generic_event_t * e)
 {

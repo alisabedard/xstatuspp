@@ -1,14 +1,12 @@
 // Copyright 2017, Jeffrey E. Bedard
-#ifndef XSTATUS_STATUS_FILE_H
-#define XSTATUS_STATUS_FILE_H
-#include <xcb/xcb.h>
-#include "Font.h"
+#ifndef XSTATUS_STATUSBAR_H
+#define XSTATUS_STATUSBAR_H
+#include "BufferWidget.h"
 namespace xstatus {
-	namespace status_file {
-		// Returns offset for next widget
-		unsigned short draw(xcb_connection_t * xc,
-			const int x_offset, const char * filename,
-			const Font & font);
-	}
+	class Statusbar : public BufferWidget {
+		public:
+			Statusbar(xcb_connection_t * xc, const Font & font,
+				const int x, const char * filename);
+	};
 }
-#endif//!XSTATUS_STATUS_FILE_H
+#endif//!XSTATUS_STATUSBAR_H

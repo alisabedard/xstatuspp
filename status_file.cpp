@@ -2,10 +2,7 @@
 #include "status_file.h"
 #include <fstream>
 #include <iostream>
-#include "Buffer.h"
 #include "config.h"
-#include "Font.h"
-#include "Widget.h"
 using namespace std;
 using namespace xstatus;
 namespace {
@@ -70,14 +67,12 @@ class StatusWidget : public Widget {
 			this->offset = offset;
 		}
 };
-// Returns offset for next widget
-unsigned short xstatus::status_file::draw(xcb_connection_t * xc,
-	const int x_offset, const char * filename, const Font & font)
+Statusbar::Statusbar(xcb_connection_t * xc, const Font & font,
+	const int x, const char * filename)
 {
-	StatusBuffer b(filename);
-	if (!b.poll())
-		return x_offset + XSTATUS_CONST_PAD;
-	StatusWidget r(xc, b, font, x_offset);
-	r.draw();
-	return r.get_next_offset();
+	StatusBuffer * sb = new StatusBuffer(filename);
+	buffer = sb;
+	widget = new StatusWidget(xc, *buffer, font, x);
+	if (sb->poll()) // success
+		widget->draw();
 }
