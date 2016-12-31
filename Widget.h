@@ -14,6 +14,7 @@ namespace xstatus {
 				const Font & font)
 				: Renderer(xc, buffer, font),
 				Window(xc) {}
+			~Widget(void) {}
 			int get_next_offset(void) const
 			{
 				return offset + width;

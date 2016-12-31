@@ -54,24 +54,20 @@ namespace {
 }
 class StatusWidget : public Widget {
 	private:
-		enum { PAD = XSTATUS_CONST_PAD << 1 };
 		JBDim f;
-		int get_width(void)
-		{
-			return f.w * buffer + offset + PAD + PAD;
-		}
 	public:
 		void draw(void)
 		{
+			enum { PAD = XSTATUS_CONST_PAD << 1 };
 			xcb_image_text_8(*this, buffer, main_window,
 				get_gc(), offset + PAD, f.h, buffer);
-			width = get_width();
+			width = f.w * buffer + PAD + PAD;
 		}
 		StatusWidget(xcb_connection_t * xc, Buffer & b,
 			const Font & font, const int offset)
 			: Widget(xc, b, font), f(font)
 		{
-			this->offset=offset;
+			this->offset = offset;
 		}
 };
 // Returns offset for next widget
