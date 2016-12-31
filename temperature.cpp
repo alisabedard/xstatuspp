@@ -58,12 +58,15 @@ namespace {
 		this->width = f.w * sz;
 	}
 }
-// Returns x offset for next item
-int temperature::draw(xcb_connection_t * xc,
-	const unsigned short offset, const Font & font)
+Temperature::Temperature(xcb_connection_t * xc, const Font & font, const int x)
 {
-	TemperatureBuffer b;
-	TemperatureWidget r(xc, b, font, offset + XSTATUS_CONST_PAD);
-	r.draw();
-	return r.get_next_offset();
+	buffer = new TemperatureBuffer();
+	widget = new TemperatureWidget(xc, *buffer, font, x +
+		XSTATUS_CONST_PAD);
+	widget->draw();
+}
+Temperature::~Temperature(void)
+{
+	delete buffer;
+	delete widget;
 }

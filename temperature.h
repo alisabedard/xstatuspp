@@ -1,13 +1,13 @@
 // Copyright 2017, Jeffrey E. Bedard
 #ifndef XSTATUS_TEMPERATURE_H
 #define XSTATUS_TEMPERATURE_H
-#include <xcb/xcb.h>
-#include "Font.h"
+#include "BufferWidget.h"
 namespace xstatus {
-	namespace temperature {
-		// Returns x offset for next item
-		int draw(xcb_connection_t * xc,
-			const unsigned short offset, const Font & font);
-	}
+	class Temperature : public BufferWidget {
+		public:
+			Temperature(xcb_connection_t * xc, const Font & font,
+				const int x);
+			~Temperature(void);
+	};
 }
 #endif//!XSTATUS_TEMPERATURE_H

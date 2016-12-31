@@ -19,7 +19,8 @@ unsigned short XStatus::poll(void)
 	unsigned short offset = widget_start + XSTATUS_CONST_PAD;
 	Font f = *font;
 	offset = Load(xc, f, offset);
-	offset = temperature::draw(xc, offset, f);
+//	offset = temperature::draw(xc, offset, f);
+	offset = Temperature(xc, f, offset);
 	offset = status_file::draw(xc, offset, opt.filename, f);
 	return offset;
 }
