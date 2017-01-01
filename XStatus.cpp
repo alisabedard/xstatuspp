@@ -1,6 +1,6 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "XStatus.h"
-#include "battery.h"
+#include "Battery.h"
 #include "config.h"
 #include "Clock.h"
 #include "libjb/cpp.h"

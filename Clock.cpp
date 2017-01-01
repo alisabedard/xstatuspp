@@ -27,8 +27,8 @@ class ClockWidget : public Widget {
 			const Font & f)
 			: Widget(xc, buffer, f),
 			screen_width(screen->width_in_pixels) {}
-		virtual int get_next_offset(void) const {return offset;}
-		virtual void draw(void);
+		int get_next_offset(void) const {return offset;}
+		void draw(void);
 };
 void ClockWidget::draw(void)
 {

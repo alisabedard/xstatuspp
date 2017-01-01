@@ -1,9 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "Button.h"
-extern "C" {
-#include "libjb/xcb.h"
-}
 #include "config.h"
+#include "libjb/xcb.h"
 #include "libjb/cpp.h"
 #include "util.h"
 using namespace std;

@@ -16,6 +16,7 @@ namespace {
 	}
 	bool exit_cb(Button * b)
 	{
+		b = nullptr;
 		return false;
 	}
 }

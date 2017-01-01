@@ -13,15 +13,16 @@ namespace xstatus {
 	};
 	class Widget : public Window, public XData, public WidgetInterface {
 		protected:
-			Buffer & buffer;
 			const Font & font;
+			Buffer & buffer;
 			int offset = 0;
 			int width = 0;
 		public:
 			Widget(xcb_connection_t * xc, Buffer & buffer,
 				const Font & font);
-			virtual int get_next_offset(void) const;
-			virtual void draw(void) {};
+			virtual ~Widget() {};
+			int get_next_offset(void) const;
+			virtual void draw(void) = 0;
 	};
 }
 #endif//!XSPP_WIDGET_H

@@ -1,6 +1,6 @@
 objs=util.o main.o Font.o XData.o Button.o Options.o
 objs+=Clock.o Load.o Statusbar.o Window.o Toolbar.o
-objs+=battery.o Temperature.o XStatus.o Buffer.o Widget.o
+objs+=Battery.o Temperature.o XStatus.o Buffer.o Widget.o
 include config.mk
 cflags+=-std=c++11
 cflags+=-D_XOPEN_SOURCE=700

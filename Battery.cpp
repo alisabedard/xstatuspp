@@ -1,5 +1,5 @@
 // Copyright 2017, Jeffrey E. Bedard
-#include "battery.h"
+#include "Battery.h"
 #include "libjb/log.h"
 #include "libjb/macros.h"
 #include "config.h"
