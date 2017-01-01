@@ -1,5 +1,5 @@
 // Copyright 2017, Jeffrey E. Bedard
-#include "temperature.h"
+#include "Temperature.h"
 #include <iostream>
 #include "config.h"
 #include "util.h"

@@ -9,7 +9,7 @@
 #include "libjb/util.h"
 #include "Load.h"
 #include "Statusbar.h"
-#include "temperature.h"
+#include "Temperature.h"
 #include "util.h"
 using namespace xstatus;
 using namespace std;

@@ -16,13 +16,13 @@ XData.o: XData.cpp XData.h Window.h libjb/xcb.h
 XStatus.o: XStatus.cpp XStatus.h Options.h Toolbar.h Button.h Font.h \
   libjb/JBDim.h Window.h XData.h battery.h config.h Clock.h libjb/cpp.h \
   libjb/log.h libjb/xcb.h libjb/util.h Load.h BufferWidget.h Widget.h \
-  Buffer.h Statusbar.h temperature.h util.h
+  Buffer.h Statusbar.h Temperature.h util.h
 battery.o: battery.cpp battery.h Font.h libjb/JBDim.h libjb/log.h \
   libjb/macros.h config.h util.h XData.h Window.h
 clock.o: clock.cpp Clock.h Font.h libjb/JBDim.h XData.h Window.h config.h \
   Widget.h Buffer.h
 main.o: main.cpp config.h Options.h XStatus.h Toolbar.h Button.h Font.h \
   libjb/JBDim.h Window.h XData.h
-temperature.o: temperature.cpp temperature.h BufferWidget.h Widget.h \
+Temperature.o: Temperature.cpp Temperature.h BufferWidget.h Widget.h \
   Buffer.h Font.h libjb/JBDim.h Window.h XData.h config.h util.h
 util.o: util.cpp util.h Font.h libjb/JBDim.h libjb/xcb.h
