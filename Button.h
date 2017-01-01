@@ -10,18 +10,18 @@
 namespace xstatus {
 	class Button : public Window {
 		private:
-			static int instances;
+			static short instances;
 			static xcb_gcontext_t button_gc;
 			XData & X;
 			const Font & font;
-			int16_t x;
+			short x;
 			JBDim font_size;
 			std::string label;
 			void set_geometry(void);
 			void create_window(void);
 		public:
 			Button(XData & X, const Font & f,
-				const int16_t x, std::string & label);
+				const short x, std::string & label);
 			~Button(void);
 			xcb_gcontext_t get_button_gc(void);
 			xcb_window_t get_window(void) const

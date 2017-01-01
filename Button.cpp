@@ -7,7 +7,7 @@ extern "C" {
 #include "libjb/cpp.h"
 #include "util.h"
 using namespace std;
-int xstatus::Button::instances = 0;
+short xstatus::Button::instances = 0;
 xcb_gcontext_t xstatus::Button::button_gc = 0;
 xcb_gcontext_t xstatus::Button::get_button_gc(void)
 {
@@ -56,7 +56,7 @@ void xstatus::Button::create_window(void)
 	create(X.main_window, this->geometry, BORDER, VM, v);
 }
 xstatus::Button::Button(XData & X, const Font & f,
-	const int16_t x, std::string & label)
+	const short x, std::string & label)
 	: Window(X), X(X), font(f), x(x), font_size(f.get_size()),
 	label(label)
 {

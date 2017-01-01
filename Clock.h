@@ -1,11 +1,11 @@
 // Copyright 2017, Jeffrey E. Bedard
 #ifndef XSTATUS_CLOCK_H
 #define XSTATUS_CLOCK_H
-#include "Font.h"
-#include "XData.h"
+#include "BufferWidget.h"
 namespace xstatus {
-	namespace clock {
-		unsigned short draw(xcb_connection_t * xc, const Font & f);
-	}
+	class Clock : public BufferWidget {
+		public:
+			Clock(xcb_connection_t * xc, const Font & f);
+	};
 }
 #endif//!XSTATUS_CLOCK_H

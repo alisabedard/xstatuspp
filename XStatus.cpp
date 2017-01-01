@@ -2,7 +2,7 @@
 #include "XStatus.h"
 #include "battery.h"
 #include "config.h"
-#include "clock.h"
+#include "Clock.h"
 #include "libjb/cpp.h"
 #include "libjb/log.h"
 #include "libjb/xcb.h"
@@ -26,7 +26,7 @@ unsigned short XStatus::poll(void)
 void XStatus::update(void)
 {
 	const Font f = *font;
-	Battery b(xc, f, poll(), clock::draw(xc, f));
+	Battery b(xc, f, poll(), Clock(xc, f));
 	b.draw();
 }
 // returns if update needed

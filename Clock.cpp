@@ -1,5 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
-#include "clock.h"
+#include "Clock.h"
 #include "config.h"
 #include "Widget.h"
 using namespace xstatus;
@@ -11,12 +11,12 @@ class Time {
 };
 class Format : public Buffer, public Time {
 	public:
-		Format(size_t size)
-			: Buffer(size)
+		Format(void)
+			: Buffer(XSTATUS_TIME_BUFFER_SIZE)
 		{
-			size = strftime(buffer, get_max_size(),
+			set_size(strftime(buffer, get_max_size(),
 				XSTATUS_TIME_FORMAT,
-				localtime(&current_time));
+				localtime(&current_time)));
 		}
 };
 class ClockWidget : public Widget {
@@ -32,17 +32,16 @@ class ClockWidget : public Widget {
 };
 void ClockWidget::draw(void)
 {
-	const size_t sz = buffer - 1;
+	const size_t sz = buffer;
 	const JBDim f = font.get_size();
 	width = f.w * sz;
 	offset = screen_width - width;
 	xcb_image_text_8(XData::xc, sz, main_window, get_gc(),
 		offset, f.h, buffer);
 }
-unsigned short clock::draw(xcb_connection_t * xc, const Font & f)
+Clock::Clock(xcb_connection_t * xc, const Font & f)
 {
-	Format c(XSTATUS_TIME_BUFFER_SIZE);
-	ClockWidget r(xc, c, f);
-	r.draw();
-	return r.get_next_offset();
+	buffer = new Format();
+	widget = new ClockWidget(xc, *buffer, f);
+	widget->draw();
 }
