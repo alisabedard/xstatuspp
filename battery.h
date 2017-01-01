@@ -6,13 +6,16 @@
 #include "Widget.h"
 namespace xstatus {
 	class Battery : public XData {
+		public:
+			typedef int8_t percent_t;
+			typedef uint8_t gc_index_t;
 		private:
 			const Font & font;
 			JBDim range;
-			int8_t percent;
-			void draw_for_gc(const gc_t gc, const gc_t bg_gc);
+			percent_t percent;
 			// Selects a gc to use based on ac/battery status
-			uint8_t get_gc_index(void) const;
+			gc_index_t get_gc_index(void) const;
+			void set_gc(gc_t * i, const char * color);
 		protected:
 			// index into gc array, keeps gc array private
 			enum BATGCs {
@@ -24,7 +27,7 @@ namespace xstatus {
 			Battery(xcb_connection_t * xc, const Font & f,
 				const int16_t start, const int16_t end);
 			void draw(void);
-			int8_t get_percent(void);
+			percent_t get_percent(void);
 	};
 }
 #endif//!XSTATUS_BATTERY_H

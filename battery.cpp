@@ -8,12 +8,6 @@
 //#define XSTATUS_BATTERY_TEST
 using namespace xstatus;
 namespace {
-	void set_gc(xcb_connection_t *  xc, const xcb_window_t w,
-		gc_t *  gc, const char *  fg, const Font & f)
-	{
-		create_gc(xc, *gc = xcb_generate_id(xc), w, fg,
-			XSTATUS_BATTERY_BACKGROUND_COLOR, f);
-	}
 	xcb_rectangle_t get_rectangle(const struct JBDim range)
 	{
 		const int16_t x = range.start, y
@@ -24,31 +18,9 @@ namespace {
 		const xcb_rectangle_t r = {x, y, width, height};
 		return r;
 	}
-	unsigned short get_width_for_percent(const unsigned short width,
-		const uint8_t pct)
-	{
-		return width * pct / 100;
-	}
-	void draw_rectangles(xcb_connection_t *  xc,
-		const gc_t gc, const gc_t bg_gc,
-		const struct JBDim range,
-		const uint8_t pct)
-	{
-		xcb_rectangle_t rect = get_rectangle(range);
-		const xcb_window_t w = XData(xc).main_window;
-		// clear:
-		xcb_poly_fill_rectangle(xc, w, bg_gc, 1, &rect);
-		rect.width = get_width_for_percent(rect.width, pct);
-		// fill rectangle per percent full:
-		xcb_poly_fill_rectangle(xc, w, gc, 1, &rect);
-	}
-	unsigned short get_x(const struct JBDim range)
-	{
-		return range.start + (range.end - range.start) / 2;
-	}
 }
 // Selects a gc to use based on ac/battery status
-uint8_t Battery::get_gc_index(void) const
+Battery::gc_index_t Battery::get_gc_index(void) const
 {
 	return system_value(XSTATUS_SYSFILE_AC)
 		? BATTERY_GC_AC : percent
@@ -58,28 +30,24 @@ uint8_t Battery::get_gc_index(void) const
 Battery::Battery(xcb_connection_t * xc, const Font & f, const int16_t start,
 	const int16_t end) : XData(xc), font(f),
 	range({.start=start,.end=end}) {}
-	// Get percent value, maximum 100. Returns -1 on error. Update percent field.
-int8_t Battery::get_percent(void)
+	// Get percent value, maximum 100. Returns -1 on error. Update percent
+	// field.
+Battery::percent_t Battery::get_percent(void)
 {
 	percent = JB_MIN(system_value(XSTATUS_SYSFILE_BATTERY), 100);
 	return percent;
 }
-void Battery::draw_for_gc(const gc_t gc, const gc_t bg_gc)
+void Battery::set_gc(gc_t * i, const char * color)
 {
-	draw_rectangles(xc, gc, bg_gc, range, percent);
-	enum {BUF_SZ = 7};
-	char buf[BUF_SZ];
-	const xcb_window_t w = XData(xc).main_window;
-	xcb_image_text_8(xc, snprintf(buf, BUF_SZ, " %d%% ", percent), w, gc,
-		get_x(range), font.get_size().h, buf);
+	create_gc(xc, *i = xcb_generate_id(xc), main_window, color,
+		XSTATUS_BATTERY_BACKGROUND_COLOR, font);
 }
 gc_t * Battery::get_gcs(void)
 {
 	static gc_t gc[BATTERY_GC_SIZE];
 	if (!*gc) {
-		const xcb_window_t w = main_window;
-#define SETGC(color) set_gc(xc, w, gc + BATTERY_GC_##color, \
-	XSTATUS_BATTERY_##color##_COLOR, font);
+#define SETGC(color) set_gc(gc + BATTERY_GC_##color,\
+	XSTATUS_BATTERY_##color##_COLOR)
 		SETGC(BACKGROUND); SETGC(AC); SETGC(BATTERY); SETGC(CRITICAL);
 #undef SETGC
 	}
@@ -95,6 +63,18 @@ void Battery::draw(void)
 	}
 	gc_t * gc = get_gcs();
 	const uint8_t i = get_gc_index();
-	draw_for_gc(gc[i], gc[BATTERY_GC_BACKGROUND]);
+	const gc_t fg_gc = gc[i], bg_gc = gc[BATTERY_GC_BACKGROUND];
+	xcb_rectangle_t rect = get_rectangle(range);
+	const xcb_window_t w = main_window;
+	// clear:
+	xcb_poly_fill_rectangle(xc, w, bg_gc, 1, &rect);
+	rect.width = rect.width * percent / 100;
+	// fill rectangle per percent full:
+	xcb_poly_fill_rectangle(xc, w, fg_gc, 1, &rect);
+	enum {BUF_SZ = 7};
+	char buf[BUF_SZ];
+	const int x = range.start + ((range.end - range.start) >> 1);
+	xcb_image_text_8(xc, snprintf(buf, BUF_SZ, " %d%% ", percent), w,
+		fg_gc, x, font.get_size().h, buf);
 	xcb_flush(xc);
 }
