@@ -10,7 +10,7 @@ using namespace xstatus;
 namespace {
 	xcb_rectangle_t get_rectangle(const struct JBDim range)
 	{
-		const int16_t x = range.start, y
+		const short x = range.start, y
 			= (XSTATUS_CONST_HEIGHT >> 2) + 1;
 		const unsigned short height = XSTATUS_CONST_HEIGHT >> 1;
 		const unsigned short width = range.end - range.start
@@ -27,8 +27,8 @@ Battery::gc_index_t Battery::get_gc_index(void) const
 		< XSTATUS_CONST_CRITICAL_PERCENT
 		? BATTERY_GC_CRITICAL : BATTERY_GC_BATTERY;
 }
-Battery::Battery(xcb_connection_t * xc, const Font & f, const int16_t start,
-	const int16_t end) : XData(xc), font(f),
+Battery::Battery(xcb_connection_t * xc, const Font & f, const short start,
+	const short end) : XData(xc), font(f),
 	range({.start=start,.end=end}) {}
 	// Get percent value, maximum 100. Returns -1 on error. Update percent
 	// field.

@@ -25,7 +25,7 @@ namespace xstatus {
 			gc_t * get_gcs(void);
 		public:
 			Battery(xcb_connection_t * xc, const Font & f,
-				const int16_t start, const int16_t end);
+				const short start, const short end);
 			void draw(void);
 			percent_t get_percent(void);
 	};
