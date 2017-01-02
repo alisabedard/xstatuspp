@@ -3,9 +3,8 @@
 #include <iostream>
 #include <signal.h>
 #include <unistd.h>
-#include "config.h"
-#include "Options.h"
 #include "XStatus.h"
+#include "config.h"
 using namespace std;
 using namespace xstatus;
 namespace {

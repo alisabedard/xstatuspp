@@ -1,7 +1,7 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "Clock.h"
-#include "config.h"
 #include "Widget.h"
+#include "config.h"
 using namespace xstatus;
 class Time {
 	protected:

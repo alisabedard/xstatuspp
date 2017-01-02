@@ -1,9 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #include "XData.h"
-extern "C" {
-#include "libjb/xcb.h"
-}
 #include "Window.h"
+#include "libjb/xcb.h"
 using namespace xstatus;
 namespace {
 	xstatus::Window & get_main_window_class(xcb_connection_t * xc)
