@@ -60,9 +60,9 @@ void Battery::draw(void)
 		LOG("Could not get percent, returning");
 		return;
 	}
-	gc_t * gc = get_gcs();
-	const uint8_t i = get_gc_index();
-	const gc_t fg_gc = gc[i], bg_gc = gc[BATTERY_GC_BACKGROUND];
+	gc_t * gc_array = get_gcs();
+	const gc_t fg_gc = gc_array[get_gc_index()], bg_gc
+		= gc_array[BATTERY_GC_BACKGROUND];
 	xcb_rectangle_t rect = get_rectangle(range);
 	const xcb_window_t w = main_window;
 	// clear:
