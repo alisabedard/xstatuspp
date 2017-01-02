@@ -1,10 +1,8 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "Window.h"
-extern "C" {
-#include "libjb/xcb.h"
-}
-#include "config.h"
 #include "XData.h"
+#include "config.h"
+#include "libjb/xcb.h"
 using namespace xstatus;
 namespace {
 	int16_t get_y(const unsigned short screen_height)
