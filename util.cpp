@@ -1,11 +1,8 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "util.h"
-extern "C" {
-#include "libjb/xcb.h"
-}
 #include <fstream>
 #include <iostream>
-#include "Font.h"
+#include "libjb/xcb.h"
 void xstatus::create_gc(xcb_connection_t * xc, const xcb_gcontext_t gc,
 	const xcb_window_t win, const char * fg,
 	const char * bg, const Font & f)
