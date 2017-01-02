@@ -1,6 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "Toolbar.h"
 #include <iostream>
+#include "Button.h"
 #include "config.h"
 #include "libjb/cpp.h"
 using namespace std;

@@ -3,7 +3,6 @@
 #include <iostream>
 #include "config.h"
 #include "util.h"
-#include "Widget.h"
 using namespace xstatus;
 namespace {
 	int get_temp_raw(void)
@@ -52,10 +51,10 @@ namespace {
 	void TemperatureWidget::draw(void)
 	{
 		const unsigned int sz = buffer;
-		const JBDim f = font;
+		const FontSize f = font.get_size();
 		xcb_image_text_8(XData::xc, sz, main_window,
-			get_gc(), offset, f.h, buffer);
-		this->width = f.w * sz;
+			get_gc(), offset, f.height, buffer);
+		this->width = f.width * sz;
 	}
 }
 Temperature::Temperature(xcb_connection_t * xc, const Font & font, const int x)

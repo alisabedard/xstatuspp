@@ -4,6 +4,7 @@
 #include <xcb/xcb.h>
 #include "Font.h"
 #include "Widget.h"
+#include "libjb/JBDim.h"
 namespace xstatus {
 	class Battery : public XData {
 		public:

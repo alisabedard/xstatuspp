@@ -74,6 +74,6 @@ void Battery::draw(void)
 	char buf[BUF_SZ];
 	const int x = range.start + ((range.end - range.start) >> 1);
 	xcb_image_text_8(xc, snprintf(buf, BUF_SZ, " %d%% ", percent), w,
-		fg_gc, x, font.get_size().h, buf);
+		fg_gc, x, font.get_size().height, buf);
 	xcb_flush(xc);
 }

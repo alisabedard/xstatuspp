@@ -2,8 +2,10 @@
 #ifndef XSTATUS_TOOLBAR_H
 #define XSTATUS_TOOLBAR_H
 #include <list>
-#include "Button.h"
+#include "XData.h"
 namespace xstatus {
+	class Button;
+	class Font;
 	class Toolbar : public XData {
 		private:
 			static int instances;

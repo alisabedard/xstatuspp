@@ -1,6 +1,5 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "Clock.h"
-#include "Widget.h"
 #include "config.h"
 using namespace xstatus;
 class Time {
@@ -33,11 +32,11 @@ class ClockWidget : public Widget {
 void ClockWidget::draw(void)
 {
 	const size_t sz = buffer;
-	const JBDim f = font.get_size();
-	width = f.w * sz;
+	const FontSize f = font.get_size();
+	width = f.width * sz;
 	offset = screen_width - width;
 	xcb_image_text_8(XData::xc, sz, main_window, get_gc(),
-		offset, f.h, buffer);
+		offset, f.height, buffer);
 }
 Clock::Clock(xcb_connection_t * xc, const Font & f)
 {

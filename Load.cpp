@@ -25,7 +25,7 @@ namespace {
 	}
 	void LoadWidget::draw(void)
 	{
-		const JBDim fs = font;
+		const FontSize fs = font.get_size();
 		xcb_image_text_8(*this, buffer, main_window, get_gc(),
 			offset, fs.height, buffer);
 		width = fs.width * buffer + XSTATUS_CONST_PAD;

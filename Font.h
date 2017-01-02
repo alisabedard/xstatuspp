@@ -3,13 +3,14 @@
 #define XSTATUS_FONT_H
 #include <stdbool.h>
 #include <xcb/xcb.h>
-#include "libjb/JBDim.h"
+#include "Size.h"
 namespace xstatus {
+	typedef Size<uint8_t> FontSize;
 	class Font {
 		private:
 			xcb_connection_t * xc;
 			xcb_font_t fid;
-			JBDim sz = {{0}, {0}};
+			FontSize sz;
 		public:
 			Font(xcb_connection_t * xc)
 				: xc(xc), fid(xcb_generate_id(xc))
@@ -17,8 +18,7 @@ namespace xstatus {
 			// Returns true if successful.
 			bool open(const char * font_name);
 			xcb_font_t get_font(void) const { return fid; }
-			JBDim get_size(void) const { return sz; }
-			operator JBDim() const { return sz; }
+			FontSize get_size(void) const { return sz; }
 	};
 }
 #endif//!XSTATUS_FONT_H

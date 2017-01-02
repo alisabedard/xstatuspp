@@ -4,9 +4,9 @@
 #include <string>
 #include <xcb/xcb.h>
 #include "Font.h"
-#include "libjb/JBDim.h"
 #include "Window.h"
 #include "XData.h"
+#include "libjb/JBDim.h"
 namespace xstatus {
 	class Button : public Window {
 		private:
@@ -15,7 +15,7 @@ namespace xstatus {
 			XData & X;
 			const Font & font;
 			short x;
-			JBDim font_size;
+			FontSize font_size;
 			std::string label;
 			void set_geometry(void);
 			void create_window(void);

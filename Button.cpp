@@ -32,9 +32,10 @@ void xstatus::Button::invert(void)
 }
 void xstatus::Button::set_geometry(void)
 {
-	JBDim & f = font_size;
-	const unsigned short w = f.w * label.size() + f.w;
-	const unsigned short h = f.h + (XSTATUS_CONST_PAD >> 1);
+	const unsigned short w = font_size.width * label.size()
+		+ font_size.width;
+	const unsigned short h = font_size.height
+		+ (XSTATUS_CONST_PAD >> 1);
 	geometry = {x, 0, w, h};
 }
 void xstatus::Button::create_window(void)

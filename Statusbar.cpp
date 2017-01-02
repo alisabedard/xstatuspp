@@ -51,18 +51,18 @@ namespace {
 }
 class StatusWidget : public Widget {
 	private:
-		JBDim f;
+		FontSize f;
 	public:
 		void draw(void)
 		{
 			enum { PAD = XSTATUS_CONST_PAD << 1 };
 			xcb_image_text_8(*this, buffer, main_window,
-				get_gc(), offset + PAD, f.h, buffer);
-			width = f.w * buffer + PAD + PAD;
+				get_gc(), offset + PAD, f.height, buffer);
+			width = f.width * buffer + PAD + PAD;
 		}
 		StatusWidget(xcb_connection_t * xc, Buffer & b,
 			const Font & font, const int offset)
-			: Widget(xc, b, font), f(font)
+			: Widget(xc, b, font), f(font.get_size())
 		{
 			this->offset = offset;
 		}
