@@ -9,5 +9,9 @@ namespace xstatus {
 		const Font & f);
 	// returns -1 on error
 	int system_value(const char * filename);
+	template <typename T>
+		inline T min(T a, T b) { return a < b ? a : b; }
+	template <typename T>
+		inline T max(T a, T b) { return a > b ? a : b; }
 }
 #endif//XSTATUS_UTIL_H

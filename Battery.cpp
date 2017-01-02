@@ -1,10 +1,12 @@
 // Copyright 2017, Jeffrey E. Bedard
 #include "Battery.h"
-#include "libjb/log.h"
-#include "libjb/macros.h"
 #include "config.h"
+#include "libjb/log.h"
 #include "util.h"
+#if 0
 #include "XData.h"
+#include "libjb/macros.h"
+#endif
 //#define XSTATUS_BATTERY_TEST
 using namespace xstatus;
 namespace {
@@ -34,7 +36,7 @@ Battery::Battery(xcb_connection_t * xc, const Font & f, const short start,
 	// field.
 Battery::percent_t Battery::get_percent(void)
 {
-	percent = JB_MIN(system_value(XSTATUS_SYSFILE_BATTERY), 100);
+	percent = min(system_value(XSTATUS_SYSFILE_BATTERY), 100);
 	return percent;
 }
 void Battery::set_gc(gc_t * i, const char * color)

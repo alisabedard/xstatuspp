@@ -3,7 +3,7 @@
 #undef DEBUG
 #include <iostream>
 #include "libjb/cpp.h"
-#include "libjb/macros.h"
+#include "util.h"
 using namespace xstatus;
 int Buffer::instances = 0;
 Buffer::Buffer(size_t sz) : max_size(sz), size(sz),
@@ -27,5 +27,5 @@ Buffer::~Buffer(void)
 void Buffer::set_size(const size_t s)
 {
 	// validate the input first, restrict to max_size
-	size = JB_MIN(s, max_size);
+	size = min(s, max_size);
 }
