@@ -1,6 +1,7 @@
 // Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
 #include "Buffer.h"
 #undef DEBUG
+#include <algorithm>
 #include <iostream>
 #include "libjb/cpp.h"
 #include "util.h"
@@ -27,5 +28,5 @@ Buffer::~Buffer(void)
 void Buffer::set_size(const size_t s)
 {
 	// validate the input first, restrict to max_size
-	size = min(s, max_size);
+	size = std::min(s, max_size);
 }
