@@ -5,9 +5,10 @@
 #include "util.h"
 using namespace xstatus;
 namespace {
+	static const char sysfile[] = XSTATUS_SYSFILE_TEMPERATURE;
 	int get_temp_raw(void)
 	{
-		return system_value(XSTATUS_SYSFILE_TEMPERATURE);
+		return system_value(sysfile);
 	}
 	int get_temp(void)
 	{
@@ -18,8 +19,7 @@ namespace {
 		// type must hold at least 100000, signed
 		int temp = get_temp_raw();
 		if (temp < 0) {
-			std::cerr << "Could not read " <<
-				XSTATUS_SYSFILE_TEMPERATURE << '\n';
+			std::cerr << "Could not read " << sysfile << '\n';
 			get_temp_failed = true;
 			return -1;
 		}
