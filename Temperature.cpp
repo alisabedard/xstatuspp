@@ -26,12 +26,10 @@ namespace {
 		return temp / 1000;
 	}
 	class TemperatureBuffer : public Buffer {
-		private:
-			void format(void);
 		public:
-			TemperatureBuffer(void) : Buffer(4) { format(); }
+			TemperatureBuffer(void);
 	};
-	void TemperatureBuffer::format(void)
+	TemperatureBuffer::TemperatureBuffer(void) : Buffer(4)
 	{
 		const uint8_t temp = get_temp();
 		set_size(temp ? snprintf(buffer, get_max_size(), "%dC", temp)
