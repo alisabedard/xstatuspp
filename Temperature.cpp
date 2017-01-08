@@ -5,35 +5,43 @@
 #include "util.h"
 using namespace xstatus;
 namespace {
-	static const char sysfile[] = XSTATUS_SYSFILE_TEMPERATURE;
-	int get_temp_raw(void)
-	{
-		return system_value(sysfile);
-	}
-	int get_temp(void)
-	{
-		// may only fail once:
-		static bool get_temp_failed;
-		if (get_temp_failed)
-			return -1;
-		// type must hold at least 100000, signed
-		int temp = get_temp_raw();
-		if (temp < 0) {
-			std::cerr << "Could not read " << sysfile << '\n';
-			get_temp_failed = true;
-			return -1;
-		}
-		return temp / 1000;
-	}
+	class TemperatureValue {
+		private:
+			int value;
+			static bool has_error;
+			void poll(void)
+			{
+				static const char sysfile[] =
+					XSTATUS_SYSFILE_TEMPERATURE;
+				value = system_value(sysfile);
+				if (value < 0) {
+					std::cerr << "Could not read "
+						<< sysfile << '\n';
+					has_error = true;
+				}
+			}
+		public:
+			TemperatureValue()
+			{
+				if (!has_error)
+					poll();
+			}
+			operator int() const
+			{
+				return value / 1000;
+			}
+			explicit operator bool() const { return ! has_error; }
+	};
+	bool TemperatureValue::has_error = false;
 	class TemperatureBuffer : public Buffer {
 		public:
 			TemperatureBuffer(void);
 	};
 	TemperatureBuffer::TemperatureBuffer(void) : Buffer(4)
 	{
-		const uint8_t temp = get_temp();
-		set_size(temp ? snprintf(buffer, get_max_size(), "%dC", temp)
-			: 0);
+		TemperatureValue t;
+		set_size(t ? snprintf(buffer, get_max_size(), "%dC", (int)t) :
+			0);
 	}
 	class TemperatureWidget : public Widget {
 		public:
