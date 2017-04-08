@@ -14,8 +14,7 @@ namespace {
 		const unsigned short height = XSTATUS_CONST_HEIGHT >> 1;
 		const unsigned short width = range.end - range.start
 			- XSTATUS_CONST_PAD;
-		const xcb_rectangle_t r = {x, y, width, height};
-		return r;
+		return (xcb_rectangle_t){x, y, width, height};
 	}
 }
 // Selects a gc to use based on ac/battery status
