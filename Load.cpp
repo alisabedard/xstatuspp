@@ -1,5 +1,6 @@
 // Copyright 2016, Jeffrey E. Bedard
 #include "Load.h"
+#include <stdlib.h>
 #include "config.h"
 using namespace xstatus;
 namespace {
