@@ -26,6 +26,11 @@ namespace {
 				if (!has_error)
 					poll();
 			}
+			operator float() const
+			{
+				float v = value;
+				return v / 1000;
+			}
 			operator int() const
 			{
 				return value / 1000;
@@ -37,11 +42,21 @@ namespace {
 		public:
 			TemperatureBuffer(void);
 	};
-	TemperatureBuffer::TemperatureBuffer(void) : Buffer(4)
+	TemperatureBuffer::TemperatureBuffer(void) : Buffer(5)
 	{
 		TemperatureValue t;
-		set_size(t ? snprintf(buffer, get_max_size(), "%dC", (int)t) :
-			0);
+		set_size(t ? snprintf(buffer, get_max_size(), "%' '3dC",
+			(int)t) : 0);
+	}
+	class FloatTemperatureBuffer : public Buffer {
+		public:
+			FloatTemperatureBuffer(void);
+	};
+	FloatTemperatureBuffer::FloatTemperatureBuffer(void) : Buffer(7)
+	{
+		TemperatureValue t;
+		set_size(t ? snprintf(buffer, get_max_size(), "%.1fC",
+			(float)t) : 0);
 	}
 	class TemperatureWidget : public Widget {
 		public:
@@ -66,7 +81,6 @@ namespace {
 Temperature::Temperature(xcb_connection_t * xc, const Font & font, const int x)
 {
 	buffer = new TemperatureBuffer();
-	widget = new TemperatureWidget(xc, *buffer, font, x +
-		XSTATUS_CONST_PAD);
+	widget = new TemperatureWidget(xc, *buffer, font, x);
 	widget->draw();
 }
