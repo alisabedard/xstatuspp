@@ -1,4 +1,4 @@
-// Copyright 2016, Jeffrey E. Bedard
+// Copyright 2016, Alisa Bedard
 #include "Window.h"
 #include "XData.h"
 #include "config.h"
@@ -28,9 +28,9 @@ Window::~Window(void)
 {
 	destroy();
 }
-void Window::create(const xcb_window_t parent, const xcb_rectangle_t &
-	geometry, const uint8_t border_width, const uint32_t value_mask, const
-	void * value_list)
+void Window::create(xcb_window_t const parent,xcb_rectangle_t const &
+	geometry,uint8_t const border_width,uint32_t, value_mask,
+	uint32_t const * value_list)
 {
 	enum { CFP = XCB_COPY_FROM_PARENT };
 	const xcb_rectangle_t & g = geometry;

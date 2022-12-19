@@ -1,4 +1,4 @@
-// Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
+// Copyright 2017, Alisa Bedard <alisabedard@gmail.com>
 #include "XData.h"
 #include "Window.h"
 #include "libjb/xcb.h"

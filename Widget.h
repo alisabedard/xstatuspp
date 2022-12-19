@@ -1,4 +1,4 @@
-// Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
+// Copyright 2017, Alisa Bedard <alisabedard@gmail.com>
 #ifndef XSPP_WIDGET_H
 #define XSPP_WIDGET_H
 #include "Buffer.h"

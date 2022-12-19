@@ -1,4 +1,4 @@
-// Copyright 2016, Jeffrey E. Bedard
+// Copyright 2016, Alisa Bedard
 #include "Font.h"
 extern "C" {
 #include "libjb/xcb.h"

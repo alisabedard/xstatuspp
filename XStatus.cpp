@@ -1,4 +1,4 @@
-// Copyright 2016, Jeffrey E. Bedard
+// Copyright 2016, Alisa Bedard
 #include "XStatus.h"
 #include "Battery.h"
 #include "config.h"

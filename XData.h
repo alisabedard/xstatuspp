@@ -1,4 +1,4 @@
-// Copyright 2017, Jeffrey E. Bedard
+// Copyright 2017, Alisa Bedard
 #ifndef XS_XDATA_H
 #define XS_XDATA_H
 #include <xcb/xcb.h>

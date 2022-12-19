@@ -1,4 +1,4 @@
-// Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
+// Copyright 2017, Alisa Bedard <alisabedard@gmail.com>
 #include "Widget.h"
 using namespace xstatus;
 Widget::Widget(xcb_connection_t * xc, Buffer & buffer, const Font & font)

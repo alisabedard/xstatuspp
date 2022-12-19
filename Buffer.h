@@ -1,4 +1,4 @@
-// Copyright 2017, Jeffrey E. Bedard <jefbed@gmail.com>
+// Copyright 2017, Alisa Bedard <alisabedard@gmail.com>
 #ifndef XSTATUS_BUFFER_H
 #define XSTATUS_BUFFER_H
 #include <string>

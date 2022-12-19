@@ -1,4 +1,4 @@
-// Copyright 2016, Jeffrey E. Bedard
+// Copyright 2016, Alisa Bedard
 #include <cstdlib>
 #include <iostream>
 #include <signal.h>
@@ -41,7 +41,7 @@ void Main::usage(void)
 		"\t-f FILE\t\tSet FILE to be continuously polled "
 		"and displayed.\n"
 		"\t-h\t\tPrint this usage information.\n"
-		"Copyright 2016, Jeffrey E. Bedard <jefbed@gmail.com>\n"
+		"Copyright 2016, Alisa Bedard <alisabedard@gmail.com>\n"
 		"Project page: https://github.com/jefbed/xstatus\n";
 	exit(1);
 }
